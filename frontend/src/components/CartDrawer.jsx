@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Minus, Plus, Trash2, ShoppingBag, Check, ArrowRight } from "lucide-react";
@@ -36,7 +36,11 @@ export default function CartDrawer() {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
-  const close = () => { setOpen(false); setTimeout(() => setView(items.length ? "cart" : "cart"), 300); };
+  const close = () => { setOpen(false); };
+
+  useEffect(() => {
+    if (open && items.length > 0) setView("cart");
+  }, [open, items.length]);
 
   const setField = (k, v) => { setCustomer((c) => ({ ...c, [k]: v })); setErrors((e) => ({ ...e, [k]: undefined })); };
 
