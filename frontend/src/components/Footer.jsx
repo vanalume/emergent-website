@@ -31,8 +31,8 @@ export default function Footer() {
       <div className="max-w-[1440px] mx-auto px-6 md:px-12 py-20 md:py-28">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-14">
           <div className="md:col-span-5">
-            <img src={IMAGES.logo} alt="Vanalume" className="h-7 w-auto object-contain invert brightness-0" style={{ filter: "invert(1)" }} />
-            <p className="font-serif text-3xl md:text-4xl mt-6 text-[#f8f6f2]/90">Composed Living</p>
+            <img src={IMAGES.logo} alt="Vanalume" className="h-7 w-auto object-contain" style={{ filter: "invert(1)" }} />
+            <p className="font-display text-3xl md:text-4xl mt-6 text-[#f8f6f2]/90">Composed Living</p>
             <p className="text-sm text-[#f8f6f2]/55 mt-5 max-w-sm leading-relaxed">
               Fragrance, ritual and thoughtful design for spaces that feel calm, intentional and beautifully lived in.
             </p>
@@ -42,9 +42,8 @@ export default function Footer() {
             <p className="text-xs tracking-[0.24em] uppercase text-[#d4a574]">Quick Links</p>
             <ul className="mt-6 space-y-3 text-sm">
               {[
-                { to: "/collections", label: "Collections" },
-                { to: "/philosophy", label: "Our Philosophy" },
-                { to: "/founders", label: "Founder Story" },
+                { to: "/shop", label: "Shop" },
+                { to: "/about", label: "About Us" },
                 { to: "/contact", label: "Contact" },
               ].map((l) => (
                 <li key={l.to}>

@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Lenis from "lenis";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import CartDrawer from "@/components/CartDrawer";
 
 function SoftCursor() {
   const dot = useRef(null);
@@ -53,6 +54,7 @@ export default function Layout() {
     <div className="vl-grain relative min-h-screen bg-[#f8f6f2] text-[#2b2823]">
       <SoftCursor />
       <Navbar />
+      <CartDrawer />
       <AnimatePresence mode="wait">
         <motion.main
           key={pathname}
