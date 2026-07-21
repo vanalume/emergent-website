@@ -1,0 +1,34 @@
+{
+  "summary": "Re-verified Vanalume after 'view-only' pivot (no prices, no cart, product cards → /contact). Backend: 13/13 pytest pass (products=23, categories=7, /inquiries CRUD + validation, /newsletter subscribe/duplicate/422, /config payment_configured=false; legacy /api/orders endpoints still functional even though unused). Frontend (Playwright end-to-end): Home has 0 product cards and 0 '₹'/'Rs.' occurrences; hero shows 'Vanalume' + 'Composed Living'; hero-explore/hero-about/world-explore/cta-explore all present and navigate. Navbar has 0 cart-* testids on any page, all nav-* links + nav-explore-btn + nav-logo work. Shop renders all 7 category sections, 8 filter buttons (all + 7 cats), 23 product cards; product card Link href = '/contact' (verified in DOM + click-through); no Add-to-Cart buttons; shop-cta-btn href='/contact'. Duet jar photos (customer-assets-gfyr7b9c artifacts host) render EXACTLY 5 times, all inside [data-testid=category-duet] — 0 on Home, About or Contact. Contact form validation fires (error-name/email/message), invalid email caught, happy path returns contact-success + Sonner toast. Footer newsletter POSTs and clears the input. About page has sense-touch/smell/sight/taste/sound + founder-0/1/2 and no duet artifacts.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/backend_test.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "(Optional cleanup) /app/backend/server.py still ships /api/orders, /api/orders/verify and razorpay imports though the frontend no longer uses them. Consider deleting to reduce attack surface & dead code, or gate behind a feature flag.",
+    "(Optional cleanup) catalog.py still carries `price` on every product and `PRICE_BY_ID` — unused by the view-only frontend. Not harmful (backend is single source of truth) but worth pruning for the pivot.",
+    "(Nit) Contact form inputs have no HTML5 `required` attribute; validation relies entirely on JS. That's fine and matches the intended custom error UX — noted only for awareness.",
+    "(Nit already reported) backend_test.py::test_create_valid_inquiry returns a value → PytestReturnNotNoneWarning. Harmless, just replace `return data['id']` with a bare assert."
+  ],
+  "critical_code_review_comments": [
+    "Home.jsx contains NO ProductCard imports or product mentions — Duet showcase removed as requested. Correct.",
+    "Navbar.jsx: no cart icon; nav-logo uses IMAGES.logo (transparent PNG) and inverts on the dark hero via `dark ? invert : ''` — nice touch. Mobile menu also has no cart entry.",
+    "ProductCard.jsx: Link to='/contact' with data-testid=product-{id}. Renders name / fragrances / desc / sizes / 'Enquire' arrow but NO price and NO Add-to-Cart button. Correct.",
+    "Shop.jsx uses process.env.REACT_APP_BACKEND_URL, renders 7 categories with data-testid=category-{id} and filter-{id} buttons, plus shop-cta-btn → /contact.",
+    "Contact.jsx submits to /api/inquiries with `inquiry_type` (only when non-empty) — matches backend Optional[str] shape. Success toast + contact-success block appears correctly. Client validation gates the POST cleanly.",
+    "Footer.jsx newsletter POSTs to /api/newsletter and clears the input on success; error path shows a friendly toast on 422.",
+    "server.py: /api/products still returns 23 items with 7 categories; /api/inquiries POST validates email + required fields (422 on both); GET sorts by created_at desc; /api/newsletter idempotent (returns already_subscribed on dup).",
+    "Mongo _id correctly excluded via projection in list_inquiries and list_orders.",
+    "Legacy /api/orders code still lives in server.py (unused by the view-only frontend). Not a bug, but should ideally be removed to align with the pivot."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100% (13/13 pytest)", "frontend": "100% on all requested flows"},
+  "test_credentials": "None — public site, no auth. /app/memory/test_credentials.md not required for this app.",
+  "seed_data_creation": "backend_test.py creates TEST_-prefixed inquiries, newsletter emails (random) and a couple of orders. Data is prefixed for identification; no cleanup performed.",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Backend regression suite lives in /app/backend/tests/backend_test.py and passes cleanly. Key invariants for this pivot: (a) 0 '₹' or 'Rs.' text on Home or Shop, (b) 0 [data-testid*=cart] elements site-wide, (c) every ProductCard is a Link to /contact, (d) duet artifact host 'customer-assets-gfyr7b9c.emergentagent.net/job_vanalume-preview/artifacts' should ONLY appear inside [data-testid=category-duet] on /shop (exactly 5 imgs — Awaken, Bloom, Clarity, Equilibrium, Intimacy). Watch for reintroduction of prices/cart if the catalog is edited. On /contact form testing, wait ≥1000ms after form is visible before clicking submit (motion animations gate the validation render otherwise).",
+  "rca_of_the_issue": "No blocking bugs. Only cleanup opportunities: (1) legacy /api/orders endpoints + razorpay bootstrap remain in server.py; (2) catalog.py still carries prices unused by the view-only UI. Deleting these would fully align code with the 'not selling right now' pivot."
+}

@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 import { Reveal, MaskLine, Kicker } from "@/components/Motion";
 import ProductCard from "@/components/ProductCard";
 
@@ -48,7 +50,7 @@ export default function Shop() {
       </section>
 
       {/* Category filter bar */}
-      <div className="sticky top-20 z-30 bg-[#f8f6f2]/85 backdrop-blur-xl border-y border-[#2b2823]/10">
+      <div className="sticky top-20 z-30 bg-[#f8f6f2]/85 backdrop-blur-xl border-y border-[#2b2320]/10">
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 py-4 flex gap-2 overflow-x-auto vl-hide-scrollbar">
           {[{ id: "all", title: "All" }, ...data.categories].map((c) => (
             <button
@@ -56,7 +58,7 @@ export default function Shop() {
               data-testid={`filter-${c.id}`}
               onClick={() => scrollTo(c.id)}
               className={`shrink-0 text-sm px-5 py-2 rounded-full border transition-colors duration-300 ${
-                active === c.id ? "bg-[#2b2823] text-[#f8f6f2] border-[#2b2823]" : "border-[#2b2823]/20 text-[#2b2823]/70 hover:border-[#2b2823]"
+                active === c.id ? "bg-[#2b2320] text-[#f8f6f2] border-[#2b2320]" : "border-[#2b2320]/20 text-[#2b2320]/70 hover:border-[#2b2320]"
               }`}
             >
               {c.title}
@@ -66,10 +68,10 @@ export default function Shop() {
       </div>
 
       {loading ? (
-        <div className="max-w-[1440px] mx-auto px-6 md:px-12 py-32 text-center text-[#2b2823]/50 font-display text-2xl">Curating the collection…</div>
+        <div className="max-w-[1440px] mx-auto px-6 md:px-12 py-32 text-center text-[#2b2320]/50 font-display text-2xl">Curating the collection…</div>
       ) : (
         visibleCats.map((cat, ci) => (
-          <section key={cat.id} id={`cat-${cat.id}`} data-testid={`category-${cat.id}`} className={`py-16 md:py-24 scroll-mt-36 ${ci % 2 === 1 ? "bg-[#f5f1ea]" : ""}`}>
+          <section key={cat.id} id={`cat-${cat.id}`} data-testid={`category-${cat.id}`} className={`py-16 md:py-24 scroll-mt-36 ${ci % 2 === 1 ? "bg-[#f2ebdd]" : ""}`}>
             <div className="max-w-[1440px] mx-auto px-6 md:px-12">
               <Reveal className="mb-10 md:mb-14">
                 <Kicker>{String(ci + 1).padStart(2, "0")}</Kicker>
@@ -87,6 +89,27 @@ export default function Shop() {
           </section>
         ))
       )}
+
+      <section className="py-28 md:py-40 bg-[#2b2320] text-[#f8f6f2]">
+        <div className="max-w-[1440px] mx-auto px-6 md:px-12 text-center">
+          <Reveal><Kicker className="text-[#e6b980]">Partnerships & Gifting</Kicker></Reveal>
+          <Reveal delay={0.05}>
+            <h2 className="font-display text-4xl md:text-6xl mt-6 max-w-3xl mx-auto tracking-tight">
+              Interested in custom gifting or bulk orders?
+            </h2>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <Link
+              to="/contact"
+              data-testid="shop-cta-btn"
+              className="group mt-10 inline-flex items-center gap-2 bg-[#f8f6f2] text-[#2b2320] px-9 py-4 rounded-full text-sm tracking-wide hover:bg-[#e6b980] transition-colors duration-300"
+            >
+              Contact Us
+              <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
+            </Link>
+          </Reveal>
+        </div>
+      </section>
     </div>
   );
 }
