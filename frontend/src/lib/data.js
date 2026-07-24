@@ -19,11 +19,11 @@ export const FRAGRANCES = [
 ];
 
 export const SENSES = [
-  { key: "Touch", desc: "The texture of handcrafted aroma stones.", icon: "Hand" },
   { key: "Smell", desc: "Our signature candles and fragrances.", icon: "Flower2" },
   { key: "Sight", desc: "Objects and designs that elevate everyday spaces.", icon: "Eye" },
-  { key: "Taste", desc: "Future tea rituals inspired by nature.", icon: "Leaf" },
+  { key: "Touch", desc: "The texture of handcrafted aroma stones.", icon: "Hand" },
   { key: "Sound", desc: "Curated ritual playlists designed to accompany moments of calm.", icon: "AudioLines" },
+  { key: "Taste", desc: "Future tea rituals inspired by nature.", icon: "Leaf" },
 ];
 
 export const FOUNDERS = [

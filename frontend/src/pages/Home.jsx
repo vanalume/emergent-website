@@ -58,12 +58,10 @@ function Hero() {
           <Kicker className="text-[#e6b980]">Aromatic Candles · Aroma Stones · Rituals</Kicker>
         </motion.div>
 
-        <h1 className="mt-5 text-[#f8f6f2] font-display font-light leading-[0.88] text-[20vw] md:text-[15vw] lg:text-[12rem] tracking-tight">
-          <MaskLine delay={0.35}>Vanalume</MaskLine>
+        <h1 className="mt-5 text-[#f8f6f2] font-display font-light leading-[0.9] text-[16vw] md:text-[13vw] lg:text-[10.5rem] tracking-tight">
+          <MaskLine delay={0.35}>Composed</MaskLine>
+          <MaskLine delay={0.52}><span className="italic">Living</span></MaskLine>
         </h1>
-        <div className="mt-1 md:mt-3 font-display italic text-[#f8f6f2]/90 text-3xl md:text-5xl">
-          <MaskLine delay={0.6}>Composed Living</MaskLine>
-        </div>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.1, duration: 1, ease: EASE }}
@@ -99,8 +97,8 @@ function Belief() {
       <div className="max-w-[1440px] mx-auto px-6 md:px-12">
         <Reveal><Kicker>Our Belief</Kicker></Reveal>
         <Reveal delay={0.05}>
-          <p className="mt-8 max-w-4xl font-display text-3xl md:text-5xl lg:text-6xl leading-[1.15] tracking-tight text-[#2b2823]">
-            Luxury isn&rsquo;t loud. It is the quiet confidence of a thoughtfully lit candle, the comfort of familiar fragrance, and rituals that slow everyday life.
+          <p className="mt-8 max-w-3xl font-display text-3xl md:text-4xl lg:text-5xl leading-[1.25] tracking-tight text-[#2b2823]">
+            Luxury isn&rsquo;t loud. It is the quiet confidence of a thoughtfully lit candle, and rituals that slow everyday life.
           </p>
         </Reveal>
       </div>
@@ -145,7 +143,7 @@ function OurWorld() {
 function Why() {
   const items = [
     { n: "01", title: "Premium ingredients", desc: "A clean soy–coconut wax blend and considered fragrance oils, selected for depth and a long, even burn." },
-    { n: "02", title: "Designed collections", desc: "Frosted colour jars, wooden lids and ritual cards — objects that remain a quiet presence long after the flame." },
+    { n: "02", title: "Curated collections", desc: "Frosted colour jars, wooden lids and ritual cards — objects that remain a quiet presence long after the flame." },
     { n: "03", title: "Made for ritual", desc: "Not trends. Timeless pieces that become part of the moments you return to." },
   ];
   return (

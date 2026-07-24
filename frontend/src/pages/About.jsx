@@ -120,7 +120,7 @@ export default function About() {
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12">
           <Reveal className="lg:col-span-4"><Kicker>The Beginning</Kicker></Reveal>
           <div className="lg:col-span-8 space-y-8 text-[#2b2320]/85 text-lg md:text-xl leading-relaxed">
-            <Reveal><p>Vanalume was founded with a simple belief: the spaces we live in shape the way we feel. What began as an exploration of fragrance has grown into a vision for a lifestyle brand centred around intentional living.</p></Reveal>
+            <Reveal><p>Vanalume was founded with a simple belief: the spaces we live in shape the way we feel. What began as an exploration of fragrance has grown into a vision for a lifestyle brand centred around composed living.</p></Reveal>
             <Reveal delay={0.05}><p>Every product is created with care, balancing thoughtful design, quality craftsmanship and sensory experiences. Rather than following trends, Vanalume seeks to create timeless pieces that become part of everyday rituals.</p></Reveal>
             <Reveal delay={0.1}><p>This journey is being built by founders who believe luxury is defined not by excess, but by meaning, simplicity and lasting experiences.</p></Reveal>
           </div>
