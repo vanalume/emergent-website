@@ -2,17 +2,11 @@ import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Marquee from "react-fast-marquee";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Reveal, MaskLine, Kicker } from "@/components/Motion";
 import { IMAGES, FRAGRANCES } from "@/lib/data";
 
 const EASE = [0.16, 1, 0.3, 1];
-
-const WORLD = [
-  { title: "Candles", desc: "Hand-poured, soy–coconut wax.", img: IMAGES.heroWarm, span: "lg:col-span-2 lg:row-span-2" },
-  { title: "Aroma Stones", desc: "Fragrance as sculpture.", img: IMAGES.aromaStones, span: "" },
-  { title: "Home Rituals", desc: "Objects for daily calm.", img: IMAGES.rituals, span: "" },
-];
 
 function Particles() {
   return (
@@ -106,40 +100,6 @@ function Belief() {
   );
 }
 
-function OurWorld() {
-  return (
-    <section className="py-28 md:py-40">
-      <div className="max-w-[1440px] mx-auto px-6 md:px-12">
-        <Reveal className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14">
-          <div>
-            <Kicker>Our World</Kicker>
-            <h2 className="font-display text-4xl md:text-6xl mt-4 tracking-tight">A brand for the senses</h2>
-          </div>
-          <Link to="/shop" data-testid="world-explore-btn" className="group inline-flex items-center gap-2 text-sm tracking-wide vl-link-underline w-max text-[#5c3e2b]">
-            Explore Products <ArrowUpRight size={16} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </Link>
-        </Reveal>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 auto-rows-[240px] md:auto-rows-[300px] gap-5">
-          {WORLD.map((c, i) => (
-            <Reveal key={c.title} delay={i * 0.08} className={c.span}>
-              <Link to="/shop" className="group relative h-full w-full overflow-hidden rounded-sm block">
-                <img src={c.img} alt={c.title} className="h-full w-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-105" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#241a10]/75 via-transparent to-transparent" />
-                <div className="absolute inset-0 p-7 flex flex-col justify-end">
-                  <h3 className="font-display text-2xl md:text-3xl text-[#f8f6f2]">{c.title}</h3>
-                  <p className="text-[#f8f6f2]/80 text-sm mt-1 translate-y-1 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">{c.desc}</p>
-                </div>
-                <ArrowUpRight className="absolute top-6 right-6 text-[#f8f6f2] opacity-0 group-hover:opacity-100 transition-opacity duration-500" size={22} />
-              </Link>
-            </Reveal>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function Why() {
   const items = [
     { n: "01", title: "Premium ingredients", desc: "A clean soy–coconut wax blend and considered fragrance oils, selected for depth and a long, even burn." },
@@ -206,7 +166,6 @@ export default function Home() {
     <div data-testid="home-page">
       <Hero />
       <Belief />
-      <OurWorld />
       <Why />
       <FragranceStrip />
       <CTA />
