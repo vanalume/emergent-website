@@ -51,22 +51,22 @@ PRODUCTS = [
     # ---------------- PERFUMER'S LIBRARY (1 set · ₹1800) ----------------
     {"id": "library-odyssey", "category": "library", "collection": "Odyssey", "name": "Odyssey",
      "fragrances": ["Neroli", "Black Oudh", "Tuberose", "Sandalwood", "Musk", "Cedarwood"],
-     "jar": "Shot Glasses", "price": 1800, "image": STOCK_CANDLE,
+     "jar": "Shot Glasses", "price": 1800, "image": f"{DUET}/egsxf81t_library.png",
      "desc": "The complete discovery experience — six fragrances."},
 
     # ---------------- PILLAR (Sea & Sand, rustic · ₹600) ----------------
     {"id": "pillar-midnight-blue", "category": "pillar", "collection": "Sea & Sand", "name": "Midnight Blue",
      "fragrances": ["Oudh"], "jar": "Midnight Blue", "price": 600, "sizes": ["4 inch", "5 inch", "6 inch"],
-     "image": STOCK_RITUALS, "desc": "A rustic-finish pillar in deep midnight blue."},
+     "image": f"{DUET}/63b55l4v_midnight%20blue.png", "desc": "A rustic-finish pillar in deep midnight blue."},
     {"id": "pillar-deep-green", "category": "pillar", "collection": "Sea & Sand", "name": "Deep Green",
      "fragrances": ["Spearmint"], "jar": "Deep Green", "price": 600, "sizes": ["4 inch", "5 inch", "6 inch"],
-     "image": STOCK_RITUALS, "desc": "A rustic-finish pillar in forest green."},
+     "image": f"{DUET}/81smp3e8_deep%20green.png", "desc": "A rustic-finish pillar in forest green."},
     {"id": "pillar-terracotta", "category": "pillar", "collection": "Sea & Sand", "name": "Terracotta",
      "fragrances": ["Patchouli"], "jar": "Terracotta", "price": 600, "sizes": ["4 inch", "5 inch", "6 inch"],
-     "image": STOCK_FEATURE, "desc": "A rustic-finish pillar in warm terracotta."},
+     "image": f"{DUET}/inlxtdzm_terracota.png", "desc": "A rustic-finish pillar in warm terracotta."},
     {"id": "pillar-sea-sand", "category": "pillar", "collection": "Sea & Sand", "name": "Sea & Sand",
      "fragrances": ["Aqua"], "jar": "Sea & Sand", "price": 600, "sizes": ["4 inch", "5 inch", "6 inch"],
-     "image": STOCK_RITUALS, "desc": "A rustic-finish pillar in soft sand tones."},
+     "image": f"{DUET}/c3u0h8bw_sea%20sand.png", "desc": "A rustic-finish pillar in soft sand tones."},
 
     # ---------------- TAPER (₹1200 sets / ₹450 singles) ----------------
     {"id": "taper-plain-trio", "category": "taper", "collection": "Taper", "name": "Plain Taper Trio",
