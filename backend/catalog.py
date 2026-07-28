@@ -31,21 +31,21 @@ PRODUCTS = [
      "desc": "For slower evenings — calming lavender and heady mogra."},
     {"id": "duet-oriental-cafe", "category": "duet", "collection": "Oriental Café", "name": "Oriental Café",
      "fragrances": ["Turkish Coffee", "Vanilla"], "jar": "Black & White", "price": 1500,
-     "image": STOCK_CANDLE,
+     "image": f"{DUET}/apwsai2q_ORIENTAL%20CAFE.png",
      "desc": "A warm, gourmand pairing — Turkish coffee and soft vanilla."},
     {"id": "duet-timeless", "category": "duet", "collection": "Timeless", "name": "Timeless",
      "fragrances": ["Black Oudh", "White Oudh"], "jar": "Black & White", "price": 1500,
-     "image": STOCK_FEATURE,
+     "image": f"{DUET}/ini4y51o_TIMELESS.png",
      "desc": "Two facets of oudh — deep black and luminous white."},
 
     # ---------------- ENSEMBLE (2 sets · ₹1200) ----------------
     {"id": "ensemble-celebrate", "category": "ensemble", "collection": "Celebrate", "name": "Celebrate",
      "fragrances": ["Apple Cinnamon", "Vanilla", "Turkish Coffee"], "jar": "Black & Gold Tin", "price": 1200,
-     "image": STOCK_FEATURE,
+     "image": f"{DUET}/afp78v3j_celebrate.png",
      "desc": "Three warm, celebratory scents — apple cinnamon, vanilla and Turkish coffee."},
     {"id": "ensemble-presence", "category": "ensemble", "collection": "Presence", "name": "Presence",
      "fragrances": ["White Oudh", "Black Oudh", "Musk"], "jar": "Black & Gold Tin", "price": 1200,
-     "image": STOCK_CANDLE,
+     "image": f"{DUET}/r2kqvo00_presence.png",
      "desc": "A composed trio of oudh and musk — quiet, resonant, present."},
 
     # ---------------- PERFUMER'S LIBRARY (1 set · ₹1800) ----------------
