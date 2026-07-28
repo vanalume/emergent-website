@@ -99,12 +99,14 @@ PRODUCTS = [
      "desc": "Handcrafted wax melt bar — soft florals, composed and clean."},
 
     # ---------------- AROMA STONES (priced by weight · enquire) ----------------
-    {"id": "stone-ceramic-pot", "category": "stone", "collection": "Aroma Stones", "name": "Black Ceramic Pot",
-     "fragrances": [], "jar": "200–220cc", "price": None, "enquire": True, "image": STOCK_STONES,
-     "desc": "A black ceramic pot filled with small diffusing lava stones."},
-    {"id": "stone-abstract", "category": "stone", "collection": "Aroma Stones", "name": "Abstract Aroma Stone",
-     "fragrances": [], "jar": "4–6cm, with ceramic dish", "price": None, "enquire": True, "image": STOCK_STONES,
-     "desc": "A medium abstract sculptural stone mounted in a ceramic dish."},
+    {"id": "stone-ceramic-pot", "category": "stone", "collection": "Aroma Stones", "name": "Amber Jar · Small Stones",
+     "fragrances": [], "jar": "Frosted amber jar, wooden lid", "price": None, "enquire": True,
+     "image": f"{DUET}/vfu6xbmo_ChatGPT%20Image%20Jul%2028%2C%202026%20at%2004_48_04%20PM.png",
+     "desc": "Small lava pebbles in a frosted amber jar with a wooden lid — a gentle diffuser that doubles as a quiet decorative object."},
+    {"id": "stone-abstract", "category": "stone", "collection": "Aroma Stones", "name": "Statement Lava Rock",
+     "fragrances": [], "jar": "Sold separately", "price": None, "enquire": True,
+     "image": f"{DUET}/kfskwid1_ChatGPT%20Image%20Jul%2028%2C%202026%20at%2004_52_53%20PM.png",
+     "desc": "A single sculptural lava rock, sold on its own — a striking diffusing object and natural centrepiece."},
 ]
 
 CATEGORIES = [
