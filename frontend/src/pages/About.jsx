@@ -92,7 +92,7 @@ export default function About() {
       <section className="pb-24 md:pb-32 bg-[#f2ebdd] pt-24 md:pt-32">
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12">
           <Reveal className="lg:col-span-4"><Kicker>What is Vanalume</Kicker></Reveal>
-          <div className="lg:col-span-8 space-y-6 text-[#2b2320]/85 text-xl md:text-2xl leading-relaxed font-display">
+          <div className="lg:col-span-8 space-y-6 text-[#2b2320]/85 text-xl md:text-2xl leading-relaxed font-read">
             <Reveal><p>Vanalume makes fragrance and objects for people who want to notice their own life. We started with candles. We won&rsquo;t stop there.</p></Reveal>
             <Reveal delay={0.05}><p className="italic text-[#5c3e2b]">Quiet, warm, restrained. No neon, no glitter, no floral candle clichés.</p></Reveal>
           </div>
@@ -103,11 +103,11 @@ export default function About() {
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 gap-16">
           <Reveal>
             <Kicker>Mission</Kicker>
-            <p className="font-display text-3xl md:text-4xl mt-6 leading-tight tracking-tight">To create thoughtfully crafted fragrance experiences that inspire slower, calmer and more intentional living.</p>
+            <p className="font-read text-3xl md:text-4xl mt-6 leading-tight tracking-tight">To create thoughtfully crafted fragrance experiences that inspire slower, calmer and more intentional living.</p>
           </Reveal>
           <Reveal delay={0.1}>
             <Kicker>Vision</Kicker>
-            <p className="font-display text-3xl md:text-4xl mt-6 leading-tight tracking-tight">To build a global lifestyle brand where fragrance, design and ritual come together to transform everyday spaces into meaningful experiences.</p>
+            <p className="font-read text-3xl md:text-4xl mt-6 leading-tight tracking-tight">To build a global lifestyle brand where fragrance, design and ritual come together to transform everyday spaces into meaningful experiences.</p>
           </Reveal>
         </div>
       </section>
@@ -150,7 +150,7 @@ export default function About() {
       <section className="py-32 md:py-48 bg-[#2b2320] text-[#f8f6f2]">
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 text-center">
           <Reveal>
-            <p className="font-display text-4xl md:text-6xl lg:text-7xl leading-[1.15] tracking-tight max-w-4xl mx-auto">
+            <p className="font-read text-4xl md:text-6xl lg:text-7xl leading-[1.15] tracking-tight max-w-4xl mx-auto">
               &ldquo;We are not building products. We are creating rituals worth returning to.&rdquo;
             </p>
           </Reveal>

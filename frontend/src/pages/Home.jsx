@@ -91,7 +91,7 @@ function Belief() {
       <div className="max-w-[1440px] mx-auto px-6 md:px-12">
         <Reveal><Kicker>Our Belief</Kicker></Reveal>
         <Reveal delay={0.05}>
-          <p className="mt-8 max-w-3xl font-display text-3xl md:text-4xl lg:text-5xl leading-[1.25] tracking-tight text-[#2b2823]">
+          <p className="mt-8 max-w-3xl font-read text-3xl md:text-4xl lg:text-5xl leading-[1.25] tracking-tight text-[#2b2823]">
             Luxury isn&rsquo;t loud. It is the quiet confidence of a thoughtfully lit candle, and rituals that slow everyday life.
           </p>
         </Reveal>
