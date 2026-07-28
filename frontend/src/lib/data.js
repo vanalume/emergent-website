@@ -31,7 +31,7 @@ const A = "https://customer-assets-gfyr7b9c.emergentagent.net/job_vanalume-previ
 export const FOUNDERS = [
   {
     name: "Nishant Sharma",
-    role: "Founder",
+    role: "Co-Founder",
     img: `${A}/ndkrjhiv_nishant.PNG`,
     bio: "Vanalume began as more than a candle brand — it began as an idea to create moments people could truly feel. A Business Management student at Shiv Nadar University, a competitive cricketer, and a trained musician, Nishant draws inspiration from the balance between performance and creativity. Whether on the cricket field, behind the tabla, or building a brand from the ground up, his journey has always been guided by patience, precision, and purpose. Vanalume is an extension of that philosophy: thoughtfully crafted products inspired by nature and designed for conscious living.",
   },
