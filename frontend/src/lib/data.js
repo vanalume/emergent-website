@@ -3,7 +3,7 @@
 export const IMAGES = {
   logo: "/vanalume-logo.png",
   // Warm, non-product ambiance imagery (Duet product photos are used ONLY inside the Shop's Duet section)
-  heroWarm: "https://images.unsplash.com/photo-1602874801007-bd458bb1b8b6?crop=entropy&cs=srgb&fm=jpg&q=85&w=1600",
+  heroWarm: "https://customer-assets-gfyr7b9c.emergentagent.net/job_vanalume-preview/artifacts/jdp4yeyo_ChatGPT%20Image%20Jul%2028%2C%202026%20at%2003_18_50%20PM.png",
   rituals: "https://images.pexels.com/photos/3965508/pexels-photo-3965508.jpeg?auto=compress&cs=tinysrgb&w=1400",
   aromaStones: "https://images.pexels.com/photos/7814959/pexels-photo-7814959.jpeg?auto=compress&cs=tinysrgb&w=1400",
   warmInterior: "https://images.pexels.com/photos/6957095/pexels-photo-6957095.jpeg?auto=compress&cs=tinysrgb&w=1400",

@@ -46,8 +46,8 @@ function Hero() {
     <section ref={ref} data-testid="hero" className="relative h-[100svh] min-h-[640px] overflow-hidden bg-[#241a10]">
       <motion.div style={{ y, scale }} className="absolute inset-0">
         <img src={IMAGES.heroWarm} alt="A candle glowing in warm light" className="h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#241a10]/88 via-[#3d2c1a]/50 to-[#241a10]/30" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#241a10]/75 via-transparent to-[#241a10]/25" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#241a10]/85 via-[#241a10]/45 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#241a10]/60 via-transparent to-[#241a10]/20" />
       </motion.div>
 
       <Particles />
