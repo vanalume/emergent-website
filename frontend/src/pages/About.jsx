@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { Hand, Flower2, Eye, Leaf, AudioLines } from "lucide-react";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { Hand, Flower2, Eye, Leaf, AudioLines, X, Plus } from "lucide-react";
 import { Reveal, MaskLine, Kicker } from "@/components/Motion";
 import { SENSES, FOUNDERS, IMAGES } from "@/lib/data";
 
@@ -77,6 +77,7 @@ function FounderHero() {
 }
 
 export default function About() {
+  const [activeFounder, setActiveFounder] = useState(null);
   return (
     <div data-testid="about-page">
       <section className="pt-40 md:pt-56 pb-20 md:pb-28">
@@ -133,14 +134,23 @@ export default function About() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mt-12">
             {FOUNDERS.map((f, i) => (
               <Reveal key={f.name} delay={i * 0.1}>
-                <div className="group" data-testid={`founder-${i}`}>
+                <button
+                  type="button"
+                  onClick={() => setActiveFounder(f)}
+                  className="group text-left w-full"
+                  data-testid={`founder-${i}`}
+                >
                   <div className="relative overflow-hidden rounded-sm">
                     <img src={f.img} alt={f.name} className="w-full aspect-[3/4] object-cover grayscale-[0.15] transition-all duration-[900ms] ease-out group-hover:scale-105 group-hover:grayscale-0" />
                     <div className="absolute inset-0 ring-1 ring-inset ring-[#2b2320]/10" />
+                    <div className="absolute inset-0 bg-[#2b2320]/0 group-hover:bg-[#2b2320]/15 transition-colors duration-500" />
+                    <span className="absolute bottom-4 right-4 flex items-center gap-2 text-xs tracking-[0.16em] uppercase text-[#f8f6f2] opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">
+                      Read story <Plus size={14} />
+                    </span>
                   </div>
                   <h3 className="font-display text-3xl mt-6">{f.name}</h3>
                   <p className="text-xs tracking-[0.2em] uppercase text-[#5c3e2b] mt-2">{f.role}</p>
-                </div>
+                </button>
               </Reveal>
             ))}
           </div>
@@ -156,6 +166,44 @@ export default function About() {
           </Reveal>
         </div>
       </section>
+      <AnimatePresence>
+        {activeFounder && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              onClick={() => setActiveFounder(null)}
+              className="fixed inset-0 z-[70] bg-[#2b2320]/60 backdrop-blur-sm"
+            />
+            <div className="fixed inset-0 z-[71] flex items-center justify-center p-4 md:p-8 pointer-events-none">
+              <motion.div
+                data-testid="founder-modal"
+                initial={{ opacity: 0, y: 40, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 20, scale: 0.98 }}
+                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                className="pointer-events-auto relative w-full max-w-3xl max-h-[88vh] overflow-hidden rounded-sm bg-[#f8f6f2] grid grid-cols-1 md:grid-cols-2"
+              >
+                <button
+                  onClick={() => setActiveFounder(null)}
+                  data-testid="founder-modal-close"
+                  aria-label="Close"
+                  className="absolute top-4 right-4 z-10 h-10 w-10 rounded-full bg-[#f8f6f2]/90 text-[#2b2320] flex items-center justify-center hover:bg-[#2b2320] hover:text-[#f8f6f2] transition-colors"
+                >
+                  <X size={18} />
+                </button>
+                <div className="relative h-64 md:h-auto">
+                  <img src={activeFounder.img} alt={activeFounder.name} className="h-full w-full object-cover" />
+                </div>
+                <div className="p-8 md:p-10 overflow-y-auto vl-hide-scrollbar">
+                  <p className="text-xs tracking-[0.2em] uppercase text-[#5c3e2b]">{activeFounder.role}</p>
+                  <h3 className="font-display text-4xl mt-2">{activeFounder.name}</h3>
+                  <p className="font-read text-base md:text-lg text-[#2b2320]/85 leading-relaxed mt-5">{activeFounder.bio}</p>
+                </div>
+              </motion.div>
+            </div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
