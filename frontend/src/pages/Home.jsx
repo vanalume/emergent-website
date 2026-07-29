@@ -52,7 +52,7 @@ function Hero() {
           <Kicker className="text-[#e6b980]">Aromatic Candles · Aroma Stones · Rituals</Kicker>
         </motion.div>
 
-        <h1 className="mt-5 text-[#f8f6f2] font-display font-light leading-[1.02] text-[13vw] md:text-[10vw] lg:text-[8rem] tracking-tight">
+        <h1 className="mt-5 text-[#f8f6f2] font-display font-light leading-[1.02] text-[11vw] md:text-[8.5vw] lg:text-[7rem] tracking-tight">
           <MaskLine delay={0.35} className="pb-[0.06em]">Composed</MaskLine>
           <MaskLine delay={0.52} className="pb-[0.12em]"><span className="italic">Living</span></MaskLine>
         </h1>

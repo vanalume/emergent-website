@@ -82,7 +82,7 @@ PRODUCTS = [
     {"id": "taper-beaded", "category": "taper", "collection": "Taper", "name": "Beaded",
      "fragrances": ["Mulberry", "Oudh", "Basil"], "jar": "Burgundy / Yellow / Blue", "price": 1200,
      "sizes": ["Burgundy · Mulberry", "Yellow · Basil", "Blue · Oudh"],
-     "image": f"{DUET}/3hbkxewn_ChatGPT%20Image%20Jul%2028%2C%202026%20at%2003_01_24%20PM.png",
+     "image": f"{DUET}/j3iypem3_ChatGPT%20Image%20Jul%2029%2C%202026%20at%2011_51_48%20PM.png",
      "desc": "Stacked-bead tapers with a tactile, sculptural profile. 25cm."},
     {"id": "taper-pyramid", "category": "taper", "collection": "Taper", "name": "Pyramid",
      "fragrances": ["Mulberry", "Oudh", "Basil"], "jar": "Olive / Burgundy / Blue", "price": 1200,

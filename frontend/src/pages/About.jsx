@@ -111,7 +111,7 @@ export default function About() {
           <div className="lg:col-span-8">
             <Reveal>
               <p className="font-read italic text-3xl md:text-5xl leading-[1.2] tracking-tight text-[#2b2320]">
-                <span className="text-[#395439]">Vana</span>, the forest, <span className="text-[#395439]">lume</span>, the light
+                <span className="text-[#395439]">Vana</span>, the forest - <span className="text-[#395439]">lume</span>, the light
               </p>
             </Reveal>
             <Reveal delay={0.08}>
