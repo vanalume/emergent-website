@@ -47,13 +47,13 @@ function Hero() {
       <Particles />
       <div className="absolute left-[16%] top-[52%] h-56 w-56 rounded-full bg-[#e6b980]/30 blur-3xl vl-glow" />
 
-      <motion.div style={{ y: textY }} className="relative z-10 h-full max-w-[1440px] mx-auto px-6 md:px-12 flex flex-col justify-center">
+      <motion.div style={{ y: textY }} className="relative z-10 h-full max-w-[1440px] mx-auto px-6 md:px-12 flex flex-col justify-center pt-28 pb-20">
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2, duration: 1 }}>
           <Kicker className="text-[#e6b980]">Aromatic Candles · Aroma Stones · Rituals</Kicker>
         </motion.div>
 
-        <h1 className="mt-5 text-[#f8f6f2] font-display font-light leading-[1.05] text-[16vw] md:text-[13vw] lg:text-[10.5rem] tracking-tight">
-          <MaskLine delay={0.35} className="pb-[0.08em]">Composed</MaskLine>
+        <h1 className="mt-5 text-[#f8f6f2] font-display font-light leading-[1.02] text-[13vw] md:text-[10vw] lg:text-[8rem] tracking-tight">
+          <MaskLine delay={0.35} className="pb-[0.06em]">Composed</MaskLine>
           <MaskLine delay={0.52} className="pb-[0.12em]"><span className="italic">Living</span></MaskLine>
         </h1>
 
