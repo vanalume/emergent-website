@@ -98,6 +98,13 @@ PRODUCTS = [
      "fragrances": ["Rose", "Jasmine"], "jar": "Bar", "price": 600, "image": f"{DUET}/7bcnmeff_035E7F5A-A314-470D-9E4F-C99634F84434.PNG",
      "desc": "Handcrafted wax melt bar, soft florals, composed and clean."},
 
+    # ---------------- FRAGRANCE OILS (Five Elements set · 15ml) ----------------
+    {"id": "oils-five-elements", "category": "oils", "collection": "Fragrance Oils", "name": "The Five Elements",
+     "fragrances": ["Zephyr · Wind", "Cascade · Water", "Aether · Space", "Ember · Fire", "Terra · Earth"],
+     "jar": "Pack of 5 · 15ml", "price": None, "enquire": True,
+     "image": f"{DUET}/wmx49ywl_40C745B2-BD21-4C78-8DAA-164A66607EC9.PNG",
+     "desc": "A set of five signature fragrance oils inspired by the five elements, in 15ml bottles."},
+
     # ---------------- AROMA STONES (priced by weight · enquire) ----------------
     {"id": "stone-ceramic-pot", "category": "stone", "collection": "Aroma Stones", "name": "Amber Jar · Small Stones",
      "fragrances": [], "jar": "Frosted amber jar, wooden lid", "price": None, "enquire": True,
@@ -116,6 +123,7 @@ CATEGORIES = [
     {"id": "pillar", "title": "Pillar Candles", "tagline": "Rustic-finish pillars in three heights."},
     {"id": "taper", "title": "Taper Candles", "tagline": "Sculptural tapers, singly or as a trio."},
     {"id": "wax", "title": "Wax Bars", "tagline": "Handcrafted wax melts for modern rituals."},
+    {"id": "oils", "title": "Fragrance Oils", "tagline": "A set of five, inspired by the five elements. 15ml each."},
     {"id": "stone", "title": "Aroma Stones", "tagline": "Fragrance as a timeless decorative object."},
 ]
 
