@@ -166,7 +166,7 @@ export default function Contact() {
                 {[
                   { Icon: Instagram, href: "https://www.instagram.com/vanalume.studio/", label: "Instagram" },
                   { Icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
-                  { Icon: Mail, href: "mailto:hello@vanalume.com", label: "Email" },
+                  { Icon: Mail, href: "mailto:support@vanalume.com", label: "Email" },
                 ].map(({ Icon, href, label }) => (
                   <a
                     key={label}
@@ -179,7 +179,6 @@ export default function Contact() {
                     <Icon size={18} />
                   </a>
                 ))}
-                <a href="https://pinterest.com" target="_blank" rel="noreferrer" aria-label="Pinterest" className="h-12 w-12 rounded-full border border-[#2b2823]/20 flex items-center justify-center text-[#2b2823] text-sm hover:bg-[#2b2823] hover:text-[#f8f6f2] transition-colors duration-300">Pin</a>
               </div>
             </Reveal>
           </aside>

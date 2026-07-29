@@ -10,6 +10,7 @@ from typing import List, Optional
 import uuid
 from datetime import datetime, timezone
 import razorpay
+import httpx
 
 from catalog import PRODUCTS, CATEGORIES, PRODUCT_BY_ID
 
@@ -25,6 +26,31 @@ RZP_KEY_SECRET = os.environ.get('RAZORPAY_KEY_SECRET', '').strip()
 rzp_client = None
 if RZP_KEY_ID and RZP_KEY_SECRET:
     rzp_client = razorpay.Client(auth=(RZP_KEY_ID, RZP_KEY_SECRET))
+
+# Emergent managed email (Resend). Base URL is a constant so it survives deployment.
+EMAIL_BASE_URL = "https://integrations.emergentagent.com"
+EMAIL_KEY = os.environ.get("EMERGENT_EMAIL_KEY", "").strip()
+EMAIL_FROM_NAME = os.environ.get("EMAIL_FROM_NAME", "Vanalume")
+OWNER_EMAIL = os.environ.get("OWNER_EMAIL", "support@vanalume.com")
+
+
+async def send_notification_email(subject: str, html: str, reply_to: str | None = None):
+    """Fire-and-forget notification to the business inbox. Never breaks the request."""
+    if not EMAIL_KEY:
+        return
+    payload = {"to": [OWNER_EMAIL], "subject": subject, "html": html, "from_name": EMAIL_FROM_NAME}
+    if reply_to:
+        payload["contact_email"] = reply_to
+    try:
+        async with httpx.AsyncClient(timeout=20) as client:
+            resp = await client.post(
+                f"{EMAIL_BASE_URL}/api/v1/email/send",
+                headers={"X-Email-Key": EMAIL_KEY},
+                json=payload,
+            )
+        resp.raise_for_status()
+    except Exception as e:  # noqa: BLE001
+        logging.getLogger(__name__).error(f"Notification email failed: {e}")
 
 app = FastAPI(title="Vanalume API")
 api_router = APIRouter(prefix="/api")
@@ -95,6 +121,36 @@ async def get_config():
 async def create_inquiry(payload: InquiryCreate):
     inquiry = Inquiry(**payload.model_dump())
     await db.inquiries.insert_one(inquiry.model_dump())
+
+    rows = "".join(
+        f"<tr><td style='padding:6px 14px 6px 0;color:#5c3e2b;font-size:13px;white-space:nowrap;vertical-align:top'>{label}</td>"
+        f"<td style='padding:6px 0;color:#2b2823;font-size:14px'>{value or '-'}</td></tr>"
+        for label, value in [
+            ("Name", inquiry.name),
+            ("Email", inquiry.email),
+            ("Phone", inquiry.phone),
+            ("Company", inquiry.company),
+            ("Enquiry type", inquiry.inquiry_type),
+        ]
+    )
+    html = (
+        "<div style='font-family:Arial,Helvetica,sans-serif;background:#f5f1ea;padding:28px'>"
+        "<div style='max-width:560px;margin:0 auto;background:#ffffff;border-radius:6px;overflow:hidden'>"
+        "<div style='background:#2b2823;padding:22px 28px'>"
+        "<div style='color:#e6b980;font-size:11px;letter-spacing:2px;text-transform:uppercase'>Vanalume</div>"
+        "<div style='color:#f8f6f2;font-size:20px;margin-top:6px'>New enquiry</div></div>"
+        f"<div style='padding:24px 28px'><table style='width:100%;border-collapse:collapse'>{rows}</table>"
+        f"<div style='margin-top:18px;padding-top:16px;border-top:1px solid #eee'>"
+        f"<div style='color:#5c3e2b;font-size:13px;margin-bottom:6px'>Message</div>"
+        f"<div style='color:#2b2823;font-size:14px;line-height:1.6;white-space:pre-wrap'>{inquiry.message}</div></div>"
+        "</div></div></div>"
+    )
+    await send_notification_email(
+        subject=f"New enquiry from {inquiry.name}"
+        + (f" · {inquiry.inquiry_type}" if inquiry.inquiry_type else ""),
+        html=html,
+        reply_to=inquiry.email,
+    )
     return inquiry
 
 
@@ -111,6 +167,15 @@ async def subscribe_newsletter(payload: NewsletterCreate):
     if existing:
         return {"email": payload.email, "status": "already_subscribed"}
     await db.newsletter.insert_one({"id": str(uuid.uuid4()), "email": payload.email, "created_at": now_iso()})
+    await send_notification_email(
+        subject="New newsletter subscriber",
+        html=(
+            "<div style='font-family:Arial,Helvetica,sans-serif;padding:24px;color:#2b2823'>"
+            "<p style='color:#5c3e2b;font-size:11px;letter-spacing:2px;text-transform:uppercase'>Vanalume</p>"
+            f"<p style='font-size:16px'>New newsletter signup: <strong>{payload.email}</strong></p></div>"
+        ),
+        reply_to=payload.email,
+    )
     return {"email": payload.email, "status": "subscribed"}
 
 
