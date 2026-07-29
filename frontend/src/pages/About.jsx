@@ -85,17 +85,30 @@ export default function About() {
           <Kicker>About Us</Kicker>
           <h1 className="font-display text-5xl md:text-7xl lg:text-8xl mt-6 tracking-tight leading-[1.02] max-w-4xl">
             <MaskLine delay={0.15}>Luxury should be</MaskLine>
-            <MaskLine delay={0.32}><span className="italic text-[#395439]">lived,</span> not displayed.</MaskLine>
+            <MaskLine delay={0.32}><span className="italic text-[#395439]">lived,</span> not displayed</MaskLine>
           </h1>
         </div>
       </section>
 
       <section className="pb-24 md:pb-32 bg-[#f2ebdd] pt-24 md:pt-32">
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12">
-          <Reveal className="lg:col-span-4"><Kicker>What is Vanalume</Kicker></Reveal>
-          <div className="lg:col-span-8 space-y-6 text-[#2b2320]/85 text-xl md:text-2xl leading-relaxed font-read">
-            <Reveal><p>Vanalume makes fragrance and objects for people who want to notice their own life. We started with candles. We won&rsquo;t stop there.</p></Reveal>
-            <Reveal delay={0.05}><p className="italic text-[#5c3e2b]">Quiet, warm, restrained. No neon, no glitter, no floral candle clichés.</p></Reveal>
+          <Reveal className="lg:col-span-4"><Kicker>The Meaning</Kicker></Reveal>
+          <div className="lg:col-span-8">
+            <Reveal>
+              <p className="font-read italic text-3xl md:text-5xl leading-[1.2] tracking-tight text-[#2b2320]">
+                <span className="text-[#395439]">Vana</span>, the forest — <span className="text-[#395439]">lume</span>, the light
+              </p>
+            </Reveal>
+            <Reveal delay={0.08}>
+              <p className="mt-8 text-lg md:text-xl leading-relaxed text-[#2b2320]/80 max-w-2xl">
+                Vanalume is the glow of the forest carried indoors — the warmth of a living flame, the calm of green, the quiet luminosity that lingers long after the day has gone
+              </p>
+            </Reveal>
+            <Reveal delay={0.14}>
+              <p className="mt-5 font-read italic text-lg md:text-xl text-[#5c3e2b] max-w-2xl">
+                Quiet, warm, restrained — no neon, no glitter, no floral candle clichés
+              </p>
+            </Reveal>
           </div>
         </div>
       </section>
@@ -104,11 +117,11 @@ export default function About() {
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 gap-16">
           <Reveal>
             <Kicker>Mission</Kicker>
-            <p className="font-read text-3xl md:text-4xl mt-6 leading-tight tracking-tight">To create thoughtfully crafted fragrance experiences that inspire slower, calmer and more intentional living.</p>
+            <p className="font-read italic text-3xl md:text-4xl mt-6 leading-[1.35] tracking-tight">To create thoughtfully crafted fragrance experiences that inspire slower, calmer and more intentional living</p>
           </Reveal>
           <Reveal delay={0.1}>
             <Kicker>Vision</Kicker>
-            <p className="font-read text-3xl md:text-4xl mt-6 leading-tight tracking-tight">To build a global lifestyle brand where fragrance, design and ritual come together to transform everyday spaces into meaningful experiences.</p>
+            <p className="font-read italic text-3xl md:text-4xl mt-6 leading-[1.35] tracking-tight">To build a global lifestyle brand where fragrance, design and ritual come together to transform everyday spaces into meaningful experiences</p>
           </Reveal>
         </div>
       </section>
@@ -161,7 +174,7 @@ export default function About() {
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 text-center">
           <Reveal>
             <p className="font-read text-4xl md:text-6xl lg:text-7xl leading-[1.15] tracking-tight max-w-4xl mx-auto">
-              &ldquo;We are not building products. We are creating rituals worth returning to.&rdquo;
+              &ldquo;We are not building products — we are creating rituals worth returning to&rdquo;
             </p>
           </Reveal>
         </div>

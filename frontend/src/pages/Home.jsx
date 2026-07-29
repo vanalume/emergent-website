@@ -52,16 +52,23 @@ function Hero() {
           <Kicker className="text-[#e6b980]">Aromatic Candles · Aroma Stones · Rituals</Kicker>
         </motion.div>
 
-        <h1 className="mt-5 text-[#f8f6f2] font-display font-light leading-[0.9] text-[16vw] md:text-[13vw] lg:text-[10.5rem] tracking-tight">
-          <MaskLine delay={0.35}>Composed</MaskLine>
-          <MaskLine delay={0.52}><span className="italic">Living</span></MaskLine>
+        <h1 className="mt-5 text-[#f8f6f2] font-display font-light leading-[1.05] text-[16vw] md:text-[13vw] lg:text-[10.5rem] tracking-tight">
+          <MaskLine delay={0.35} className="pb-[0.08em]">Composed</MaskLine>
+          <MaskLine delay={0.52} className="pb-[0.12em]"><span className="italic">Living</span></MaskLine>
         </h1>
+
+        <motion.p
+          initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8, duration: 1, ease: EASE }}
+          className="mt-3 font-display italic text-[#e6b980] text-2xl md:text-3xl"
+        >
+          Rituals &amp; Designs
+        </motion.p>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.1, duration: 1, ease: EASE }}
           className="mt-8 max-w-lg text-[#f8f6f2]/80 text-base md:text-lg leading-relaxed"
         >
-          Bringing together fragrance, ritual and thoughtful design to create spaces that feel calm, intentional and beautifully lived in.
+          Bringing together fragrance, ritual and thoughtful design to create spaces that feel calm, intentional and beautifully lived in
         </motion.p>
 
         <motion.div
@@ -91,36 +98,10 @@ function Belief() {
       <div className="max-w-[1440px] mx-auto px-6 md:px-12">
         <Reveal><Kicker>Our Belief</Kicker></Reveal>
         <Reveal delay={0.05}>
-          <p className="mt-8 max-w-3xl font-read text-3xl md:text-4xl lg:text-5xl leading-[1.25] tracking-tight text-[#2b2823]">
-            Luxury isn&rsquo;t loud. It is the quiet confidence of a thoughtfully lit candle, and rituals that slow everyday life.
+          <p className="mt-8 max-w-3xl font-read italic text-3xl md:text-4xl lg:text-5xl leading-[1.3] tracking-tight text-[#2b2823]">
+            Luxury isn&rsquo;t loud — it is the quiet confidence of a thoughtfully lit candle, and rituals that slow everyday life
           </p>
         </Reveal>
-      </div>
-    </section>
-  );
-}
-
-function Why() {
-  const items = [
-    { n: "01", title: "Premium ingredients", desc: "A clean soy–coconut wax blend and considered fragrance oils, selected for depth and a long, even burn." },
-    { n: "02", title: "Curated collections", desc: "Frosted colour jars, wooden lids and ritual cards — objects that remain a quiet presence long after the flame." },
-    { n: "03", title: "Made for ritual", desc: "Not trends. Timeless pieces that become part of the moments you return to." },
-  ];
-  return (
-    <section className="py-28 md:py-40 bg-[#2b2320] text-[#f8f6f2]">
-      <div className="max-w-[1440px] mx-auto px-6 md:px-12">
-        <Reveal><Kicker className="text-[#e6b980]">Why Vanalume</Kicker></Reveal>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-y-14 gap-x-12 mt-14">
-          {items.map((w, i) => (
-            <Reveal key={w.n} delay={i * 0.1}>
-              <div className="border-t border-[#f8f6f2]/15 pt-8">
-                <span className="font-display text-5xl text-[#e6b980]">{w.n}</span>
-                <h3 className="font-display text-2xl md:text-3xl mt-6">{w.title}</h3>
-                <p className="text-[#f8f6f2]/60 text-sm md:text-base mt-4 leading-relaxed">{w.desc}</p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
       </div>
     </section>
   );
@@ -166,7 +147,6 @@ export default function Home() {
     <div data-testid="home-page">
       <Hero />
       <Belief />
-      <Why />
       <FragranceStrip />
       <CTA />
     </div>

@@ -62,7 +62,7 @@ export default function Contact() {
           <Kicker>Contact</Kicker>
           <h1 className="font-display text-4xl md:text-6xl lg:text-7xl mt-6 tracking-tight leading-[1.05] max-w-4xl">
             <MaskLine delay={0.15}>Let&rsquo;s create something</MaskLine>
-            <MaskLine delay={0.32}>beautiful together.</MaskLine>
+            <MaskLine delay={0.32}>beautiful together</MaskLine>
           </h1>
         </div>
       </section>
