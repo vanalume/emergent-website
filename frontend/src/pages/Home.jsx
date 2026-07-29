@@ -58,17 +58,10 @@ function Hero() {
         </h1>
 
         <motion.p
-          initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8, duration: 1, ease: EASE }}
-          className="mt-3 font-display italic text-[#e6b980] text-2xl md:text-3xl"
-        >
-          Rituals &amp; Designs
-        </motion.p>
-
-        <motion.p
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.1, duration: 1, ease: EASE }}
           className="mt-8 max-w-lg text-[#f8f6f2]/80 text-base md:text-lg leading-relaxed"
         >
-          Bringing together fragrance, ritual and thoughtful design to create spaces that feel calm, intentional and beautifully lived in
+          Bringing together fragrances, rituals and thoughtful designs to create spaces that feel calm, intentional and beautifully lived in
         </motion.p>
 
         <motion.div

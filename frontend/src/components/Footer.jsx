@@ -34,7 +34,7 @@ export default function Footer() {
             <img src={IMAGES.logo} alt="Vanalume" className="h-9 w-auto object-contain" style={{ filter: "invert(1)" }} />
             <p className="font-display text-3xl md:text-4xl mt-6 text-[#f8f6f2]/90">Composed Living</p>
             <p className="text-sm text-[#f8f6f2]/55 mt-5 max-w-sm leading-relaxed">
-              Fragrance, ritual and thoughtful design for spaces that feel calm, intentional and beautifully lived in.
+              Fragrances, rituals and thoughtful designs for spaces that feel calm, intentional and beautifully lived in.
             </p>
           </div>
 

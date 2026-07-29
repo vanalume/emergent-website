@@ -38,10 +38,11 @@ export default function Layout() {
     if (reduce) return;
     const l = new Lenis({ duration: 1.15, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
     setLenis(l);
+    window.__lenis = l;
     let raf;
     const loop = (time) => { l.raf(time); raf = requestAnimationFrame(loop); };
     raf = requestAnimationFrame(loop);
-    return () => { cancelAnimationFrame(raf); l.destroy(); };
+    return () => { cancelAnimationFrame(raf); l.destroy(); window.__lenis = null; };
   }, []);
 
   useEffect(() => {

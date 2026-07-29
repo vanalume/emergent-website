@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { Hand, Flower2, Eye, Leaf, AudioLines, X, Plus } from "lucide-react";
 import { Reveal, MaskLine, Kicker } from "@/components/Motion";
@@ -78,6 +78,21 @@ function FounderHero() {
 
 export default function About() {
   const [activeFounder, setActiveFounder] = useState(null);
+
+  useEffect(() => {
+    if (activeFounder) {
+      window.__lenis?.stop();
+      document.body.style.overflow = "hidden";
+    } else {
+      window.__lenis?.start();
+      document.body.style.overflow = "";
+    }
+    return () => {
+      window.__lenis?.start();
+      document.body.style.overflow = "";
+    };
+  }, [activeFounder]);
+
   return (
     <div data-testid="about-page">
       <section className="pt-40 md:pt-56 pb-20 md:pb-28">
@@ -194,7 +209,7 @@ export default function About() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 20, scale: 0.98 }}
                 transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                className="pointer-events-auto relative w-full max-w-3xl max-h-[88vh] overflow-hidden rounded-sm bg-[#f8f6f2] grid grid-cols-1 md:grid-cols-2"
+                className="pointer-events-auto relative w-full max-w-3xl max-h-[88vh] overflow-hidden rounded-sm bg-[#f8f6f2] flex flex-col md:grid md:grid-cols-2"
               >
                 <button
                   onClick={() => setActiveFounder(null)}
@@ -204,10 +219,10 @@ export default function About() {
                 >
                   <X size={18} />
                 </button>
-                <div className="relative h-64 md:h-auto">
+                <div className="relative h-56 sm:h-64 md:h-auto shrink-0">
                   <img src={activeFounder.img} alt={activeFounder.name} className="h-full w-full object-cover" />
                 </div>
-                <div className="p-8 md:p-10 overflow-y-auto vl-hide-scrollbar">
+                <div data-lenis-prevent className="flex-1 min-h-0 overflow-y-auto vl-hide-scrollbar overscroll-contain p-8 md:p-10">
                   <p className="text-xs tracking-[0.2em] uppercase text-[#5c3e2b]">{activeFounder.role}</p>
                   <h3 className="font-display text-4xl mt-2">{activeFounder.name}</h3>
                   <p className="font-read text-base md:text-lg text-[#2b2320]/85 leading-relaxed mt-5">{activeFounder.bio}</p>
