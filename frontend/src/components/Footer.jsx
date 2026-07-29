@@ -54,7 +54,7 @@ export default function Footer() {
               ))}
             </ul>
             <div className="mt-8 flex items-center gap-5">
-              <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram" className="text-[#f8f6f2]/70 hover:text-[#e6b980] transition-colors"><Instagram size={19} /></a>
+              <a href="https://www.instagram.com/vanalume.studio/" target="_blank" rel="noreferrer" aria-label="Instagram" className="text-[#f8f6f2]/70 hover:text-[#e6b980] transition-colors"><Instagram size={19} /></a>
               <a href="https://linkedin.com" target="_blank" rel="noreferrer" aria-label="LinkedIn" className="text-[#f8f6f2]/70 hover:text-[#e6b980] transition-colors"><Linkedin size={19} /></a>
               <a href="mailto:hello@vanalume.com" aria-label="Email" className="text-[#f8f6f2]/70 hover:text-[#e6b980] transition-colors"><Mail size={19} /></a>
             </div>

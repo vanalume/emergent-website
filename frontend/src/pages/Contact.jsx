@@ -164,7 +164,7 @@ export default function Contact() {
               <Kicker>Elsewhere</Kicker>
               <div className="mt-5 flex items-center gap-4">
                 {[
-                  { Icon: Instagram, href: "https://instagram.com", label: "Instagram" },
+                  { Icon: Instagram, href: "https://www.instagram.com/vanalume.studio/", label: "Instagram" },
                   { Icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
                   { Icon: Mail, href: "mailto:hello@vanalume.com", label: "Email" },
                 ].map(({ Icon, href, label }) => (

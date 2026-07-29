@@ -111,17 +111,17 @@ export default function About() {
           <div className="lg:col-span-8">
             <Reveal>
               <p className="font-read italic text-3xl md:text-5xl leading-[1.2] tracking-tight text-[#2b2320]">
-                <span className="text-[#395439]">Vana</span>, the forest — <span className="text-[#395439]">lume</span>, the light
+                <span className="text-[#395439]">Vana</span>, the forest, <span className="text-[#395439]">lume</span>, the light
               </p>
             </Reveal>
             <Reveal delay={0.08}>
               <p className="mt-8 text-lg md:text-xl leading-relaxed text-[#2b2320]/80 max-w-2xl">
-                Vanalume is the glow of the forest carried indoors — the warmth of a living flame, the calm of green, the quiet luminosity that lingers long after the day has gone
+                Vanalume is the glow of the forest carried indoors, the warmth of a living flame, the calm of green, the quiet luminosity that lingers long after the day has gone
               </p>
             </Reveal>
             <Reveal delay={0.14}>
               <p className="mt-5 font-read italic text-lg md:text-xl text-[#5c3e2b] max-w-2xl">
-                Quiet, warm, restrained — no neon, no glitter, no floral candle clichés
+                Quiet, warm, restrained, no neon, no glitter, no floral candle clichés
               </p>
             </Reveal>
           </div>
@@ -189,7 +189,7 @@ export default function About() {
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 text-center">
           <Reveal>
             <p className="font-read text-4xl md:text-6xl lg:text-7xl leading-[1.15] tracking-tight max-w-4xl mx-auto">
-              &ldquo;We are not building products — we are creating rituals worth returning to&rdquo;
+              &ldquo;We are not building products, we are creating rituals worth returning to&rdquo;
             </p>
           </Reveal>
         </div>

@@ -12,7 +12,7 @@
     --vl-navy: #1b3453;
     --vl-gold: #d4a574;
     --vl-sage: #8a9a86;
-    /* Didot for display, Avenir Next for body — with elegant web fallbacks */
+    /* Didot for display, Avenir Next for body, with elegant web fallbacks */
     --font-display: "Didot", "Bodoni Moda", "GFS Didot", Georgia, serif;
     --font-read: "Fraunces", "Cormorant Garamond", Georgia, serif;
     --font-body: "Avenir Next", "Avenir", "Jost", system-ui, -apple-system, sans-serif;

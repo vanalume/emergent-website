@@ -37,7 +37,7 @@ export default function Navbar() {
       }`}
     >
       <nav className="max-w-[1440px] mx-auto px-6 md:px-12 h-24 flex items-center justify-between">
-        <Link to="/" data-testid="nav-logo" aria-label="Vanalume — Home" className="flex items-center shrink-0">
+        <Link to="/" data-testid="nav-logo" aria-label="Vanalume, Home" className="flex items-center shrink-0">
           <img
             src={IMAGES.logo}
             alt="Vanalume"
