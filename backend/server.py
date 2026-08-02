@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, HTTPException
+from fastapi import FastAPI, APIRouter, HTTPException, Header
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -32,6 +32,7 @@ EMAIL_BASE_URL = "https://integrations.emergentagent.com"
 EMAIL_KEY = os.environ.get("EMERGENT_EMAIL_KEY", "").strip()
 EMAIL_FROM_NAME = os.environ.get("EMAIL_FROM_NAME", "Vanalume")
 OWNER_EMAIL = os.environ.get("OWNER_EMAIL", "support@vanalume.com")
+ADMIN_KEY = os.environ.get("ADMIN_KEY", "").strip()
 
 
 async def send_notification_email(subject: str, html: str, reply_to: str | None = None):
@@ -158,6 +159,25 @@ async def create_inquiry(payload: InquiryCreate):
 async def list_inquiries():
     docs = await db.inquiries.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
     return [Inquiry(**d) for d in docs]
+
+
+def _check_admin(key: str | None):
+    if not ADMIN_KEY or key != ADMIN_KEY:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+
+@api_router.post("/admin/verify")
+async def admin_verify(payload: dict):
+    _check_admin((payload or {}).get("key"))
+    return {"ok": True}
+
+
+@api_router.get("/admin/data")
+async def admin_data(x_admin_key: str | None = Header(default=None)):
+    _check_admin(x_admin_key)
+    inquiries = await db.inquiries.find({}, {"_id": 0}).sort("created_at", -1).to_list(2000)
+    newsletter = await db.newsletter.find({}, {"_id": 0}).sort("created_at", -1).to_list(5000)
+    return {"inquiries": inquiries, "newsletter": newsletter}
 
 
 # ---- Newsletter ----
