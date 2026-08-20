@@ -32,7 +32,9 @@ IMG = {
     "timeless": f"{A}/ini4y51o_TIMELESS.png",
     "timeless_box": f"{A}/pivbqtxh_Timeless%20box.png",
     "celebrate": f"{A}/afp78v3j_celebrate.png",
+    "celebrate_metallic": f"{A}/ijm869cw_ensemble%20metal%20celebrate.png",
     "presence": f"{A}/r2kqvo00_presence.png",
+    "presence_metallic": f"{A}/pwobacm9_ensemble%20metal%20presence.png",
     "library": f"{A}/egsxf81t_library.png",
     "midnight": f"{A}/63b55l4v_midnight%20blue.png",
     "green": f"{A}/81smp3e8_deep%20green.png",
@@ -102,7 +104,7 @@ PRODUCTS = [
      "desc": "Three warm, celebratory scents in the signature tin."},
     {"id": "ensemble-celebrate-metallic", "category": "ensemble", "collection": "Celebrate",
      "name": "Celebrate · Metallic Jar", "fragrances": ["Apple Cinnamon", "Vanilla", "Turkish Coffee"],
-     "mrp": 2599, "sp": 1999, "images": [IMG["celebrate"]],
+     "mrp": 2599, "sp": 1999, "images": [IMG["celebrate_metallic"]],
      "desc": "Celebrate, in a premium 220cc metallic jar."},
     {"id": "ensemble-presence-tin", "category": "ensemble", "collection": "Presence",
      "name": "Presence · Tin", "fragrances": ["White Oudh", "Black Oudh", "Musk"],
@@ -110,7 +112,7 @@ PRODUCTS = [
      "desc": "A composed trio of oudh and musk in the signature tin."},
     {"id": "ensemble-presence-metallic", "category": "ensemble", "collection": "Presence",
      "name": "Presence · Metallic Jar", "fragrances": ["White Oudh", "Black Oudh", "Musk"],
-     "mrp": 2599, "sp": 1999, "images": [IMG["presence"]],
+     "mrp": 2599, "sp": 1999, "images": [IMG["presence_metallic"]],
      "desc": "Presence, in a premium 220cc metallic jar."},
 
     # ---------------- PERFUMER'S LIBRARY (1) ----------------
@@ -119,42 +121,25 @@ PRODUCTS = [
      "mrp": 2299, "sp": 1799, "images": [IMG["library"]],
      "desc": "The complete discovery experience, six fragrances."},
 
-    # ---------------- PILLAR CANDLES (4 SKUs) ----------------
-    # 3 individual sizes with colour variants + 1 pack of 3
-    {"id": "pillar-4in", "category": "pillar", "collection": "Sea & Sand", "name": "Pillar 4-inch",
-     "fragrances": ["Oudh", "Spearmint", "Patchouli", "Aqua"], "mrp": 799, "sp": 599,
+    # ---------------- PILLAR CANDLES (1 SKU · size selector + 4 colours) ----------------
+    {"id": "pillar", "category": "pillar", "collection": "Pillar Candles",
+     "name": "Pillar Candle",
+     "fragrances": ["Oudh", "Spearmint", "Patchouli", "Aqua"],
+     "mrp": 799, "sp": 599,
      "images": [IMG["midnight"]],
+     "sizes": [
+        {"label": "4-inch", "mrp": 799, "sp": 599},
+        {"label": "5-inch", "mrp": 899, "sp": 699},
+        {"label": "6-inch", "mrp": 999, "sp": 799},
+        {"label": "Pack of 3 (4·5·6-inch)", "mrp": 2299, "sp": 1699},
+     ],
      "variants": [
         {"label": "Midnight Blue · Oudh", "image": IMG["midnight"]},
         {"label": "Deep Green · Spearmint", "image": IMG["green"]},
         {"label": "Terracotta · Patchouli", "image": IMG["terracotta"]},
         {"label": "Sea & Sand · Aqua", "image": IMG["seasand"]},
      ],
-     "desc": "Rustic-finish 4-inch pillar. Choose your colour and fragrance."},
-    {"id": "pillar-5in", "category": "pillar", "collection": "Sea & Sand", "name": "Pillar 5-inch",
-     "fragrances": ["Oudh", "Spearmint", "Patchouli", "Aqua"], "mrp": 899, "sp": 699,
-     "images": [IMG["green"]],
-     "variants": [
-        {"label": "Midnight Blue · Oudh", "image": IMG["midnight"]},
-        {"label": "Deep Green · Spearmint", "image": IMG["green"]},
-        {"label": "Terracotta · Patchouli", "image": IMG["terracotta"]},
-        {"label": "Sea & Sand · Aqua", "image": IMG["seasand"]},
-     ],
-     "desc": "Rustic-finish 5-inch pillar. Choose your colour and fragrance."},
-    {"id": "pillar-6in", "category": "pillar", "collection": "Sea & Sand", "name": "Pillar 6-inch",
-     "fragrances": ["Oudh", "Spearmint", "Patchouli", "Aqua"], "mrp": 999, "sp": 799,
-     "images": [IMG["terracotta"]],
-     "variants": [
-        {"label": "Midnight Blue · Oudh", "image": IMG["midnight"]},
-        {"label": "Deep Green · Spearmint", "image": IMG["green"]},
-        {"label": "Terracotta · Patchouli", "image": IMG["terracotta"]},
-        {"label": "Sea & Sand · Aqua", "image": IMG["seasand"]},
-     ],
-     "desc": "Rustic-finish 6-inch pillar. Choose your colour and fragrance."},
-    {"id": "pillar-pack3", "category": "pillar", "collection": "Sea & Sand", "name": "Pillar Pack of 3",
-     "fragrances": ["Oudh", "Spearmint", "Patchouli", "Aqua"], "mrp": 2299, "sp": 1699,
-     "images": [IMG["seasand"]],
-     "desc": "A set of three rustic-finish pillars in curated colours and heights."},
+     "desc": "Rustic-finish pillar candles. Choose your size and colour, or take all three sizes as a set."},
 
     # ---------------- TAPER (1 SKU) ----------------
     {"id": "taper-set3", "category": "taper", "collection": "Taper", "name": "Taper Set of 3",
@@ -188,7 +173,7 @@ CATEGORIES = [
     {"id": "duet",     "title": "Duet Collection",      "tagline": "Two fragrances, one ritual. Also available as individuals."},
     {"id": "ensemble", "title": "Ensemble Collection",  "tagline": "Three curated fragrances. Tin or premium metallic jar."},
     {"id": "library",  "title": "Perfumer's Library",   "tagline": "Six fragrances. The complete discovery experience."},
-    {"id": "pillar",   "title": "Pillar Candles",       "tagline": "Rustic-finish pillars in three heights, or as a pack of three."},
+    {"id": "pillar",   "title": "Pillar Candles",       "tagline": "Rustic-finish pillars. Choose your size and colour, or take all three sizes together."},
     {"id": "taper",    "title": "Taper Candles",        "tagline": "Sculptural tapers, in a set of three."},
     {"id": "wax",      "title": "Wax Bars",             "tagline": "Handcrafted wax melts, in a set of two."},
     {"id": "aroma",    "title": "Aroma Stones & Oils",  "tagline": "Objects and oils for a quiet, sensory home."},
@@ -199,8 +184,12 @@ CATEGORIES = [
 PRODUCT_BY_ID = {p["id"]: p for p in PRODUCTS}
 
 
-def resolve_line_price(product, variant_label=None):
-    """Return the SP for a given product/variant."""
+def resolve_line_price(product, variant_label=None, size_label=None):
+    """Return the SP for a given product/variant/size. Size overrides variant/product SP."""
+    if size_label and product.get("sizes"):
+        for s in product["sizes"]:
+            if s["label"] == size_label and "sp" in s:
+                return s["sp"]
     if variant_label and product.get("variants"):
         for v in product["variants"]:
             if v["label"] == variant_label and "sp" in v:

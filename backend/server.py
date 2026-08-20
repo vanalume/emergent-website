@@ -85,6 +85,7 @@ class CartItem(BaseModel):
     product_id: str
     quantity: int = Field(ge=1, le=50)
     variant: Optional[str] = None
+    size: Optional[str] = None
 
 
 class Customer(BaseModel):
@@ -210,14 +211,14 @@ def compute_amount(items: List[CartItem]):
             raise HTTPException(status_code=400, detail=f"Unknown product: {it.product_id}")
         if product.get("enquire"):
             raise HTTPException(status_code=400, detail=f"{product['name']} is enquiry-only.")
-        unit = resolve_line_price(product, it.variant)
+        unit = resolve_line_price(product, it.variant, it.size)
         if unit is None:
             raise HTTPException(status_code=400, detail=f"{product['name']} has no price set.")
         line_total = unit * it.quantity
         subtotal += line_total
         lines.append({
             "product_id": it.product_id, "name": product["name"],
-            "collection": product.get("collection"), "variant": it.variant,
+            "collection": product.get("collection"), "variant": it.variant, "size": it.size,
             "unit_price": unit, "quantity": it.quantity, "line_total": line_total,
         })
     shipping = compute_shipping(subtotal)

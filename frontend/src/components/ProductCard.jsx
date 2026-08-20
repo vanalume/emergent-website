@@ -5,11 +5,17 @@ import { useCart, formatINR } from "@/context/CartContext";
 export default function ProductCard({ product }) {
   const { add } = useCart();
   const hasVariants = Array.isArray(product.variants) && product.variants.length > 0;
+  const hasSizes = Array.isArray(product.sizes) && product.sizes.length > 0;
   const [variant, setVariant] = useState(hasVariants ? product.variants[0].label : null);
+  const [size, setSize] = useState(hasSizes ? product.sizes[0].label : null);
 
   const chosenVariant = useMemo(
     () => hasVariants ? product.variants.find(v => v.label === variant) : null,
     [hasVariants, product.variants, variant]
+  );
+  const chosenSize = useMemo(
+    () => hasSizes ? product.sizes.find(s => s.label === size) : null,
+    [hasSizes, product.sizes, size]
   );
 
   const images = useMemo(() => {
@@ -23,11 +29,11 @@ export default function ProductCard({ product }) {
   const next = (e) => { e.preventDefault(); e.stopPropagation(); setIdx((idx + 1) % total); };
   const prev = (e) => { e.preventDefault(); e.stopPropagation(); setIdx((idx - 1 + total) % total); };
 
-  const sp = chosenVariant?.sp ?? product.sp;
-  const mrp = chosenVariant?.mrp ?? product.mrp;
+  const sp = chosenSize?.sp ?? chosenVariant?.sp ?? product.sp;
+  const mrp = chosenSize?.mrp ?? chosenVariant?.mrp ?? product.mrp;
   const enquire = product.enquire;
 
-  const onAdd = (e) => { e.preventDefault(); e.stopPropagation(); add(product, variant, 1); };
+  const onAdd = (e) => { e.preventDefault(); e.stopPropagation(); add(product, { variant, size, qty: 1 }); };
 
   return (
     <div data-testid={`product-${product.id}`} className="group flex flex-col">
@@ -77,19 +83,42 @@ export default function ProductCard({ product }) {
 
         {product.desc && <p className="text-sm text-[#2b2320]/55 mt-2 leading-relaxed">{product.desc}</p>}
 
+        {hasSizes && (
+          <div className="mt-4">
+            <p className="text-[10px] tracking-[0.18em] uppercase text-[#5c3e2b] mb-2">Size</p>
+            <div className="flex flex-wrap gap-2">
+              {product.sizes.map(s => (
+                <button
+                  key={s.label}
+                  onClick={() => setSize(s.label)}
+                  data-testid={`size-${product.id}-${s.label.replace(/[^a-z0-9]+/gi,'-').toLowerCase()}`}
+                  className={`text-xs px-3 py-1.5 rounded-full border transition-colors duration-300 ${
+                    size === s.label ? "bg-[#2b2320] text-[#f8f6f2] border-[#2b2320]" : "border-[#2b2320]/25 text-[#2b2320]/70 hover:border-[#2b2320]"
+                  }`}
+                >
+                  {s.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         {hasVariants && (
-          <div className="flex flex-wrap gap-2 mt-4">
-            {product.variants.map(v => (
-              <button
-                key={v.label}
-                onClick={() => setVariant(v.label)}
-                className={`text-xs px-3 py-1.5 rounded-full border transition-colors duration-300 ${
-                  variant === v.label ? "bg-[#2b2320] text-[#f8f6f2] border-[#2b2320]" : "border-[#2b2320]/25 text-[#2b2320]/70 hover:border-[#2b2320]"
-                }`}
-              >
-                {v.label}
-              </button>
-            ))}
+          <div className="mt-4">
+            {hasSizes && <p className="text-[10px] tracking-[0.18em] uppercase text-[#5c3e2b] mb-2">Colour</p>}
+            <div className="flex flex-wrap gap-2">
+              {product.variants.map(v => (
+                <button
+                  key={v.label}
+                  onClick={() => setVariant(v.label)}
+                  className={`text-xs px-3 py-1.5 rounded-full border transition-colors duration-300 ${
+                    variant === v.label ? "bg-[#2b2320] text-[#f8f6f2] border-[#2b2320]" : "border-[#2b2320]/25 text-[#2b2320]/70 hover:border-[#2b2320]"
+                  }`}
+                >
+                  {v.label}
+                </button>
+              ))}
+            </div>
           </div>
         )}
 
