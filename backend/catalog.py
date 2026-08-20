@@ -18,10 +18,15 @@ A = "https://customer-assets-gfyr7b9c.emergentagent.net/job_vanalume-preview/art
 # Real product photos already placed on the site
 IMG = {
     "awaken": f"{A}/j3hz7tne_AWAKEN%20copy.png",
+    "awaken_box": f"{A}/nflsyjq1_Awaken%20box.png",
     "bloom": f"{A}/l9rrpbom_BLOOM%20copy.png",
+    "bloom_box": f"{A}/2tnx0tsx_bloom%20box.png",
     "clarity": f"{A}/1qz79thf_CLARITY%20copy.png",
+    "clarity_box": f"{A}/kqso40pb_clarity%20box.png",
     "equilibrium": f"{A}/i8wo86bm_EQUILIBRIUM%20copy.png",
+    "equilibrium_box": f"{A}/2wuv7lii_Equilibrium%20box.png",
     "intimacy": f"{A}/u8xpxby0_INTIMACY.png",
+    "intimacy_box": f"{A}/2i1cnhod_intimacy%20box.png",
     "oriental": f"{A}/apwsai2q_ORIENTAL%20CAFE.png",
     "timeless": f"{A}/ini4y51o_TIMELESS.png",
     "celebrate": f"{A}/afp78v3j_celebrate.png",
@@ -40,11 +45,14 @@ IMG = {
 }
 
 
-def _duet(id_, name, frags, img_key):
+def _duet(id_, name, frags, img_key, box_key=None):
+    images = [IMG[img_key]]
+    if box_key:
+        images.append(IMG[box_key])
     return {
         "id": id_, "category": "duet", "collection": name, "name": name,
         "fragrances": frags, "mrp": 1899, "sp": 1499,
-        "images": [IMG[img_key]],
+        "images": images,
         "desc": "Two fragrances, one ritual.",
     }
 
@@ -70,11 +78,11 @@ DUET_INDIVIDUAL_VARIANTS = [
 
 PRODUCTS = [
     # ---------------- DUET GIFT BOX (7 sets · MRP 1899 · SP 1499) ----------------
-    _duet("duet-awaken", "Awaken", ["Lemongrass", "Cedarwood"], "awaken"),
-    _duet("duet-bloom", "Bloom", ["Rose", "Jasmine"], "bloom"),
-    _duet("duet-clarity", "Clarity", ["White Sage", "Aqua"], "clarity"),
-    _duet("duet-equilibrium", "Equilibrium", ["Tea Tree", "Sandalwood"], "equilibrium"),
-    _duet("duet-intimacy", "Intimacy", ["Lavender", "Mogra"], "intimacy"),
+    _duet("duet-awaken", "Awaken", ["Lemongrass", "Cedarwood"], "awaken", "awaken_box"),
+    _duet("duet-bloom", "Bloom", ["Rose", "Jasmine"], "bloom", "bloom_box"),
+    _duet("duet-clarity", "Clarity", ["White Sage", "Aqua"], "clarity", "clarity_box"),
+    _duet("duet-equilibrium", "Equilibrium", ["Tea Tree", "Sandalwood"], "equilibrium", "equilibrium_box"),
+    _duet("duet-intimacy", "Intimacy", ["Lavender", "Mogra"], "intimacy", "intimacy_box"),
     _duet("duet-oriental-cafe", "Oriental Cafe", ["Turkish Coffee", "Vanilla"], "oriental"),
     _duet("duet-timeless", "Timeless", ["Black Oudh", "White Oudh"], "timeless"),
 
