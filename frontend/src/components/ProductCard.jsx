@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
-import { Plus, ChevronLeft, ChevronRight } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Plus, ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import { useCart, formatINR } from "@/context/CartContext";
 
 export default function ProductCard({ product }) {
@@ -7,15 +8,10 @@ export default function ProductCard({ product }) {
   const hasVariants = Array.isArray(product.variants) && product.variants.length > 0;
   const hasSizes = Array.isArray(product.sizes) && product.sizes.length > 0;
   const [variant, setVariant] = useState(hasVariants ? product.variants[0].label : null);
-  const [size, setSize] = useState(hasSizes ? product.sizes[0].label : null);
 
   const chosenVariant = useMemo(
     () => hasVariants ? product.variants.find(v => v.label === variant) : null,
     [hasVariants, product.variants, variant]
-  );
-  const chosenSize = useMemo(
-    () => hasSizes ? product.sizes.find(s => s.label === size) : null,
-    [hasSizes, product.sizes, size]
   );
 
   const images = useMemo(() => {
@@ -26,49 +22,65 @@ export default function ProductCard({ product }) {
 
   const [idx, setIdx] = useState(0);
   const total = images.length;
-  const next = (e) => { e.preventDefault(); e.stopPropagation(); setIdx((idx + 1) % total); };
-  const prev = (e) => { e.preventDefault(); e.stopPropagation(); setIdx((idx - 1 + total) % total); };
+  const stopLink = (e) => { e.preventDefault(); e.stopPropagation(); };
+  const next = (e) => { stopLink(e); setIdx((idx + 1) % total); };
+  const prev = (e) => { stopLink(e); setIdx((idx - 1 + total) % total); };
 
-  const sp = chosenSize?.sp ?? chosenVariant?.sp ?? product.sp;
-  const mrp = chosenSize?.mrp ?? chosenVariant?.mrp ?? product.mrp;
+  const sp = chosenVariant?.sp ?? product.sp;
+  const mrp = chosenVariant?.mrp ?? product.mrp;
   const enquire = product.enquire;
+  const hasChoices = hasSizes || hasVariants;
 
-  const onAdd = (e) => { e.preventDefault(); e.stopPropagation(); add(product, { variant, size, qty: 1 }); };
+  const to = `/product/${product.id}`;
+
+  const onAdd = (e) => {
+    stopLink(e);
+    // If choices exist (size or multi-variant), send to detail so user can choose properly.
+    if (hasSizes) {
+      window.location.href = to;
+      return;
+    }
+    add(product, { variant, size: null, qty: 1 });
+  };
 
   return (
     <div data-testid={`product-${product.id}`} className="group flex flex-col">
-      <div className="relative overflow-hidden rounded-sm bg-[#ece3d4] aspect-[4/5]">
-        <img
-          key={images[idx]}
-          src={images[idx]}
-          alt={product.name}
-          loading="lazy"
-          className="h-full w-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-105"
-        />
-        <div className="absolute inset-0 ring-1 ring-inset ring-[#5c3e2b]/12" />
-        {total > 1 && (
-          <>
-            <button onClick={prev} aria-label="Previous image"
-              className="absolute left-3 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-[#f8f6f2]/85 text-[#2b2320] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-              <ChevronLeft size={16} />
-            </button>
-            <button onClick={next} aria-label="Next image"
-              className="absolute right-3 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-[#f8f6f2]/85 text-[#2b2320] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-              <ChevronRight size={16} />
-            </button>
-            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
-              {images.map((_, i) => (
-                <span key={i} className={`h-1.5 w-1.5 rounded-full transition-colors ${i === idx ? "bg-[#f8f6f2]" : "bg-[#f8f6f2]/40"}`} />
-              ))}
-            </div>
-          </>
-        )}
-      </div>
+      <Link to={to} className="block">
+        <div className="relative overflow-hidden rounded-sm bg-[#ece3d4] aspect-[4/5]">
+          <img
+            key={images[idx]}
+            src={images[idx]}
+            alt={product.name}
+            loading="lazy"
+            className="h-full w-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-105"
+          />
+          <div className="absolute inset-0 ring-1 ring-inset ring-[#5c3e2b]/12" />
+          {total > 1 && (
+            <>
+              <button onClick={prev} aria-label="Previous image"
+                className="absolute left-3 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-[#f8f6f2]/85 text-[#2b2320] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <ChevronLeft size={16} />
+              </button>
+              <button onClick={next} aria-label="Next image"
+                className="absolute right-3 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-[#f8f6f2]/85 text-[#2b2320] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <ChevronRight size={16} />
+              </button>
+              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+                {images.map((_, i) => (
+                  <span key={i} className={`h-1.5 w-1.5 rounded-full transition-colors ${i === idx ? "bg-[#f8f6f2]" : "bg-[#f8f6f2]/40"}`} />
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      </Link>
 
       <div className="mt-4 flex-1 flex flex-col">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <h3 className="font-display text-2xl leading-tight">{product.name}</h3>
+            <Link to={to} className="block">
+              <h3 className="font-display text-2xl leading-tight hover:text-[#5c3e2b] transition-colors">{product.name}</h3>
+            </Link>
             {product.fragrances?.length > 0 && (
               <p className="text-xs text-[#5c3e2b] mt-1 tracking-wide">{product.fragrances.join(" · ")}</p>
             )}
@@ -83,48 +95,34 @@ export default function ProductCard({ product }) {
 
         {product.desc && <p className="text-sm text-[#2b2320]/55 mt-2 leading-relaxed">{product.desc}</p>}
 
-        {hasSizes && (
-          <div className="mt-4">
-            <p className="text-[10px] tracking-[0.18em] uppercase text-[#5c3e2b] mb-2">Size</p>
-            <div className="flex flex-wrap gap-2">
-              {product.sizes.map(s => (
-                <button
-                  key={s.label}
-                  onClick={() => setSize(s.label)}
-                  data-testid={`size-${product.id}-${s.label.replace(/[^a-z0-9]+/gi,'-').toLowerCase()}`}
-                  className={`text-xs px-3 py-1.5 rounded-full border transition-colors duration-300 ${
-                    size === s.label ? "bg-[#2b2320] text-[#f8f6f2] border-[#2b2320]" : "border-[#2b2320]/25 text-[#2b2320]/70 hover:border-[#2b2320]"
-                  }`}
-                >
-                  {s.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {hasVariants && (
-          <div className="mt-4">
-            {hasSizes && <p className="text-[10px] tracking-[0.18em] uppercase text-[#5c3e2b] mb-2">Colour</p>}
-            <div className="flex flex-wrap gap-2">
-              {product.variants.map(v => (
-                <button
-                  key={v.label}
-                  onClick={() => setVariant(v.label)}
-                  className={`text-xs px-3 py-1.5 rounded-full border transition-colors duration-300 ${
-                    variant === v.label ? "bg-[#2b2320] text-[#f8f6f2] border-[#2b2320]" : "border-[#2b2320]/25 text-[#2b2320]/70 hover:border-[#2b2320]"
-                  }`}
-                >
-                  {v.label}
-                </button>
-              ))}
-            </div>
+        {hasVariants && !hasSizes && (
+          <div className="flex flex-wrap gap-2 mt-4">
+            {product.variants.map(v => (
+              <button
+                key={v.label}
+                onClick={(e) => { stopLink(e); setVariant(v.label); }}
+                className={`text-xs px-3 py-1.5 rounded-full border transition-colors duration-300 ${
+                  variant === v.label ? "bg-[#2b2320] text-[#f8f6f2] border-[#2b2320]" : "border-[#2b2320]/25 text-[#2b2320]/70 hover:border-[#2b2320]"
+                }`}
+              >
+                {v.label}
+              </button>
+            ))}
           </div>
         )}
 
         <div className="mt-5">
           {enquire ? (
-            <a href="/contact" className="inline-flex items-center gap-2 text-sm border border-[#2b2320] rounded-full px-6 py-2.5">Enquire</a>
+            <Link to="/contact" className="inline-flex items-center gap-2 text-sm border border-[#2b2320] rounded-full px-6 py-2.5">Enquire</Link>
+          ) : hasChoices ? (
+            <Link
+              to={to}
+              data-testid={`view-${product.id}`}
+              className="group/btn inline-flex items-center gap-2 text-sm bg-[#2b2320] text-[#f8f6f2] rounded-full px-6 py-2.5 hover:bg-[#395439] transition-colors duration-300"
+            >
+              View Details
+              <ArrowRight size={14} className="transition-transform duration-300 group-hover/btn:translate-x-1" />
+            </Link>
           ) : (
             <button
               onClick={onAdd}
