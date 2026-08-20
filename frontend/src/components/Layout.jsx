@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Lenis from "lenis";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import CartDrawer from "@/components/CartDrawer";
 
 function SoftCursor() {
   const dot = useRef(null);
@@ -66,6 +67,7 @@ export default function Layout() {
         </motion.main>
       </AnimatePresence>
       <Footer />
+      <CartDrawer />
     </div>
   );
 }

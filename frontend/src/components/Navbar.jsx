@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ShoppingBag } from "lucide-react";
 import { IMAGES } from "@/lib/data";
+import { useCart } from "@/context/CartContext";
 
 const LINKS = [
   { to: "/", label: "Home" },
@@ -15,6 +16,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
+  const { count, setOpen: setCartOpen } = useCart();
 
   const dark = pathname === "/" && !scrolled; // over the dark home hero
 
@@ -65,11 +67,42 @@ export default function Navbar() {
           >
             Explore Products
           </Link>
+          <button
+            onClick={() => setCartOpen(true)}
+            data-testid="nav-cart-btn"
+            aria-label={`Open cart, ${count} items`}
+            className={`relative p-2 -mr-2 transition-colors duration-300 ${textCol} hover:opacity-100 opacity-80`}
+          >
+            <ShoppingBag size={20} strokeWidth={1.5} />
+            {count > 0 && (
+              <span
+                data-testid="nav-cart-count"
+                className="absolute -top-0.5 -right-0.5 h-4 min-w-4 px-1 rounded-full bg-[#e6b980] text-[#2b2320] text-[10px] font-medium flex items-center justify-center"
+              >
+                {count}
+              </span>
+            )}
+          </button>
         </div>
 
-        <button data-testid="nav-mobile-toggle" onClick={() => setOpen((v) => !v)} className={`lg:hidden p-2 ${textCol}`} aria-label="Toggle menu">
-          {open ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        <div className="lg:hidden flex items-center gap-1">
+          <button
+            onClick={() => setCartOpen(true)}
+            data-testid="nav-mobile-cart-btn"
+            aria-label={`Open cart, ${count} items`}
+            className={`relative p-2 ${textCol}`}
+          >
+            <ShoppingBag size={22} strokeWidth={1.5} />
+            {count > 0 && (
+              <span className="absolute top-0 right-0 h-4 min-w-4 px-1 rounded-full bg-[#e6b980] text-[#2b2320] text-[10px] font-medium flex items-center justify-center">
+                {count}
+              </span>
+            )}
+          </button>
+          <button data-testid="nav-mobile-toggle" onClick={() => setOpen((v) => !v)} className={`p-2 ${textCol}`} aria-label="Toggle menu">
+            {open ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </nav>
 
       <AnimatePresence>

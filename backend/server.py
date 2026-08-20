@@ -12,7 +12,7 @@ from datetime import datetime, timezone
 import razorpay
 import httpx
 
-from catalog import PRODUCTS, CATEGORIES, PRODUCT_BY_ID
+from catalog import PRODUCTS, CATEGORIES, PRODUCT_BY_ID, resolve_line_price, compute_shipping
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -201,64 +201,53 @@ async def subscribe_newsletter(payload: NewsletterCreate):
 
 # ---- Orders ----
 def compute_amount(items: List[CartItem]):
-    """Compute order total (in INR) from the server-side catalogue. Returns (amount, line_items)."""
-    total = 0
+    """Compute (subtotal, shipping, total, line_items) in INR from the server-side catalogue."""
+    subtotal = 0
     lines = []
     for it in items:
         product = PRODUCT_BY_ID.get(it.product_id)
         if not product:
             raise HTTPException(status_code=400, detail=f"Unknown product: {it.product_id}")
-        if product.get("price") is None:
-            raise HTTPException(status_code=400, detail=f"{product['name']} is priced by weight — please enquire.")
-        line_total = product["price"] * it.quantity
-        total += line_total
+        if product.get("enquire"):
+            raise HTTPException(status_code=400, detail=f"{product['name']} is enquiry-only.")
+        unit = resolve_line_price(product, it.variant)
+        if unit is None:
+            raise HTTPException(status_code=400, detail=f"{product['name']} has no price set.")
+        line_total = unit * it.quantity
+        subtotal += line_total
         lines.append({
-            "product_id": it.product_id,
-            "name": product["name"],
-            "collection": product.get("collection"),
-            "variant": it.variant,
-            "unit_price": product["price"],
-            "quantity": it.quantity,
-            "line_total": line_total,
+            "product_id": it.product_id, "name": product["name"],
+            "collection": product.get("collection"), "variant": it.variant,
+            "unit_price": unit, "quantity": it.quantity, "line_total": line_total,
         })
-    return total, lines
+    shipping = compute_shipping(subtotal)
+    return subtotal, shipping, subtotal + shipping, lines
 
 
 @api_router.post("/orders")
 async def create_order(payload: OrderCreate):
-    amount, lines = compute_amount(payload.items)
+    subtotal, shipping, amount, lines = compute_amount(payload.items)
     order_id = str(uuid.uuid4())
     doc = {
-        "id": order_id,
-        "items": lines,
-        "amount": amount,
-        "currency": "INR",
+        "id": order_id, "items": lines,
+        "subtotal": subtotal, "shipping": shipping, "amount": amount, "currency": "INR",
         "customer": payload.customer.model_dump(),
-        "status": "pending",
-        "razorpay_order_id": None,
-        "created_at": now_iso(),
+        "status": "pending", "razorpay_order_id": None, "created_at": now_iso(),
     }
-
     razorpay_order_id = None
     if rzp_client is not None:
         rzp_order = rzp_client.order.create({
-            "amount": amount * 100,  # paise
-            "currency": "INR",
-            "receipt": order_id[:40],
-            "payment_capture": 1,
+            "amount": amount * 100, "currency": "INR",
+            "receipt": order_id[:40], "payment_capture": 1,
         })
         razorpay_order_id = rzp_order["id"]
         doc["razorpay_order_id"] = razorpay_order_id
-
     await db.orders.insert_one(doc)
-
     return {
-        "order_id": order_id,
-        "amount": amount,
-        "currency": "INR",
+        "order_id": order_id, "subtotal": subtotal, "shipping": shipping,
+        "amount": amount, "currency": "INR",
         "payment_configured": rzp_client is not None,
-        "razorpay_order_id": razorpay_order_id,
-        "razorpay_key_id": RZP_KEY_ID or None,
+        "razorpay_order_id": razorpay_order_id, "razorpay_key_id": RZP_KEY_ID or None,
     }
 
 
