@@ -28,7 +28,9 @@ IMG = {
     "intimacy": f"{A}/u8xpxby0_INTIMACY.png",
     "intimacy_box": f"{A}/2i1cnhod_intimacy%20box.png",
     "oriental": f"{A}/apwsai2q_ORIENTAL%20CAFE.png",
+    "oriental_box": f"{A}/gxgy5891_orientla%20cafe%20box.png",
     "timeless": f"{A}/ini4y51o_TIMELESS.png",
+    "timeless_box": f"{A}/pivbqtxh_Timeless%20box.png",
     "celebrate": f"{A}/afp78v3j_celebrate.png",
     "presence": f"{A}/r2kqvo00_presence.png",
     "library": f"{A}/egsxf81t_library.png",
@@ -83,8 +85,8 @@ PRODUCTS = [
     _duet("duet-clarity", "Clarity", ["White Sage", "Aqua"], "clarity", "clarity_box"),
     _duet("duet-equilibrium", "Equilibrium", ["Tea Tree", "Sandalwood"], "equilibrium", "equilibrium_box"),
     _duet("duet-intimacy", "Intimacy", ["Lavender", "Mogra"], "intimacy", "intimacy_box"),
-    _duet("duet-oriental-cafe", "Oriental Cafe", ["Turkish Coffee", "Vanilla"], "oriental"),
-    _duet("duet-timeless", "Timeless", ["Black Oudh", "White Oudh"], "timeless"),
+    _duet("duet-oriental-cafe", "Oriental Cafe", ["Turkish Coffee", "Vanilla"], "oriental", "oriental_box"),
+    _duet("duet-timeless", "Timeless", ["Black Oudh", "White Oudh"], "timeless", "timeless_box"),
 
     # ---------------- DUET INDIVIDUAL (14 variants · MRP 999 · SP 599) ----------------
     {"id": "duet-individual", "category": "duet", "collection": "Individual",
