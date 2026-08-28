@@ -82,13 +82,12 @@ function HeroSlideshow() {
 
 function FragranceStrip() {
   return (
-    <section className="pt-28 md:pt-32 pb-12 md:pb-16 bg-[#e8ddc9] overflow-hidden">
-      <Reveal className="max-w-[1440px] mx-auto px-6 md:px-12 mb-8"><Kicker>The Fragrance Library</Kicker></Reveal>
-      <Marquee speed={40} gradient gradientColor="#e8ddc9" gradientWidth={120} pauseOnHover>
+    <section className="pt-24 md:pt-28 pb-4 md:pb-6 bg-[#e8ddc9] overflow-hidden">
+      <Marquee speed={40} gradient gradientColor="#e8ddc9" gradientWidth={80} pauseOnHover>
         {FRAGRANCES.map((f) => (
-          <div key={f} className="group flex items-center gap-8 md:gap-12 px-8 md:px-12">
-            <span className="font-display italic text-4xl md:text-7xl text-[#5c3e2b]/85 group-hover:text-[#395439] transition-colors duration-500">{f}</span>
-            <span className="h-2 w-2 rounded-full bg-[#5c3e2b]/40" />
+          <div key={f} className="group flex items-center gap-6 md:gap-8 px-6 md:px-8">
+            <span className="font-display italic text-lg md:text-2xl text-[#5c3e2b]/85 group-hover:text-[#395439] transition-colors duration-500">{f}</span>
+            <span className="h-1 w-1 rounded-full bg-[#5c3e2b]/40" />
           </div>
         ))}
       </Marquee>
