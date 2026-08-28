@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { Link, useLocation } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
-import { Reveal, MaskLine, Kicker } from "@/components/Motion";
+import { Reveal, Kicker } from "@/components/Motion";
 import ProductCard from "@/components/ProductCard";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -111,19 +111,7 @@ export default function Shop() {
 
   return (
     <div data-testid="shop-page">
-      <section className="pt-40 md:pt-52 pb-10 md:pb-14">
-        <div className="max-w-[1440px] mx-auto px-6 md:px-12">
-          <Kicker>The Shop</Kicker>
-          <h1 className="font-display text-6xl md:text-8xl lg:text-9xl mt-5 tracking-tight leading-none">
-            <MaskLine delay={0.15}>Candles &amp; Rituals</MaskLine>
-          </h1>
-          <Reveal delay={0.35}>
-            <p className="mt-8 max-w-xl text-[#5c3e2b]/90 text-lg leading-relaxed">
-              Every piece is thoughtfully designed to bring fragrance, craftsmanship and quiet luxury into everyday spaces.
-            </p>
-          </Reveal>
-        </div>
-      </section>
+      <div className="pt-28 md:pt-36" />
 
       {/* Group filter bar */}
       <div className="sticky top-20 z-30 bg-[#f8f6f2]/85 backdrop-blur-xl border-y border-[#2b2320]/10">
