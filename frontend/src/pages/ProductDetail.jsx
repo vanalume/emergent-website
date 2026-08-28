@@ -48,6 +48,12 @@ export default function ProductDetail() {
     return base;
   }, [product, chosenVariant]);
 
+  const imageCrops = product?.image_crops || [];
+  const currentCrop = imageCrops[imgIdx] || null;
+  const cropStyle = currentCrop
+    ? { height: "200%", top: currentCrop === "top" ? 0 : "auto", bottom: currentCrop === "bottom" ? 0 : "auto", left: 0, right: 0, position: "absolute", objectFit: "cover", width: "100%" }
+    : null;
+
   const sp = chosenSize?.sp ?? chosenVariant?.sp ?? product?.sp ?? 0;
   const mrp = chosenSize?.mrp ?? chosenVariant?.mrp ?? product?.mrp ?? 0;
   const save = mrp > sp ? Math.round(((mrp - sp) / mrp) * 100) : 0;
@@ -86,12 +92,21 @@ export default function ProductDetail() {
           {/* --------- Gallery --------- */}
           <div>
             <div className="relative overflow-hidden rounded-sm bg-[#ece3d4] aspect-[4/5]">
-              <img
-                key={images[imgIdx]}
-                src={images[imgIdx]}
-                alt={product.name}
-                className="h-full w-full object-cover"
-              />
+              {currentCrop ? (
+                <img
+                  key={images[imgIdx]}
+                  src={images[imgIdx]}
+                  alt={product.name}
+                  style={cropStyle}
+                />
+              ) : (
+                <img
+                  key={images[imgIdx]}
+                  src={images[imgIdx]}
+                  alt={product.name}
+                  className="h-full w-full object-cover"
+                />
+              )}
               {images.length > 1 && (
                 <>
                   <button data-testid="pdp-prev" onClick={prev} aria-label="Previous image"

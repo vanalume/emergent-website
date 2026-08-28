@@ -20,11 +20,19 @@ export default function ProductCard({ product }) {
     return base;
   }, [product.images, product.image, chosenVariant]);
 
+  const imageCrops = product.image_crops || [];
+
   const [idx, setIdx] = useState(0);
   const total = images.length;
   const stopLink = (e) => { e.preventDefault(); e.stopPropagation(); };
   const next = (e) => { stopLink(e); setIdx((idx + 1) % total); };
   const prev = (e) => { stopLink(e); setIdx((idx - 1 + total) % total); };
+
+  const currentCrop = imageCrops[idx] || null;
+  // Pair photos are two 4:5 frames stacked. Scale img to 200% height and shift.
+  const cropStyle = currentCrop
+    ? { height: "200%", top: currentCrop === "top" ? 0 : "auto", bottom: currentCrop === "bottom" ? 0 : "auto", left: 0, right: 0, position: "absolute", objectFit: "cover", width: "100%" }
+    : null;
 
   const sp = chosenVariant?.sp ?? product.sp;
   const mrp = chosenVariant?.mrp ?? product.mrp;
@@ -47,13 +55,24 @@ export default function ProductCard({ product }) {
     <div data-testid={`product-${product.id}`} className="group flex flex-col">
       <Link to={to} className="block">
         <div className="relative overflow-hidden rounded-sm bg-[#ece3d4] aspect-[4/5]">
-          <img
-            key={images[idx]}
-            src={images[idx]}
-            alt={product.name}
-            loading="lazy"
-            className="h-full w-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-105"
-          />
+          {currentCrop ? (
+            <img
+              key={images[idx]}
+              src={images[idx]}
+              alt={product.name}
+              loading="lazy"
+              style={cropStyle}
+              className="transition-transform duration-[900ms] ease-out group-hover:scale-105"
+            />
+          ) : (
+            <img
+              key={images[idx]}
+              src={images[idx]}
+              alt={product.name}
+              loading="lazy"
+              className="h-full w-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-105"
+            />
+          )}
           <div className="absolute inset-0 ring-1 ring-inset ring-[#5c3e2b]/12" />
           {total > 1 && (
             <>
