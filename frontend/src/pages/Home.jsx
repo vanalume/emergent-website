@@ -26,52 +26,54 @@ function HeroSlideshow() {
   const slide = SLIDES[idx];
 
   return (
-    <section data-testid="hero-slideshow" className="relative w-full bg-[#f2ebdd] pt-20">
-      <div className="relative w-full aspect-[3/2] max-h-[calc(100svh-5rem)] overflow-hidden">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={slide.id}
-            initial={{ opacity: 0, scale: 1.02 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.02 }}
-            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute inset-0"
+    <section data-testid="hero-slideshow" className="relative w-full bg-[#f2ebdd]">
+      <div className="max-w-[1440px] mx-auto px-6 md:px-12">
+        <div className="relative w-full aspect-[3/2] max-h-[68vh] overflow-hidden rounded-sm">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={slide.id}
+              initial={{ opacity: 0, scale: 1.02 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 1.02 }}
+              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute inset-0"
+            >
+              <Link to={slide.to} data-testid={`hero-slide-${slide.id}`} className="block h-full w-full">
+                <img src={slide.src} alt={slide.alt} className="h-full w-full object-contain md:object-cover" />
+              </Link>
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Prev / Next */}
+          <button
+            onClick={prev}
+            data-testid="hero-prev"
+            aria-label="Previous slide"
+            className="absolute right-20 md:right-24 bottom-4 md:bottom-6 h-10 w-10 md:h-12 md:w-12 rounded-full border border-[#2b2320]/40 bg-[#f8f6f2]/70 hover:bg-[#f8f6f2] backdrop-blur-sm text-[#2b2320] flex items-center justify-center transition-colors"
           >
-            <Link to={slide.to} data-testid={`hero-slide-${slide.id}`} className="block h-full w-full">
-              <img src={slide.src} alt={slide.alt} className="h-full w-full object-contain md:object-cover" />
-            </Link>
-          </motion.div>
-        </AnimatePresence>
+            <ChevronLeft size={16} />
+          </button>
+          <button
+            onClick={next}
+            data-testid="hero-next"
+            aria-label="Next slide"
+            className="absolute right-4 md:right-6 bottom-4 md:bottom-6 h-10 w-10 md:h-12 md:w-12 rounded-full border border-[#2b2320]/40 bg-[#f8f6f2]/70 hover:bg-[#f8f6f2] backdrop-blur-sm text-[#2b2320] flex items-center justify-center transition-colors"
+          >
+            <ChevronRight size={16} />
+          </button>
 
-        {/* Prev / Next */}
-        <button
-          onClick={prev}
-          data-testid="hero-prev"
-          aria-label="Previous slide"
-          className="absolute right-24 md:right-28 bottom-6 md:bottom-10 h-11 w-11 md:h-14 md:w-14 rounded-full border border-[#2b2320]/40 bg-[#f8f6f2]/70 hover:bg-[#f8f6f2] backdrop-blur-sm text-[#2b2320] flex items-center justify-center transition-colors"
-        >
-          <ChevronLeft size={18} />
-        </button>
-        <button
-          onClick={next}
-          data-testid="hero-next"
-          aria-label="Next slide"
-          className="absolute right-6 md:right-10 bottom-6 md:bottom-10 h-11 w-11 md:h-14 md:w-14 rounded-full border border-[#2b2320]/40 bg-[#f8f6f2]/70 hover:bg-[#f8f6f2] backdrop-blur-sm text-[#2b2320] flex items-center justify-center transition-colors"
-        >
-          <ChevronRight size={18} />
-        </button>
-
-        {/* Dots */}
-        <div className="absolute left-1/2 -translate-x-1/2 bottom-6 md:bottom-10 flex gap-2">
-          {SLIDES.map((s, i) => (
-            <button
-              key={s.id}
-              onClick={() => setIdx(i)}
-              data-testid={`hero-dot-${s.id}`}
-              aria-label={`Go to slide ${i + 1}`}
-              className={`h-1.5 rounded-full transition-all duration-300 ${i === idx ? "bg-[#2b2320] w-8" : "bg-[#2b2320]/30 w-3 hover:bg-[#2b2320]/60"}`}
-            />
-          ))}
+          {/* Dots */}
+          <div className="absolute left-1/2 -translate-x-1/2 bottom-4 md:bottom-6 flex gap-2">
+            {SLIDES.map((s, i) => (
+              <button
+                key={s.id}
+                onClick={() => setIdx(i)}
+                data-testid={`hero-dot-${s.id}`}
+                aria-label={`Go to slide ${i + 1}`}
+                className={`h-1.5 rounded-full transition-all duration-300 ${i === idx ? "bg-[#2b2320] w-8" : "bg-[#2b2320]/30 w-3 hover:bg-[#2b2320]/60"}`}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -80,7 +82,7 @@ function HeroSlideshow() {
 
 function FragranceStrip() {
   return (
-    <section className="py-16 md:py-24 bg-[#e8ddc9] overflow-hidden">
+    <section className="pt-28 md:pt-32 pb-12 md:pb-16 bg-[#e8ddc9] overflow-hidden">
       <Reveal className="max-w-[1440px] mx-auto px-6 md:px-12 mb-8"><Kicker>The Fragrance Library</Kicker></Reveal>
       <Marquee speed={40} gradient gradientColor="#e8ddc9" gradientWidth={120} pauseOnHover>
         {FRAGRANCES.map((f) => (
@@ -131,8 +133,8 @@ function CTA() {
 export default function Home() {
   return (
     <div data-testid="home-page">
-      <HeroSlideshow />
       <FragranceStrip />
+      <HeroSlideshow />
       <Belief />
       <CTA />
     </div>
