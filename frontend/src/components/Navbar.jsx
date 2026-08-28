@@ -18,7 +18,7 @@ export default function Navbar() {
   const { pathname } = useLocation();
   const { count, setOpen: setCartOpen } = useCart();
 
-  const dark = pathname === "/" && !scrolled; // over the dark home hero
+  const dark = false; // Home hero is now a light poster slideshow; navbar always uses dark text on light bg
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
