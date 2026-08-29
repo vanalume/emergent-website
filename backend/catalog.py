@@ -1,4 +1,9 @@
-"""Vanalume retail catalogue (INR). MRP = crossed-out original, SP = selling price.
+"""Vanalume retail catalogue seed (INR). MRP = crossed-out original, SP = selling price.
+
+This module is NOT a runtime database. It holds the canonical seed data and a
+`seed_catalog()` helper that persists it into MongoDB at startup (conforming to
+the Product / Category models in `models.py`). Every API route reads the
+catalogue from MongoDB via `database.db` — never from these static lists.
 
 Schema (scalable, ready for future admin editing):
 - id, category, collection, name
@@ -13,6 +18,8 @@ Schema (scalable, ready for future admin editing):
 - ritual (dict, optional) : {"title": str, "steps": [str, ...]} — Vanalume ritual instruction
 - enquire (bool) : if True, product is NOT purchasable (contact-only). Default False.
 """
+
+from models import Category, Product
 
 A = "https://customer-assets-gfyr7b9c.emergentagent.net/job_vanalume-preview/artifacts"
 
@@ -327,27 +334,24 @@ CATEGORIES = [
 ]
 
 
-# ---------- Helpers used by the backend ----------
-PRODUCT_BY_ID = {p["id"]: p for p in PRODUCTS}
+# ---------- Seed helper (runs once at startup) ----------
+async def seed_catalog(db) -> None:
+    """Persist PRODUCTS / CATEGORIES into MongoDB.
 
-
-def resolve_line_price(product, variant_label=None, size_label=None):
-    """Return the SP for a given product/variant/size. Size overrides variant/product SP."""
-    if size_label and product.get("sizes"):
-        for s in product["sizes"]:
-            if s["label"] == size_label and "sp" in s:
-                return s["sp"]
-    if variant_label and product.get("variants"):
-        for v in product["variants"]:
-            if v["label"] == variant_label and "sp" in v:
-                return v["sp"]
-    return product.get("sp")
-
-
-# Shipping rule
-SHIPPING_FLAT = 100
-SHIPPING_FREE_THRESHOLD = 2000
-
-
-def compute_shipping(subtotal: int) -> int:
-    return 0 if subtotal >= SHIPPING_FREE_THRESHOLD else SHIPPING_FLAT
+    Uses $setOnInsert so existing documents (e.g. admin edits made in Mongo) are
+    never overwritten on restart, while new seed entries are added.
+    """
+    for p in PRODUCTS:
+        product = Product(**p)
+        await db.products.update_one(
+            {"id": product.id},
+            {"$setOnInsert": product.model_dump()},
+            upsert=True,
+        )
+    for c in CATEGORIES:
+        category = Category(**c)
+        await db.categories.update_one(
+            {"id": category.id},
+            {"$setOnInsert": category.model_dump()},
+            upsert=True,
+        )

@@ -125,6 +125,7 @@ class TestOrders:
         assert d["currency"] == "INR"
         assert d["payment_configured"] is False
         assert d["razorpay_order_id"] is None
+        assert d["delivery_provider"] == "shiprocket"
         assert "order_id" in d
 
     def test_large_order_free_shipping(self, client):
@@ -180,6 +181,17 @@ class TestOrders:
         r = client.post(f"{API}/orders", json=payload)
         assert r.status_code == 400
         assert "unknown product" in r.json().get("detail", "").lower()
+
+    def test_uncovered_pincode_rejected_before_payment(self, client):
+        # No provider covers 999999 / "Unknown State" -> order must fail before
+        # any Razorpay order is created.
+        payload = {
+            "items": [{"product_id": "duet-bloom", "quantity": 1}],
+            "customer": {**VALID_CUSTOMER, "pincode": "999999", "state": "Unknown State"},
+        }
+        r = client.post(f"{API}/orders", json=payload)
+        assert r.status_code == 400
+        assert "delivery" in r.json().get("detail", "").lower()
 
     def test_verify_without_razorpay_400(self, client):
         r = client.post(f"{API}/orders/verify", json={
