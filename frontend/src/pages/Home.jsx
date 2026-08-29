@@ -33,9 +33,9 @@ function HeroSlideshow() {
             <motion.div
               key={slide.id}
               initial={{ opacity: 0, scale: 1.02 }}
-              animate={{ opacity: 1, scale: 1 }}
+              animate={{ opacity: 1, scale: 1.02 }}
               exit={{ opacity: 0, scale: 1.02 }}
-              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               className="absolute inset-0"
             >
               <Link to={slide.to} data-testid={`hero-slide-${slide.id}`} className="block h-full w-full">
@@ -131,8 +131,8 @@ function CTA() {
 
 export default function Home() {
   return (
-    <div data-testid="home-page">
-      <FragranceStrip />
+    <div className="my-24" data-testid="home-page">
+      {/* <FragranceStrip /> */}
       <HeroSlideshow />
       <Belief />
       <CTA />

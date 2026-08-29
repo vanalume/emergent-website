@@ -1,8 +1,9 @@
-from fastapi import FastAPI, APIRouter, HTTPException, Header
+from fastapi import FastAPI, APIRouter, HTTPException, Header, Request
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
+import hmac
 import logging
 from pathlib import Path
 from pydantic import BaseModel, Field, EmailStr, ConfigDict
@@ -13,6 +14,7 @@ import razorpay
 import httpx
 
 from catalog import PRODUCTS, CATEGORIES, PRODUCT_BY_ID, resolve_line_price, compute_shipping
+import shiprocket
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -94,6 +96,7 @@ class Customer(BaseModel):
     phone: str = Field(min_length=3, max_length=40)
     address: str = Field(min_length=1, max_length=600)
     city: Optional[str] = Field(default=None, max_length=120)
+    state: Optional[str] = Field(default=None, max_length=120)
     pincode: Optional[str] = Field(default=None, max_length=20)
 
 
@@ -115,7 +118,11 @@ async def get_products():
 
 @api_router.get("/config")
 async def get_config():
-    return {"payment_configured": rzp_client is not None, "razorpay_key_id": RZP_KEY_ID or None}
+    return {
+        "payment_configured": rzp_client is not None,
+        "razorpay_key_id": RZP_KEY_ID or None,
+        "shipping_configured": shiprocket.is_configured(),
+    }
 
 
 # ---- Inquiries ----
@@ -273,11 +280,80 @@ async def verify_payment(payload: VerifyPayment):
         await db.orders.update_one({"id": payload.order_id}, {"$set": {"status": "failed"}})
         raise HTTPException(status_code=400, detail="Payment verification failed.")
 
-    await db.orders.update_one(
+    order_doc = await db.orders.find_one_and_update(
         {"id": payload.order_id},
         {"$set": {"status": "paid", "razorpay_payment_id": payload.razorpay_payment_id, "paid_at": now_iso()}},
+        return_document=True,
     )
-    return {"status": "paid", "order_id": payload.order_id}
+
+    shipment: dict | None = None
+    if order_doc and shiprocket.is_configured():
+        # Idempotent: only create a shipment once per Vanalume order.
+        if not order_doc.get("shiprocket"):
+            shipment = await shiprocket.create_adhoc_order(order_doc)
+            if shipment:
+                await db.orders.update_one({"id": payload.order_id}, {"$set": {"shiprocket": shipment, "shiprocket_created_at": now_iso()}})
+        else:
+            shipment = order_doc["shiprocket"]
+
+    return {"status": "paid", "order_id": payload.order_id, "shipment": shipment}
+
+
+# ---- Shipping / tracking ----
+@api_router.get("/shipping/track/order/{source_order_id}")
+async def track_order(source_order_id: str):
+    if not shiprocket.is_configured():
+        raise HTTPException(status_code=400, detail="Shipping is not configured.")
+    try:
+        return await shiprocket.track_by_source_order(source_order_id)
+    except httpx.HTTPStatusError as e:
+        raise HTTPException(status_code=502, detail=f"Shiprocket: {e.response.text[:300]}")
+
+
+@api_router.get("/shipping/track/shipment/{shipment_id}")
+async def track_shipment(shipment_id: int):
+    if not shiprocket.is_configured():
+        raise HTTPException(status_code=400, detail="Shipping is not configured.")
+    try:
+        return await shiprocket.track_by_shipment(shipment_id)
+    except httpx.HTTPStatusError as e:
+        raise HTTPException(status_code=502, detail=f"Shiprocket: {e.response.text[:300]}")
+
+
+@api_router.get("/shipping/track/awb/{awb_code}")
+async def track_awb(awb_code: str):
+    if not shiprocket.is_configured():
+        raise HTTPException(status_code=400, detail="Shipping is not configured.")
+    try:
+        return await shiprocket.track_by_awb(awb_code)
+    except httpx.HTTPStatusError as e:
+        raise HTTPException(status_code=502, detail=f"Shiprocket: {e.response.text[:300]}")
+
+
+SR_WEBHOOK_SECRET = os.environ.get("SHIPROCKET_WEBHOOK_SECRET", "").strip()
+
+
+@api_router.post("/webhooks/logistics")
+async def shiprocket_webhook(request: Request, x_api_key: str | None = Header(default=None)):
+    """Receive Shiprocket status updates. Configure this URL in Shiprocket dashboard → Settings → API → Webhooks."""
+    if not SR_WEBHOOK_SECRET or not x_api_key or not hmac.compare_digest(x_api_key, SR_WEBHOOK_SECRET):
+        raise HTTPException(status_code=401, detail="Invalid webhook key")
+    body = await request.json()
+    event_key = body.get("awb") or str(body.get("shipment_id") or body.get("sr_order_id") or uuid.uuid4())
+    await db.shiprocket_events.update_one(
+        {"event_key": event_key},
+        {"$setOnInsert": {"event_key": event_key, "payload": body, "received_at": now_iso()}},
+        upsert=True,
+    )
+    # Best-effort: update the matching order status.
+    await db.orders.update_one(
+        {"$or": [
+            {"shiprocket.shipment_id": body.get("shipment_id")},
+            {"shiprocket.order_id": body.get("sr_order_id")},
+        ]},
+        {"$set": {"tracking_event": body, "shipping_status": body.get("current_status")}},
+    )
+    return {"ok": True}
 
 
 @api_router.get("/orders")
