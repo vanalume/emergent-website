@@ -34,13 +34,22 @@ export function CartProvider({ children }) {
   }, []);
   const clear = useCallback(() => setItems([]), []);
 
+  // Buy Now: add and open the drawer straight in checkout mode
+  const [buyNowFlag, setBuyNowFlag] = useState(false);
+  const buyNow = useCallback((product, opts = {}) => {
+    add(product, opts);
+    setBuyNowFlag(true);
+    setOpen(true);
+  }, [add]);
+  const consumeBuyNow = useCallback(() => setBuyNowFlag(false), []);
+
   const count = useMemo(() => items.reduce((s, i) => s + i.qty, 0), [items]);
   const subtotal = useMemo(() => items.reduce((s, i) => s + (i.price || 0) * i.qty, 0), [items]);
   const shipping = subtotal === 0 ? 0 : (subtotal >= 2000 ? 0 : 100);
   const total = subtotal + shipping;
 
   return (
-    <CartContext.Provider value={{ items, add, remove, setQty, clear, count, subtotal, shipping, total, open, setOpen }}>
+    <CartContext.Provider value={{ items, add, remove, setQty, clear, count, subtotal, shipping, total, open, setOpen, buyNow, buyNowFlag, consumeBuyNow }}>
       {children}
     </CartContext.Provider>
   );

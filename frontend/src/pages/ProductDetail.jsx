@@ -11,7 +11,7 @@ const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { add, setOpen } = useCart();
+  const { add, buyNow } = useCart();
 
   const [data, setData] = useState({ products: [], categories: [] });
   const [loading, setLoading] = useState(true);
@@ -72,7 +72,7 @@ export default function ProductDetail() {
   );
 
   const doAdd = () => { add(product, { variant, size, qty: 1 }); };
-  const doBuyNow = () => { add(product, { variant, size, qty: 1 }); setOpen(true); toast.success("Added to cart"); };
+  const doBuyNow = () => { buyNow(product, { variant, size, qty: 1 }); toast.success("Redirecting to checkout"); };
 
   const prev = () => setImgIdx((imgIdx - 1 + images.length) % images.length);
   const next = () => setImgIdx((imgIdx + 1) % images.length);
