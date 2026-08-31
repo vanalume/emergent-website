@@ -28,6 +28,8 @@ class Size(BaseModel):
     label: str
     mrp: Optional[int] = None
     sp: Optional[int] = None
+    image: Optional[str] = None
+    desc: Optional[str] = None
 
 
 class Ritual(BaseModel):

@@ -19,51 +19,83 @@ Schema (scalable, ready for future admin editing):
 - enquire (bool) : if True, product is NOT purchasable (contact-only). Default False.
 """
 
+from config import VANALUME_URL
 from models import Category, Product
 
-A = "https://customer-assets-gfyr7b9c.emergentagent.net/job_vanalume-preview/artifacts"
+# A = "https://customer-assets-gfyr7b9c.emergentagent.net/job_vanalume-preview/artifacts"
+
+A = VANALUME_URL
 
 IMG = {
-    "awaken": f"{A}/j3hz7tne_AWAKEN%20copy.png",
-    "awaken_box": f"{A}/nflsyjq1_Awaken%20box.png",
-    "bloom": f"{A}/l9rrpbom_BLOOM%20copy.png",
-    "bloom_box": f"{A}/2tnx0tsx_bloom%20box.png",
-    "clarity": f"{A}/1qz79thf_CLARITY%20copy.png",
-    "clarity_box": f"{A}/kqso40pb_clarity%20box.png",
-    "equilibrium": f"{A}/i8wo86bm_EQUILIBRIUM%20copy.png",
-    "equilibrium_box": f"{A}/2wuv7lii_Equilibrium%20box.png",
-    "intimacy": f"{A}/u8xpxby0_INTIMACY.png",
-    "intimacy_box": f"{A}/2i1cnhod_intimacy%20box.png",
-    "oriental": f"{A}/apwsai2q_ORIENTAL%20CAFE.png",
-    "oriental_box": f"{A}/gxgy5891_orientla%20cafe%20box.png",
-    "timeless": f"{A}/ini4y51o_TIMELESS.png",
-    "timeless_box": f"{A}/pivbqtxh_Timeless%20box.png",
-    "celebrate": f"{A}/afp78v3j_celebrate.png",
-    "celebrate_metallic": f"{A}/ijm869cw_ensemble%20metal%20celebrate.png",
-    "presence": f"{A}/r2kqvo00_presence.png",
-    "presence_metallic": f"{A}/pwobacm9_ensemble%20metal%20presence.png",
-    "library": f"{A}/egsxf81t_library.png",
-    "midnight": f"{A}/63b55l4v_midnight%20blue.png",
-    "green": f"{A}/81smp3e8_deep%20green.png",
-    "terracotta": f"{A}/inlxtdzm_terracota.png",
-    "seasand": f"{A}/c3u0h8bw_sea%20sand.png",
-    "beaded": f"{A}/j3iypem3_ChatGPT%20Image%20Jul%2029%2C%202026%20at%2011_51_48%20PM.png",
-    "wax_clove": f"{A}/v9gv9e1v_B617F427-57BC-4651-89AD-65D064992DA9.PNG",
-    "wax_rose": f"{A}/7bcnmeff_035E7F5A-A314-470D-9E4F-C99634F84434.PNG",
-    "stone_jar": f"{A}/vfu6xbmo_ChatGPT%20Image%20Jul%2028%2C%202026%20at%2004_48_04%20PM.png",
-    "stone_rock": f"{A}/kfskwid1_ChatGPT%20Image%20Jul%2028%2C%202026%20at%2004_52_53%20PM.png",
-    "oils": f"{A}/wmx49ywl_40C745B2-BD21-4C78-8DAA-164A66607EC9.PNG",
+    "awaken": f"{A}/duet/awaken.png",
+    "awaken_box": f"{A}/boxes-with-candles/awaken-box.png",
+    "bloom": f"{A}/duet/bloom.png",
+    "clarity": f"{A}/duet/clarity.png",
+    "equilibrium": f"{A}/duet/equilibrium.png",
+    "intimacy": f"{A}/duet/intimacy.png",
+    "oriental": f"{A}/duet/oriental-cafe.png",
+    "timeless": f"{A}/duet/timeless.png",
+    "bloom_box": f"{A}/boxes-with-candles/bloom-box.png",
+    "clarity_box": f"{A}/boxes-with-candles/clarity-box.png",
+    "equilibrium_box": f"{A}/boxes-with-candles/equilibrium-box.png",
+    "intimacy_box": f"{A}/boxes-with-candles/intimacy-box.png",
+    "oriental_box": f"{A}/boxes-with-candles/oriental-cafe-box.png",
+    "timeless_box": f"{A}/boxes-with-candles/timeless-box.png",
+
+    "celebrate": f"{A}/ensemble-tin/celebrate.png",
+    "presence": f"{A}/ensemble-tin/presence.png",
+    "celebrate_metallic": f"{A}/ensemble-metallic/celebrate-metallic.png",
+    "presence_metallic": f"{A}/ensemble-metallic/presence-metallic.png",
+    "library": f"{A}/library/library.png",
+    
+    "midnight-blue-4-inch": f"{A}/pillar/midnight-blue/midnight-blue-4.png",
+    "midnight-blue-5-inch": f"{A}/pillar/midnight-blue/midnight-blue-5.png",
+    "midnight-blue-6-inch": f"{A}/pillar/midnight-blue/midnight-blue-6.png",
+    "midnight-blue-pack": f"{A}/pillar/midnight-blue/midnight-blue-pack.png",
+
+    "deep-green-4-inch": f"{A}/pillar/deep-green/deep-green-4.png",
+    "deep-green-5-inch": f"{A}/pillar/deep-green/deep-green-5.png",
+    "deep-green-6-inch": f"{A}/pillar/deep-green/deep-green-6.png",
+    "deep-green-pack": f"{A}/pillar/deep-green/deep-green-pack.png",
+
+    "sea-and-sand-4-inch": f"{A}/pillar/sea-and-sand/sea-sand-4.png",
+    "sea-and-sand-5-inch": f"{A}/pillar/sea-and-sand/sea-sand-5.png",
+    "sea-and-sand-6-inch": f"{A}/pillar/sea-and-sand/sea-sand-6.png",
+    "sea-and-sand-pack": f"{A}/pillar/sea-and-sand/sea-sand-pack.png",
+    
+    "terracotta-4-inch": f"{A}/pillar/terracotta/terracotta-4.png",
+    "terracotta-5-inch": f"{A}/pillar/terracotta/terracotta-5.png",
+    "terracotta-6-inch": f"{A}/pillar/terracotta/terracotta-6.png",
+    "terracotta-pack": f"{A}/pillar/terracotta/terracotta-pack.png",
+
+    "midnight": f"{A}/pillar/midnight-blue.png",
+    "green": f"{A}/pillar/deep-green.png",
+    "terracotta": f"{A}/pillar/terracota.png",
+    "seasand": f"{A}/pillar/sea-sand.png",
+
+    "orbis": f"{A}/taper/orbis.png",
+    "obelisk": f"{A}/taper/obelisk.png",
+    "confluence": f"{A}/taper/confluence.png",
+    "stria": f"{A}/taper/stria.png",
+
+    "wax_clove": f"{A}/wax-bars/wax-bar-clovexcinnamon.png",
+    "wax_rose": f"{A}/wax-bars/wax-bar-rosexjasmine.png",
+    "stone_jar": f"{A}/aroma-stones/small-stones-with-amber-jar.png",
+    "stone_rock": f"{A}/aroma-stones/large-stone.png",
+
+    "oils": f"{A}/oils/aroma-oils.png",
+
     # Individual candle photography (supplied by user)
-    "s_aqua":           f"{A}/umc5qatw_aqua.png",
-    "s_black_oudh":     f"{A}/1fjbewzj_black%20oudh%20.png",
-    "s_awaken_pair":    f"{A}/p896qj62_cendarwood%20and%20lemongrass.png",
-    "s_jasmine":        f"{A}/9bu0jzl1_jasmine.png",
-    "s_intimacy_pair":  f"{A}/it4ob0q7_mogra%20and%20lavenderpng.png",
-    "s_rose":           f"{A}/ipbao3zd_rose.png",
-    "s_white_sage":     f"{A}/wi79t8rp_white%20sage.png",
-    "s_white_oudh":     f"{A}/crq7vtza_white%20oudh%20indi.png",
-    "s_equilib_pair":   f"{A}/ubtthua5_sandalwood%20and%20teatree%20indi.png",
-    "s_oriental_pair":  f"{A}/2487kswj_oriental%20cafe.png",
+    "s_aqua":           f"{A}/single-candles/aqua.png",
+    "s_black_oudh":     f"{A}/single-candles/black-oudh%20.png",
+    "s_awaken_pair":    f"{A}/single-candles/cendarwood-and-lemongrass.png",
+    "s_jasmine":        f"{A}/single-candles/jasmine.png",
+    "s_intimacy_pair":  f"{A}/single-candles/mogra-and-lavender.png",
+    "s_rose":           f"{A}/single-candles/rose.png",
+    "s_white_sage":     f"{A}/single-candles/white-sage.png",
+    "s_white_oudh":     f"{A}/single-candles/white-oudh-indi.png",
+    "s_equilib_pair":   f"{A}/single-candles/sandalwood-and-teatree-indi.png",
+    "s_oriental_pair":  f"{A}/single-candles/oriental-cafe.png",
 }
 
 
@@ -241,57 +273,130 @@ PRODUCTS = [
      "long_desc": "Odyssey is Vanalume's complete tasting menu — six discovery-size candles across Neroli, Black Oudh, Tuberose, Sandalwood, Musk and Cedarwood. It's how we recommend starting if you don't yet know which fragrance is yours."},
 
     # ============ PILLAR CANDLES (4 separate SKUs) ============
-    {"id": "pillar-4in", "category": "pillar", "collection": "Pillar", "name": "Pillar Candle · 4-inch",
-     "fragrances": ["Oudh", "Spearmint", "Patchouli", "Aqua"], "mrp": 799, "sp": 599,
-     "images": [IMG["midnight"]],
-     "variants": [
-        {"label": "Midnight Blue · Oudh", "image": IMG["midnight"]},
-        {"label": "Deep Green · Spearmint", "image": IMG["green"]},
-        {"label": "Terracotta · Patchouli", "image": IMG["terracotta"]},
-        {"label": "Sea & Sand · Aqua", "image": IMG["seasand"]},
+    {"id": "pillar-midnight-blue", "category": "pillar", "collection": "Pillar", "name": "Pillar Candle · Midnight Blue",
+     "fragrances": ["Oudh"], "mrp": 799, "sp": 599,
+     "images": [IMG["midnight-blue-4-inch"]],
+     "sizes": [
+        {"label": "4-inch", "image": IMG["midnight-blue-4-inch"], "mrp": 799, "sp": 599, "desc": "Our Shortest rustic finish pillar, at 4 inches. Long clean burn texted surface. Four colour fragrance pairing to choose from." },
+        {"label": "5-inch", "image": IMG["midnight-blue-5-inch"], "mrp": 899, "sp": 699, "desc": "The Middle height, at 5 inches. Same rustic finish, same 4 colour-fragrance, parings, longer burn than the 4-inch." },
+        {"label": "6-inch", "image": IMG["midnight-blue-6-inch"], "mrp": 999, "sp": 799, "desc": " The tallest at 6-inches. Statement height for a mantel, or bath, same finish same four pairings" },
+        {"label": "Pack of 3", "image": IMG["midnight-blue-pack"], "mrp": 2299, "sp": 1699, "desc": " the full pillar set: 4-inch, 5-inch and 6-inch pillars in one colour–fragrance pairing. Meant to be arranged together – the height variation is the point." },
      ],
-     "desc": "Rustic-finish 4-inch pillar. Choose your colour and fragrance.",
-     "long_desc": "Our shortest rustic-finish pillar, at 4 inches. Long, clean burn; textured surface; four colour-fragrance pairings to choose from."},
-    {"id": "pillar-5in", "category": "pillar", "collection": "Pillar", "name": "Pillar Candle · 5-inch",
-     "fragrances": ["Oudh", "Spearmint", "Patchouli", "Aqua"], "mrp": 899, "sp": 699,
-     "images": [IMG["green"]],
-     "variants": [
-        {"label": "Midnight Blue · Oudh", "image": IMG["midnight"]},
-        {"label": "Deep Green · Spearmint", "image": IMG["green"]},
-        {"label": "Terracotta · Patchouli", "image": IMG["terracotta"]},
-        {"label": "Sea & Sand · Aqua", "image": IMG["seasand"]},
+    },
+
+
+
+
+    {"id": "pillar-deep-green", "category": "pillar", "collection": "Pillar", "name": "Pillar Candle · Deep Green",
+     "fragrances": ["Spearmint"], "mrp": 799, "sp": 599,
+     "images": [IMG["deep-green-4-inch"]],
+       "sizes": [
+        {"label": "4-inch", "image": IMG["deep-green-4-inch"], "mrp": 799, "sp": 599, "desc": "Our Shortest rustic finish pillar, at 4 inches. Long clean burn texted surface. Four colour fragrance pairing to choose from." },
+        {"label": "5-inch", "image": IMG["deep-green-5-inch"], "mrp": 899, "sp": 699, "desc": "The Middle height, at 5 inches. Same rustic finish, same 4 colour-fragrance, parings, longer burn than the 4-inch." },
+        {"label": "6-inch", "image": IMG["deep-green-6-inch"], "mrp": 999, "sp": 799, "desc": " The tallest at 6-inches. Statement height for a mantel, or bath, same finish same four pairings" },
+        {"label": "Pack of 3", "image": IMG["deep-green-pack"], "mrp": 2299, "sp": 1699, "desc": " the full pillar set: 4-inch, 5-inch and 6-inch pillars in one colour–fragrance pairing. Meant to be arranged together – the height variation is the point." },
      ],
-     "desc": "Rustic-finish 5-inch pillar. Choose your colour and fragrance.",
-     "long_desc": "The middle height, at 5 inches. Same rustic finish, same four colour-fragrance pairings, longer burn than the 4-inch."},
-    {"id": "pillar-6in", "category": "pillar", "collection": "Pillar", "name": "Pillar Candle · 6-inch",
-     "fragrances": ["Oudh", "Spearmint", "Patchouli", "Aqua"], "mrp": 999, "sp": 799,
-     "images": [IMG["terracotta"]],
-     "variants": [
-        {"label": "Midnight Blue · Oudh", "image": IMG["midnight"]},
-        {"label": "Deep Green · Spearmint", "image": IMG["green"]},
-        {"label": "Terracotta · Patchouli", "image": IMG["terracotta"]},
-        {"label": "Sea & Sand · Aqua", "image": IMG["seasand"]},
+    },
+
+
+    {"id": "pillar-sea-and-sand", "category": "pillar", "collection": "Pillar", "name": "Pillar Candle · Sea and Sand",
+     "fragrances": ["Aqua"], "mrp": 799, "sp": 599,
+     "images": [IMG["sea-and-sand-4-inch"]],
+     "sizes": [
+        {"label": "4-inch", "image": IMG["sea-and-sand-4-inch"], "mrp": 799, "sp": 599, "desc": "Our Shortest rustic finish pillar, at 4 inches. Long clean burn texted surface. Four colour fragrance pairing to choose from." },
+        {"label": "5-inch", "image": IMG["sea-and-sand-5-inch"], "mrp": 899, "sp": 699, "desc": "The Middle height, at 5 inches. Same rustic finish, same 4 colour-fragrance, parings, longer burn than the 4-inch." },
+        {"label": "6-inch", "image": IMG["sea-and-sand-6-inch"], "mrp": 999, "sp": 799, "desc": " The tallest at 6-inches. Statement height for a mantel, or bath, same finish same four pairings" },
+        {"label": "Pack of 3", "image": IMG["sea-and-sand-pack"], "mrp": 2299, "sp": 1699, "desc": " the full pillar set: 4-inch, 5-inch and 6-inch pillars in one colour–fragrance pairing. Meant to be arranged together – the height variation is the point." },
      ],
-     "desc": "Rustic-finish 6-inch pillar. Choose your colour and fragrance.",
-     "long_desc": "The tallest, at 6 inches. Statement height for a mantel, table or bath — same finish, same four pairings."},
-    {"id": "pillar-pack3", "category": "pillar", "collection": "Pillar", "name": "Pillar · Pack of 3 (4·5·6-inch)",
-     "fragrances": ["Oudh", "Spearmint", "Patchouli", "Aqua"], "mrp": 2299, "sp": 1699,
-     "images": [IMG["seasand"]],
-     "variants": [
-        {"label": "Midnight Blue · Oudh", "image": IMG["midnight"]},
-        {"label": "Deep Green · Spearmint", "image": IMG["green"]},
-        {"label": "Terracotta · Patchouli", "image": IMG["terracotta"]},
-        {"label": "Sea & Sand · Aqua", "image": IMG["seasand"]},
+    },
+
+
+    {"id": "pillar-terracotta", "category": "pillar", "collection": "Pillar", "name": "Pillar Candle · Terracotta",
+     "fragrances": ["Patchouli"], "mrp": 799, "sp": 599,
+     "images": [IMG["terracotta-4-inch"]],
+     "sizes": [
+        {"label": "4-inch", "image": IMG["terracotta-4-inch"], "mrp": 799, "sp": 599},
+        {"label": "5-inch", "image": IMG["terracotta-5-inch"], "mrp": 899, "sp": 699},
+        {"label": "6-inch", "image": IMG["terracotta-6-inch"], "mrp": 999, "sp": 799},
+        {"label": "Pack of 3", "image": IMG["terracotta-pack"], "mrp": 2299, "sp": 1699},
      ],
-     "desc": "All three heights — 4, 5 and 6 inches — in your chosen colour.",
-     "long_desc": "The full pillar set: 4-inch, 5-inch and 6-inch pillars in one colour-fragrance pairing. Meant to be arranged together — the height variation is the point."},
+    },
+
+
+
+
+
+    # {"id": "pillar-deep-green", "category": "pillar", "collection": "Pillar", "name": "Pillar Candle · Deep Green",
+    #  "fragrances": ["Oudh", "Spearmint", "Patchouli", "Aqua"], "mrp": 899, "sp": 699,
+    #  "images": [IMG["green"]],
+    #  "variants": [
+    #     {"label": "4-inch", "image": IMG["midnight"]},
+    #     {"label": "5-inch", "image": IMG["green"]},
+    #     {"label": "6-inch", "image": IMG["terracotta"]},
+    #     {"label": "Pack of 3", "image": IMG["seasand"]},
+    #  ],
+    #  "desc": "Rustic-finish 5-inch pillar. Choose your colour and fragrance.",
+    #  "long_desc": "The middle height, at 5 inches. Same rustic finish, same four colour-fragrance pairings, longer burn than the 4-inch."},
+    # {"id": "pillar-6in", "category": "pillar", "collection": "Pillar", "name": "Pillar Candle · Terracotta",
+    #  "fragrances": ["Oudh", "Spearmint", "Patchouli", "Aqua"], "mrp": 999, "sp": 799,
+    #  "images": [IMG["terracotta"]],
+    #  "variants": [
+
+    #     {"label": "4-inch", "image": IMG["midnight"]},
+    #     {"label": "5-inch", "image": IMG["green"]},
+    #     {"label": "6-inch", "image": IMG["terracotta"]},
+    #     {"label": "Pack of 3", "image": IMG["seasand"]},
+    #  ],
+    #  "desc": "Rustic-finish 6-inch pillar. Choose your colour and fragrance.",
+    #  "long_desc": "The tallest, at 6 inches. Statement height for a mantel, table or bath — same finish, same four pairings."},
+    #  {"id": "pillar-6in", "category": "pillar", "collection": "Pillar", "name": "Pillar Candle · Terracotta",
+    #  "fragrances": ["Oudh", "Spearmint", "Patchouli", "Aqua"], "mrp": 999, "sp": 799,
+    #  "images": [IMG["terracotta"]],
+    #  "variants": [
+    #     {"label": "4-inch", "image": IMG["midnight"]},
+    #     {"label": "5-inch", "image": IMG["green"]},
+    #     {"label": "6-inch", "image": IMG["terracotta"]},
+    #     {"label": "Pack of 3", "image": IMG["seasand"]},
+    #  ],
+    #  "desc": "Rustic-finish 6-inch pillar. Choose your colour and fragrance.",
+    #  "long_desc": "The tallest, at 6 inches. Statement height for a mantel, table or bath — same finish, same four pairings."},
+
+    # {"id": "pillar-pack3", "category": "pillar", "collection": "Pillar", "name": "Pillar · Pack of 3 (4·5·6-inch)",
+    #  "fragrances": ["Oudh", "Spearmint", "Patchouli", "Aqua"], "mrp": 2299, "sp": 1699,
+    #  "images": [IMG["seasand"]],
+    #  "variants": [
+    #     {"label": "Midnight Blue · Oudh", "image": IMG["midnight"]},
+    #     {"label": "Deep Green · Spearmint", "image": IMG["green"]},
+    #     {"label": "Terracotta · Patchouli", "image": IMG["terracotta"]},
+    #     {"label": "Sea & Sand · Aqua", "image": IMG["seasand"]},
+    #  ],
+    #  "desc": "All three heights — 4, 5 and 6 inches — in your chosen colour.",
+    #  "long_desc": "The full pillar set: 4-inch, 5-inch and 6-inch pillars in one colour-fragrance pairing. Meant to be arranged together — the height variation is the point."},
 
     # ============ TAPER ============
-    {"id": "taper-set3", "category": "taper", "collection": "Taper", "name": "Taper · Set of 3",
+    {"id": "taper-set-1", "category": "taper", "collection": "Taper", "name": "Orbis Taper · Set of 3",
      "fragrances": ["Mulberry", "Oudh", "Basil"], "mrp": 999, "sp": 799,
-     "images": [IMG["beaded"]],
+     "images": [IMG["orbis"]],
      "desc": "Three sculptural tapers, in Mulberry, Oudh and Basil.",
      "long_desc": "A set of three sculptural taper candles — one Mulberry, one Oudh, one Basil. Meant to be lit together at dinner or displayed unlit as an object."},
+    {"id": "taper-set-2", "category": "taper", "collection": "Taper", "name": "Obelisk Taper · Set of 3",
+     "fragrances": ["Mulberry", "Oudh", "Basil"], "mrp": 999, "sp": 799,
+     "images": [IMG["obelisk"]],
+     "desc": "Three sculptural tapers, in Mulberry, Oudh and Basil.",
+     "long_desc": "A set of three sculptural taper candles — one Mulberry, one Oudh, one Basil. Meant to be lit together at dinner or displayed unlit as an object."},
+    {"id": "taper-set-3", "category": "taper", "collection": "Taper", "name": "Confluence Taper · Set of 3",
+     "fragrances": ["Mulberry", "Oudh", "Basil"], "mrp": 999, "sp": 799,
+     "images": [IMG["confluence"]],
+     "desc": "Three sculptural tapers, in Mulberry, Oudh and Basil.",
+     "long_desc": "A set of three sculptural taper candles — one Mulberry, one Oudh, one Basil. Meant to be lit together at dinner or displayed unlit as an object."},
+    {"id": "taper-set-4", "category": "taper", "collection": "Taper", "name": "Stria Taper · Set of 3",
+     "fragrances": ["Mulberry", "Oudh", "Basil"], "mrp": 999, "sp": 799,
+     "images": [IMG["stria"]],
+     "desc": "Three sculptural tapers, in Mulberry, Oudh and Basil.",
+     "long_desc": "A set of three sculptural taper candles — one Mulberry, one Oudh, one Basil. Meant to be lit together at dinner or displayed unlit as an object."},
+
+
+
 
     # ============ WAX BARS ============
     {"id": "wax-set1", "category": "wax", "collection": "Wax Bars", "name": "Wax Bars · Set of 2",
@@ -342,22 +447,19 @@ CATEGORIES = [
 
 # ---------- Seed helper (runs once at startup) ----------
 async def seed_catalog(db) -> None:
-    """Persist PRODUCTS / CATEGORIES into MongoDB.
+    """Replace the catalogue in MongoDB with the canonical seed data.
 
-    Uses $setOnInsert so existing documents (e.g. admin edits made in Mongo) are
-    never overwritten on restart, while new seed entries are added.
+    Flushes existing products/categories first, then inserts PRODUCTS /
+    CATEGORIES from this module so the DB always mirrors the seed lists on
+    startup.
     """
-    for p in PRODUCTS:
-        product = Product(**p)
-        await db.products.update_one(
-            {"id": product.id},
-            {"$setOnInsert": product.model_dump()},
-            upsert=True,
-        )
-    for c in CATEGORIES:
-        category = Category(**c)
-        await db.categories.update_one(
-            {"id": category.id},
-            {"$setOnInsert": category.model_dump()},
-            upsert=True,
-        )
+    await db.products.delete_many({})
+    await db.categories.delete_many({})
+
+    products = [Product(**p).model_dump() for p in PRODUCTS]
+    categories = [Category(**c).model_dump() for c in CATEGORIES]
+
+    if products:
+        await db.products.insert_many(products)
+    if categories:
+        await db.categories.insert_many(categories)

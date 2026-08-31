@@ -1,0 +1,69 @@
+# Dev stack: Mongo (exposed to host) + backend + frontend, both with hot reload.
+#
+# Usage:
+#   docker compose -f dev-container/docker-compose.dev.yml up --build
+#
+# Required .env values (set manually — nothing is auto-rewritten in dev):
+#   backend/.env    MONGO_URL=mongodb://mongo:27017
+#   backend/.env    DB_NAME=<your db name>
+#   backend/.env    CORS_ORIGINS=http://localhost:3000
+#   frontend/.env   REACT_APP_BACKEND_URL=http://localhost:8000
+#
+# Host URLs once running:
+#   Frontend  http://localhost:3000
+#   Backend   http://localhost:8000
+#   Mongo     mongodb://localhost:27017
+#
+# Note: after changing frontend deps, rebuild with --build and drop the
+# stale node_modules volume:  docker compose -f dev-container/docker-compose.dev.yml down -v
+
+services:
+  mongo:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "quit(db.runCommand({ping:1}).ok ? 0 : 1)"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  backend:
+    build:
+      context: ..
+      dockerfile: dev-container/backend.Dockerfile
+    working_dir: /app
+    command: uvicorn server:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - ../backend:/app
+    ports:
+      - "8000:8000"
+    environment:
+      # Reliable file watching over macOS bind mounts (uvicorn --reload)
+      WATCHFILES_FORCE_POLLING: "true"
+    depends_on:
+      mongo:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: dev-container/frontend.Dockerfile
+    working_dir: /app
+    command: yarn start
+    volumes:
+      - ../frontend:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      # Reliable file watching over macOS bind mounts (CRA/webpack HMR)
+      CHOKIDAR_USEPOLLING: "true"
+      WATCHPACK_POLLING: "true"
+    depends_on:
+      - backend
+
+volumes:
+  mongo-data:

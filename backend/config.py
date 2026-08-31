@@ -16,6 +16,10 @@ load_dotenv(ROOT_DIR / ".env")
 MONGO_URL = os.environ["MONGO_URL"]
 DB_NAME = os.environ["DB_NAME"]
 
+# Frontend asset base URL (catalogue images live in the frontend's public/ folder).
+# Empty means relative paths (e.g. "/duet/awaken.png"), resolved against the frontend origin.
+VANALUME_URL = os.environ.get("VANALUME_URL", "").rstrip("/")
+
 # Razorpay (both keys required before payments activate)
 RZP_KEY_ID = os.environ.get("RAZORPAY_KEY_ID", "").strip()
 RZP_KEY_SECRET = os.environ.get("RAZORPAY_KEY_SECRET", "").strip()

@@ -74,7 +74,10 @@ export default function Shop() {
   const { hash } = useLocation();
 
   useEffect(() => {
-    axios.get(`${API}/products`).then((r) => setData(r.data)).finally(() => setLoading(false));
+    axios.get(`${API}/products`).then((r) => {
+      setData(r.data)
+      console.log(r.data)
+  }).finally(() => setLoading(false));
   }, []);
 
   // Deep-link: /shop#group-<id> from the Home hero slideshow

@@ -1,34 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, Outlet } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Lenis from "lenis";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
-
-function SoftCursor() {
-  const dot = useRef(null);
-  const ring = useRef(null);
-  useEffect(() => {
-    if (window.matchMedia("(pointer: coarse)").matches) return;
-    let rx = 0, ry = 0, x = 0, y = 0, raf;
-    const move = (e) => { x = e.clientX; y = e.clientY; if (dot.current) dot.current.style.transform = `translate(${x}px, ${y}px)`; };
-    const loop = () => {
-      rx += (x - rx) * 0.12; ry += (y - ry) * 0.12;
-      if (ring.current) ring.current.style.transform = `translate(${rx}px, ${ry}px)`;
-      raf = requestAnimationFrame(loop);
-    };
-    window.addEventListener("mousemove", move);
-    loop();
-    return () => { window.removeEventListener("mousemove", move); cancelAnimationFrame(raf); };
-  }, []);
-  return (
-    <div className="hidden lg:block" aria-hidden>
-      <div ref={ring} className="pointer-events-none fixed top-0 left-0 z-[9998] -ml-4 -mt-4 h-8 w-8 rounded-full border border-[#5c3e2b]/40" />
-      <div ref={dot} className="pointer-events-none fixed top-0 left-0 z-[9998] -ml-[3px] -mt-[3px] h-1.5 w-1.5 rounded-full bg-[#5c3e2b]" />
-    </div>
-  );
-}
 
 export default function Layout() {
   const { pathname } = useLocation();
@@ -53,7 +29,6 @@ export default function Layout() {
 
   return (
     <div className="vl-grain relative min-h-screen bg-[#f8f6f2] text-[#2b2823]">
-      <SoftCursor />
       <Navbar />
       <AnimatePresence mode="wait">
         <motion.main

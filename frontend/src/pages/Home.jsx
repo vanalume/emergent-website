@@ -7,9 +7,9 @@ import { Reveal, Kicker } from "@/components/Motion";
 import { IMAGES, FRAGRANCES } from "@/lib/data";
 
 const SLIDES = [
-  { id: "candles", src: "/hero/candles.jpg", alt: "Vanalume scented candles collection", to: "/shop#group-jar-candles" },
-  { id: "stones",  src: "/hero/stones.jpg",  alt: "Vanalume aroma stones",                to: "/shop#group-aroma-stones" },
-  { id: "oils",    src: "/hero/oils.jpg",    alt: "Vanalume aroma oils, inspired by the elements", to: "/shop#group-aroma-oils" },
+  { id: "candles", src: "/hero/candles.png", alt: "Vanalume scented candles collection", to: "/shop#group-jar-candles" },
+  { id: "stones",  src: "/hero/stones.png",  alt: "Vanalume aroma stones",                to: "/shop#group-aroma-stones" },
+  { id: "oils",    src: "/hero/oils.png",    alt: "Vanalume aroma oils, inspired by the elements", to: "/shop#group-aroma-oils" },
 ];
 
 function HeroSlideshow() {
@@ -27,8 +27,8 @@ function HeroSlideshow() {
 
   return (
     <section data-testid="hero-slideshow" className="relative w-full bg-[#f2ebdd]">
-      <div className="max-w-[1440px] mx-auto px-6 md:px-12">
-        <div className="relative w-full aspect-[3/2] max-h-[68vh] overflow-hidden rounded-sm">
+      <div className="max-w-[1240px] mx-auto px-6 md:px-12">
+        <div className="relative w-full aspect-[3/2] overflow-hidden rounded-sm">
           <AnimatePresence mode="wait">
             <motion.div
               key={slide.id}

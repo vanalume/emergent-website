@@ -26,8 +26,8 @@ const FIELDS = [
   { name: "email", label: "Email", col: "", placeholder: "you@example.com" },
   { name: "phone", label: "Phone (10-digit mobile)", col: "", placeholder: "9876543210" },
   { name: "address", label: "Address", col: "md:col-span-2", placeholder: "Flat / building, street" },
-  { name: "city", label: "City", col: "", placeholder: "New Delhi" },
-  { name: "state", label: "State", col: "", placeholder: "Delhi" },
+  { name: "city", label: "City", col: "", placeholder: "Auto-detected", auto: true },
+  { name: "state", label: "State", col: "", placeholder: "Auto-detected", auto: true },
   { name: "pincode", label: "Pincode", col: "", placeholder: "110001" },
 ];
 
@@ -42,6 +42,7 @@ export default function CartDrawer() {
   const [err, setErr] = useState({});
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(null); // { order_id, amount, shipment }
+  const [pinStatus, setPinStatus] = useState("idle"); // idle | loading | done | error
 
   useEffect(() => { if (open) window.__lenis?.stop(); else window.__lenis?.start(); }, [open]);
 
@@ -62,6 +63,30 @@ export default function CartDrawer() {
     setErr(e => ({ ...e, [k]: undefined }));
   };
 
+  const detectPincode = async (pin) => {
+    setPinStatus("loading");
+    try {
+      const { data } = await axios.get(`https://api.postalpincode.in/pincode/${pin}`);
+      const postOffice = data?.[0]?.PostOffice?.[0];
+      if (data?.[0]?.Status === "Success" && postOffice) {
+        setC(p => ({ ...p, city: postOffice.District || postOffice.Name || "", state: postOffice.State || "" }));
+        setPinStatus("done");
+      } else {
+        setPinStatus("error");
+      }
+    } catch {
+      setPinStatus("error");
+    }
+  };
+
+  const handlePincode = (value) => {
+    const pin = value.replace(/\D/g, "").slice(0, 6);
+    set("pincode", pin);
+    setC(p => ({ ...p, city: "", state: "" }));
+    setPinStatus("idle");
+    if (pin.length === 6) detectPincode(pin);
+  };
+
   const validate = () => {
     const e = {};
     if (!c.name.trim()) e.name = "Required";
@@ -69,9 +94,8 @@ export default function CartDrawer() {
     const phone = c.phone.replace(/\D/g, "").replace(/^91/, "");
     if (!INDIAN_MOBILE_RE.test(phone)) e.phone = "10-digit Indian mobile required";
     if (!c.address.trim() || c.address.trim().length < 6) e.address = "A little more detail, please";
-    if (!c.city.trim()) e.city = "Required";
-    if (!c.state.trim()) e.state = "Required";
     if (!PINCODE_RE.test(c.pincode.trim())) e.pincode = "6-digit pincode";
+    else if (!c.city.trim() || !c.state.trim()) e.pincode = "Could not detect your city/state — check the pincode";
     setErr(e);
     return Object.keys(e).length === 0;
   };
@@ -220,6 +244,7 @@ export default function CartDrawer() {
                       ))}
                     </div>
                   ) : (
+                    <>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                       {FIELDS.map(f => (
                         <div key={f.name} className={f.col}>
@@ -227,14 +252,25 @@ export default function CartDrawer() {
                           <input
                             data-testid={`checkout-${f.name}`}
                             value={c[f.name]}
-                            onChange={e => set(f.name, e.target.value)}
+                            onChange={e => f.name === "pincode" ? handlePincode(e.target.value) : set(f.name, e.target.value)}
                             placeholder={f.placeholder}
-                            className="w-full mt-1.5 bg-transparent border-b border-[#2b2320]/25 focus:border-[#2b2320] outline-none py-2 text-base placeholder:text-[#2b2320]/25"
+                            disabled={f.auto}
+                            className="w-full mt-1.5 bg-transparent border-b border-[#2b2320]/25 focus:border-[#2b2320] outline-none py-2 text-base placeholder:text-[#2b2320]/25 disabled:text-[#2b2320]/60 disabled:cursor-not-allowed disabled:border-[#2b2320]/10"
                           />
                           {err[f.name] && <p className="text-xs text-[#9a3b2e] mt-1">{err[f.name]}</p>}
                         </div>
                       ))}
                     </div>
+
+                    {pinStatus === "loading" && (
+                      <p className="text-xs text-[#5c3e2b]/70 mt-3 flex items-center gap-2">
+                        <Loader2 size={13} className="animate-spin" /> Detecting your city & state…
+                      </p>
+                    )}
+                    {pinStatus === "error" && (
+                      <p className="text-xs text-[#9a3b2e] mt-3">Could not detect city/state for this pincode. Please check it and try again.</p>
+                    )}
+                    </>
                   )}
                 </div>
 

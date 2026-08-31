@@ -44,9 +44,10 @@ export default function ProductDetail() {
   const images = useMemo(() => {
     if (!product) return [];
     const base = product.images || [];
-    if (chosenVariant?.image) return [chosenVariant.image, ...base.filter(x => x !== chosenVariant.image)];
+    const primary = chosenSize?.image || chosenVariant?.image;
+    if (primary) return [primary, ...base.filter(x => x !== primary)];
     return base;
-  }, [product, chosenVariant]);
+  }, [product, chosenVariant, chosenSize]);
 
   const imageCrops = product?.image_crops || [];
   const currentCrop = imageCrops[imgIdx] || null;
@@ -57,6 +58,7 @@ export default function ProductDetail() {
   const sp = chosenSize?.sp ?? chosenVariant?.sp ?? product?.sp ?? 0;
   const mrp = chosenSize?.mrp ?? chosenVariant?.mrp ?? product?.mrp ?? 0;
   const save = mrp > sp ? Math.round(((mrp - sp) / mrp) * 100) : 0;
+  const desc = chosenSize?.desc || product?.long_desc || product?.desc;
 
   const related = useMemo(
     () => product ? data.products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4) : [],
@@ -157,8 +159,8 @@ export default function ProductDetail() {
               )}
             </div>
 
-            {product.long_desc && (
-              <p className="text-base text-[#2b2320]/75 mt-6 leading-relaxed">{product.long_desc}</p>
+            {desc && (
+              <p className="text-base text-[#2b2320]/75 mt-6 leading-relaxed">{desc}</p>
             )}
 
             {/* Size */}
