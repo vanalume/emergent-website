@@ -294,11 +294,17 @@ PRODUCTS = [
      "long_desc": "A set of three sculptural taper candles — one Mulberry, one Oudh, one Basil. Meant to be lit together at dinner or displayed unlit as an object."},
 
     # ============ WAX BARS ============
+    {"id": "wax-set1", "category": "wax", "collection": "Wax Bars", "name": "Wax Bars · Set of 2",
+     "fragrances": ["Clove", "Cinnamon"], "mrp": 799, "sp": 599,
+     "images": [IMG["wax_clove"]],
+     "desc": "Two handcrafted wax melt bars — Clove × Cinnamon.",
+     "long_desc": "Two handcrafted wax melt bars in one set: Clove × Cinnamon for warm evenings."},
+
     {"id": "wax-set2", "category": "wax", "collection": "Wax Bars", "name": "Wax Bars · Set of 2",
-     "fragrances": ["Clove", "Cinnamon", "Rose", "Jasmine"], "mrp": 799, "sp": 599,
-     "images": [IMG["wax_clove"], IMG["wax_rose"]],
-     "desc": "Two handcrafted wax melt bars — Clove × Cinnamon and Rose × Jasmine.",
-     "long_desc": "Two handcrafted wax melt bars in one set: Clove × Cinnamon for warm evenings, Rose × Jasmine for lighter, floral moods. Break, warm and diffuse."},
+     "fragrances": ["Rose", "Jasmine"], "mrp": 799, "sp": 599,
+     "images": [IMG["wax_rose"]],
+     "desc": "Two handcrafted wax melt bars — Rose × Jasmine.",
+     "long_desc": "Two handcrafted wax melt bars in one set: Rose × Jasmine for lighter, floral moods. Break, warm and diffuse."},
 
     # ============ AROMA STONES (own category) ============
     {"id": "aroma-stone-jar", "category": "aroma-stones", "collection": "Aroma Stones",

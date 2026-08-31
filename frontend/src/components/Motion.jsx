@@ -30,7 +30,7 @@ export const MaskLine = ({ children, delay = 0, className = "" }) => (
 );
 
 export const Kicker = ({ children, className = "" }) => (
-  <span className={`text-xs md:text-sm tracking-[0.28em] uppercase text-[#5c3e2b] ${className}`}>
+  <span className={`text-xl md:text-2xl tracking-[0.28em] uppercase text-[#5c3e2b] ${className}`}>
     {children}
   </span>
 );
