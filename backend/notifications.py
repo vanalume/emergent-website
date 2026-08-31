@@ -1,23 +1,30 @@
-"""Emergent managed email notifications (Resend)."""
+"""Resend transactional email notifications."""
 import logging
 
 import httpx
 
-from config import EMAIL_BASE_URL, EMAIL_FROM_NAME, EMAIL_KEY, OWNER_EMAIL
+from config import EMAIL_FROM, OWNER_EMAIL, RESEND_API_KEY
+
+RESEND_API_URL = "https://api.resend.com/emails"
 
 
 async def send_notification_email(subject: str, html: str, reply_to: str | None = None):
     """Fire-and-forget notification to the business inbox. Never breaks the request."""
-    if not EMAIL_KEY:
+    if not RESEND_API_KEY:
         return
-    payload = {"to": [OWNER_EMAIL], "subject": subject, "html": html, "from_name": EMAIL_FROM_NAME}
+    payload = {
+        "from": EMAIL_FROM,
+        "to": [OWNER_EMAIL],
+        "subject": subject,
+        "html": html,
+    }
     if reply_to:
-        payload["contact_email"] = reply_to
+        payload["reply_to"] = reply_to
     try:
         async with httpx.AsyncClient(timeout=20) as client:
             resp = await client.post(
-                f"{EMAIL_BASE_URL}/api/v1/email/send",
-                headers={"X-Email-Key": EMAIL_KEY},
+                RESEND_API_URL,
+                headers={"Authorization": f"Bearer {RESEND_API_KEY}"},
                 json=payload,
             )
         resp.raise_for_status()

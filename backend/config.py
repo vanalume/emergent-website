@@ -23,10 +23,9 @@ rzp_client = None
 if RZP_KEY_ID and RZP_KEY_SECRET:
     rzp_client = razorpay.Client(auth=(RZP_KEY_ID, RZP_KEY_SECRET))
 
-# Emergent managed email (Resend)
-EMAIL_BASE_URL = os.environ.get("EMAIL_BASE_URL", "https://integrations.emergentagent.com")
-EMAIL_KEY = os.environ.get("EMERGENT_EMAIL_KEY", "").strip()
-EMAIL_FROM_NAME = os.environ.get("EMAIL_FROM_NAME", "Vanalume")
+# Resend transactional email
+RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "").strip()
+EMAIL_FROM = os.environ.get("EMAIL_FROM", "Vanalume <support@vanalume.com>")
 OWNER_EMAIL = os.environ.get("OWNER_EMAIL", "support@vanalume.com")
 
 # Admin
