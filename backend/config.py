@@ -13,7 +13,7 @@ ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / ".env")
 
 # MongoDB
-MONGO_URL = os.environ["MONGO_URL"]
+MONGO_URL = os.environ["DB_URL"]
 DB_NAME = os.environ["DB_NAME"]
 
 # Frontend asset base URL (catalogue images live in the frontend's public/ folder).
