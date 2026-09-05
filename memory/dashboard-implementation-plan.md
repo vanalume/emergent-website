@@ -5,17 +5,33 @@
 
 ---
 
-## 0 · Deviations from the brief (please confirm)
+## 0 · Decisions locked in
 
-The brief specifies a few tools that don't match our current stack. I'd like to lock the substitutions **before** we begin — none of them change what the user sees, only *how* we implement it.
+| Topic | Decision |
+|---|---|
+| File upload middleware | FastAPI native `UploadFile` (multer is Node-only, same UX) |
+| Object storage | **Supabase Storage via S3-compatible API** |
+| Admin UI kit | **shadcn/ui + Recharts**, themed to Vanalume warm palette + Didot/Avenir Next |
+| Admin auth | Single `ADMIN_KEY` (existing) |
+| Offer stacking | **Higher discount wins** when two active offers overlap a category |
+| Sales cut-off | Include all `status="paid"` orders (paid but unshipped still counts) |
+| CMS scope (v1) | Home + About + Contact intro + Footer + Navbar labels |
+| Bonus Phase 7 (Admin Orders) | **Deferred** — not part of this build |
 
-| Brief says | Our stack | Proposed substitution | Impact |
-|---|---|---|---|
-| **Multer** (Node/Express file middleware) | FastAPI (Python) | FastAPI's native `UploadFile` — identical dropzone UX, native async, no extra dep | None visible |
-| **Supabase Object Storage** | We already have Emergent-managed object storage wired via `EMERGENT_LLM_KEY` (playbook already used elsewhere) | **Option A (recommended):** use Emergent-managed storage — zero new keys, ready to ship. **Option B:** Supabase Storage — requires `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_BUCKET` from you and vendor lock-in on Supabase | You choose |
-| **TailAdmin** (paid/PRO in most parts) | React + Tailwind + shadcn/ui + framer-motion | Use **shadcn/ui** primitives (`Table`, `Sheet`, `Dialog`, `Tabs`, `Form`, `Command`) which are already installed, plus **Recharts** for charts. Layout borrows the *ideas* from TailAdmin (sidebar + top bar + KPI cards) but styled to match Vanalume's warm palette / Didot + Avenir Next typography. Flowbite tabs are optional and only if shadcn's don't cover a case | Fully themed, no license cost, native to our components |
+### Supabase — env variables required
+- `SUPABASE_STORAGE_ACCESS_KEY` *(will be added empty; you'll paste it)*
+- `SUPABASE_STORAGE_SECRET_ACCESS_KEY` *(will be added empty; you'll paste it)*
+- **Also needed (three more values I'll add as empty keys):**
+  - `SUPABASE_STORAGE_BUCKET` — the bucket name you create in Supabase → Storage (e.g., `vanalume`)
+  - `SUPABASE_STORAGE_ENDPOINT` — the S3 endpoint URL, format `https://<project-ref>.supabase.co/storage/v1/s3` (find your project ref under Project Settings → General)
+  - `SUPABASE_STORAGE_REGION` — usually `ap-south-1` for India-hosted Supabase, or whatever Region shows in Settings → Infrastructure. Supabase's S3 API requires a region string even though it ignores it internally
 
-**Approval needed on:** (a) storage choice, (b) confirmation that shadcn+Recharts substituting TailAdmin is acceptable.
+We'll use `aioboto3` (async S3 client) to talk to Supabase. Nothing Supabase-vendor-specific — this same code would work against AWS S3 or R2 unchanged.
+
+**One prep task for you (do at your leisure, not blocking Phase 1):**
+1. In Supabase → Storage, create a public bucket named `vanalume` (Public read, admin-only write)
+2. In Supabase → Project Settings → S3 Access Keys, generate an S3 access key pair
+3. Drop the 5 values into the empty env keys via the Emergent env panel
 
 ---
 
@@ -176,23 +192,7 @@ The brief specifies a few tools that don't match our current stack. I'd like to 
 
 ---
 
-## Phase 7 · Orders view in admin  *(bonus, small)*
-
-**Goal:** you can see and manage every order without leaving the site.
-
-**Backend:**
-- `GET /api/admin/orders?status=&from=&to=` — list + filter
-- `POST /api/admin/orders/{id}/status` — manual status override (edge cases)
-
-**Frontend (`admin/pages/Orders.jsx`):**
-- Table: date, customer, amount, status pill, Razorpay ID, Shiprocket shipment/AWB
-- Row expands into a detail panel with the full order, ability to trigger tracking refresh
-
-*This wasn't in the brief but Sales + Offers pull hard toward wanting it. Flagging as bonus — say the word and I'll include, otherwise it's a future phase.*
-
----
-
-## Phase 8 · Website content CMS  *(home + about text/images)*
+## Phase 7 · Website content CMS  *(home + about + contact intro + footer + navbar labels)*
 
 **Goal:** you edit hero copy, belief statement, founder bios, etc. without redeploy.
 
@@ -226,7 +226,7 @@ Types supported by the editor: `text` (single line), `richtext` (multi-line + it
 
 ---
 
-## Phase 9 · Testing, hardening, deploy
+## Phase 8 · Testing, hardening, deploy
 
 - Full backend pytest for offers pricing edge-cases + admin auth
 - Full `testing_agent` regression: retail flow + admin CRUD + offers + analytics numbers
@@ -241,25 +241,52 @@ Types supported by the editor: `text` (single line), `richtext` (multi-line + it
 
 | Component | Used in phases |
 |---|---|
-| `AdminShell` | 1–9 |
-| `DataTable` | 3, 4, 5, 7, 8 |
-| `FormField` | 3, 4, 5, 8 |
-| `StringArrayEditor` | 4, 8 |
-| `ImageDropzone` | 4, 8 |
+| `AdminShell` | 1–8 |
+| `DataTable` | 3, 4, 5, 7 |
+| `FormField` | 3, 4, 5, 7 |
+| `StringArrayEditor` | 4, 7 |
+| `ImageDropzone` | 4, 7 |
 | `StatCard` | 6 |
-| `RangePicker` | 6, 7 |
-| `Sheet`-based EditorPanel wrapper | 3, 4, 5, 7, 8 |
-| `ConfirmDialog` | 3, 4, 5, 8 |
+| `RangePicker` | 6 |
+| `Sheet`-based EditorPanel wrapper | 3, 4, 5, 7 |
+| `ConfirmDialog` | 3, 4, 5, 7 |
 
 ---
 
-## Open questions (please answer before I begin)
+## CMS scope (v1) — sections you'll edit from day 1
 
-1. **Storage:** Emergent-managed (recommended, ready) or Supabase (needs your keys + adds vendor lock-in)?
-2. **Bonus Phase 7 (Admin Orders):** include from the start, or defer?
-3. **Auth on `/admin`:** stick with the current single `ADMIN_KEY` gate, or upgrade to per-user login (email + password with roles)? *Single key is fine for now; multi-user makes sense when the team grows.*
-4. **Offer stacking rule:** confirm "higher discount wins" when two active offers overlap a category. Alternatively: latest-created wins, or don't allow overlap at all.
-5. **Sales data cut-off:** all `status="paid"` orders count as a sale. Include or exclude the current in-flight order (i.e., paid but not yet shipped)? *Default: include, since the money's in.*
-6. **CMS scope:** happy to start with Home + About only? Or do you want Contact intro + Footer + Navbar links editable too from day one?
+**Home page**
+- Hero slide 1 image + link
+- Hero slide 2 image + link
+- Hero slide 3 image + link
+- Fragrance Library strip enabled/disabled (single toggle)
+- Belief section body
+- CTA section headline + button label
 
-Once you answer these + approve §0 substitutions, I'll begin **Phase 1** and share screenshots before touching any real data.
+**About page**
+- Page intro heading + body
+- What is Vanalume section body
+- Five Senses items (title + body per sense · 5 items)
+- Founder cards (name, title, bio · 3 items)
+
+**Contact page**
+- Intro heading + subhead
+- Direct contact block (email, phone if used)
+
+**Footer**
+- Tagline / description
+- Column headings + link labels (routes stay hardcoded)
+- Copyright line
+
+**Navbar**
+- Label for each of the 4 links (Home / Shop / About / Contact)
+- Explore Products button label
+
+---
+
+## What I need before Phase 1 kicks off
+
+1. Approval on this final plan (a "go" is enough)
+2. The 5 Supabase env values whenever you have them — Phase 1 doesn't need storage yet, so this can arrive by Phase 2 at latest
+
+Once you say go, I'll start Phase 1 (admin shell + all reusable primitives) and share screenshots of the kitchensink before touching any real data.
