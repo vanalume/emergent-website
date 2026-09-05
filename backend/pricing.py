@@ -3,7 +3,7 @@
 Prices and shipping are computed against the catalogue stored in MongoDB, never
 against static in-memory data.
 """
-from typing import List
+from typing import Sequence
 
 from fastapi import HTTPException
 
@@ -35,7 +35,7 @@ async def get_product(product_id: str) -> dict | None:
     return await db.products.find_one({"id": product_id}, {"_id": 0})
 
 
-async def compute_amount(items: List[CartItem]):
+async def compute_amount(items: Sequence[CartItem]):
     """Compute (subtotal, shipping, total, line_items) in INR from the Mongo catalogue."""
     subtotal = 0
     lines = []

@@ -7,7 +7,7 @@ from fastapi import APIRouter, HTTPException
 import delivery_provider
 from config import RZP_KEY_ID, rzp_client
 from database import db
-from models import Order, VerifyPayment, now_iso
+from models import Order, OrderItem, VerifyPayment, now_iso
 from pricing import compute_amount
 
 router = APIRouter(tags=["orders"])
@@ -27,7 +27,7 @@ async def create_order(payload: Order):
 
     order = Order(
         id=str(uuid.uuid4()),
-        items=payload.items,
+        items=[OrderItem(**line) for line in lines],
         customer=payload.customer,
         subtotal=subtotal,
         shipping=shipping,
@@ -103,6 +103,8 @@ async def verify_payment(payload: VerifyPayment):
                     )
             else:
                 shipment_id = order_doc.get("shipment_id") or provider.shipment_id_from(shipment)
+                if shipment_id is not None:
+                    shipment_id = str(shipment_id)
 
     return {
         "status": "paid", "order_id": payload.order_id,

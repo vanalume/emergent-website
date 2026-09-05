@@ -91,6 +91,16 @@ class CartItem(BaseModel):
     size: Optional[str] = None
 
 
+class OrderItem(CartItem):
+    """A resolved line stored on an order: raw cart fields plus the product
+    name and unit price charged, so fulfillment (Shiprocket) needs no re-lookup."""
+    model_config = ConfigDict(extra="allow")
+    name: Optional[str] = None
+    collection: Optional[str] = None
+    unit_price: Optional[int] = None
+    line_total: Optional[int] = None
+
+
 class Customer(BaseModel):
     name: str = Field(min_length=1, max_length=120)
     email: EmailStr
@@ -108,7 +118,7 @@ class Order(BaseModel):
 
     model_config = ConfigDict(extra="allow")
 
-    items: List[CartItem] = Field(min_length=1)
+    items: List[OrderItem] = Field(min_length=1)
     customer: Customer
 
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))

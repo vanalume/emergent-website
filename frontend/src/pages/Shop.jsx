@@ -20,9 +20,9 @@ const GROUPS = [
       { key: "duet",             title: "Duet Collection",        tagline: "Two fragrances, one ritual.",                filter: (p) => p.category === "duet" },
       { key: "single",           title: "Individual Candles",     tagline: "Every Duet fragrance available on its own.",  filter: (p) => p.category === "single" },
       { key: "ensemble-tin",     title: "Ensemble · Tin",         tagline: "Three curated fragrances in the signature tin.", filter: (p) => p.id === "ensemble-celebrate-tin" || p.id === "ensemble-presence-tin" },
-      { key: "ensemble-metal",   title: "Ensemble · Metallic Jar",tagline: "Three curated fragrances in a premium 220cc metallic jar.", filter: (p) => p.id === "ensemble-celebrate-metallic" || p.id === "ensemble-presence-metallic" },
+      { key: "ensemble-metal",   title: "Ensemble · Shimmer Jar",tagline: "Three curated fragrances in a premium 220cc metallic jar.", filter: (p) => p.id === "ensemble-celebrate-metallic" || p.id === "ensemble-presence-metallic" },
       { key: "library",          title: "Perfumer's Library",     tagline: "Six fragrances. The complete discovery experience.", filter: (p) => p.category === "library" },
-      { key: "ceramic",          title: "Ceramic Jars",           tagline: "Coming soon.",                                filter: () => false, comingSoon: true },
+      { key: "concrete",          title: "Concrete Jars",           tagline: "Coming soon.",                                filter: (p) => p.category === "concrete-jar", comingSoon: false },
     ],
   },
   {
@@ -76,7 +76,6 @@ export default function Shop() {
   useEffect(() => {
     axios.get(`${API}/products`).then((r) => {
       setData(r.data)
-      console.log(r.data)
   }).finally(() => setLoading(false));
   }, []);
 

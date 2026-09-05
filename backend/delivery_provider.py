@@ -55,8 +55,13 @@ class DeliveryProvider(ABC):
         """Create a shipment/ad-hoc order. Returns the provider response or None."""
 
     def shipment_id_from(self, response: dict) -> Optional[str]:
-        """Extract the provider's shipment id from a create response."""
-        return response.get("shipment_id")
+        """Extract the provider's shipment id from a create response.
+
+        Shiprocket returns `shipment_id` as an integer; normalise to a string so
+        the value is consistent across providers and storage.
+        """
+        value = response.get("shipment_id")
+        return str(value) if value is not None else None
 
     # -- tracking (base set of APIs supported by all providers) ----------
     @abstractmethod
