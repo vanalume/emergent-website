@@ -42,6 +42,7 @@ class Product(BaseModel):
 
     id: str
     category: str
+    subcategory: Optional[str] = None
     collection: str
     name: str
     mrp: int
@@ -56,10 +57,17 @@ class Product(BaseModel):
     enquire: bool = False
 
 
+class SubCategory(BaseModel):
+    id: str
+    title: str
+    tagline: Optional[str] = None
+
+
 class Category(BaseModel):
     id: str
     title: str
     tagline: str
+    subcategories: Optional[List[SubCategory]] = None
 
 
 # ----------------------------- Inquiries -----------------------------

@@ -32,6 +32,11 @@ export default function ProductDetail() {
     [data.categories, product]
   );
 
+  const subcategory = useMemo(
+    () => product?.subcategory ? category?.subcategories?.find(s => s.id === product.subcategory) || null : null,
+    [category, product]
+  );
+
   useEffect(() => {
     if (!product) return;
     setVariant(product.variants?.[0]?.label ?? null);
@@ -60,10 +65,11 @@ export default function ProductDetail() {
   const save = mrp > sp ? Math.round(((mrp - sp) / mrp) * 100) : 0;
   const desc = chosenSize?.desc || product?.long_desc || product?.desc;
 
-  const related = useMemo(
-    () => product ? data.products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4) : [],
-    [data.products, product]
-  );
+  const related = useMemo(() => {
+    if (!product) return [];
+    const match = (p) => product.subcategory ? p.subcategory === product.subcategory : p.category === product.category;
+    return data.products.filter(p => match(p) && p.id !== product.id).slice(0, 4);
+  }, [data.products, product]);
 
   if (loading) return <div className="pt-40 text-center text-[#5c3e2b]/60 font-display text-2xl">Loading…</div>;
   if (!product) return (
@@ -142,7 +148,7 @@ export default function ProductDetail() {
 
           {/* --------- Details --------- */}
           <div>
-            <Kicker>{category?.title || product.collection}</Kicker>
+            <Kicker>{subcategory?.title || category?.title || product.collection}</Kicker>
             <h1 data-testid="pdp-name" className="font-display text-5xl md:text-6xl tracking-tight mt-4 leading-none">{product.name}</h1>
 
             {product.fragrances?.length > 0 && (
@@ -271,7 +277,7 @@ export default function ProductDetail() {
           <section className="mt-24 md:mt-32">
             <Reveal><Kicker>You may also like</Kicker></Reveal>
             <Reveal delay={0.05}>
-              <h2 className="font-display text-3xl md:text-5xl tracking-tight mt-3">More from {category?.title}</h2>
+              <h2 className="font-display text-3xl md:text-5xl tracking-tight mt-3">More from {subcategory?.title || category?.title}</h2>
             </Reveal>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 mt-10">
               {related.map(r => (
