@@ -11,16 +11,26 @@ Schema (scalable, ready for future admin editing):
 - sp (int)  : selling price
 - images (list[str]) : 1 or more image URLs (used by the 2-image carousel)
 - fragrances (list[str]) : displayed under name
-- variants (list[dict], optional) : selectable variants {label, sku?, mrp?, sp?, image?}
-- sizes (list[dict], optional) : selectable sizes {label, mrp, sp} — overrides product SP
+- variants (list[dict], optional) : selectable variants {label, sku?, mrp?, sp?, images[], desc?} — overrides product SP
 - desc (str)      : short (card) description
 - long_desc (str) : extended description shown on the product detail page
 - ritual (dict, optional) : {"title": str, "steps": [str, ...]} — Vanalume ritual instruction
-- enquire (bool) : if True, product is NOT purchasable (contact-only). Default False.
+- draft (bool) : if True, product is hidden from the store (not live). Default False.
 """
 
+import asyncio
+import hashlib
+import logging
+import os
+from urllib.parse import urlparse
+
+import httpx
+
+import storage
 from config import VANALUME_URL
 from models import Category, Product
+
+logger = logging.getLogger(__name__)
 
 # A = "https://customer-assets-gfyr7b9c.emergentagent.net/job_vanalume-preview/artifacts"
 
@@ -87,15 +97,24 @@ IMG = {
 
     # Individual candle photography (supplied by user)
     "s_aqua":           f"{A}/single-candles/aqua.png",
-    "s_black_oudh":     f"{A}/single-candles/black-oudh%20.png",
-    "s_awaken_pair":    f"{A}/single-candles/cendarwood-and-lemongrass.png",
+    "s_black_oudh":     f"{A}/single-candles/black-oudh.png",
+    # "s_awaken_pair":    f"{A}/single-candles/cendarwood-and-lemongrass.png",
+    "s_cedarwood":    f"{A}/single-candles/cedarwood.png",
+    "s_lemongrass":    f"{A}/single-candles/lemongrass.png",
     "s_jasmine":        f"{A}/single-candles/jasmine.png",
-    "s_intimacy_pair":  f"{A}/single-candles/mogra-and-lavender.png",
+    # "s_intimacy_pair":  f"{A}/single-candles/mogra-and-lavender.png",
+    "s_mogra":  f"{A}/single-candles/mogra.png",
+    "s_lavender":  f"{A}/single-candles/lavender.png",
+    # "s_intimacy_pair":  f"{A}/single-candles/mogra-and-lavender.png",
     "s_rose":           f"{A}/single-candles/rose.png",
     "s_white_sage":     f"{A}/single-candles/white-sage.png",
-    "s_white_oudh":     f"{A}/single-candles/white-oudh-indi.png",
-    "s_equilib_pair":   f"{A}/single-candles/sandalwood-and-teatree-indi.png",
-    "s_oriental_pair":  f"{A}/single-candles/oriental-cafe.png",
+    "s_white_oudh":     f"{A}/single-candles/white-oudh.png",
+    # "s_equilib_pair":   f"{A}/single-candles/sandalwood-and-teatree-indi.png",
+    "s_sandalwood":   f"{A}/single-candles/sandalwood.png",
+    "s_teatree":   f"{A}/single-candles/teatree.png",
+    # "s_oriental_pair":  f"{A}/single-candles/oriental-cafe.png",
+    "s_turkish_coffee":  f"{A}/single-candles/turkish-coffee.png",
+    "s_vanilla":  f"{A}/single-candles/vanilla.png",
 }
 
 
@@ -249,19 +268,22 @@ PRODUCTS = [
     _duet("duet-timeless",      "Timeless",      ["Black Oudh", "White Oudh"],      "timeless",     "timeless_box",     "timeless"),
 
     # ============ INDIVIDUAL CANDLES (14 SKUs · MRP 999 · SP 599) ============
-    # Separate category — each fragrance sold on its own. Photos to come per fragrance.
-    {"id": "single-lemongrass",      "category": "jar-candles", "subcategory": "single", "collection": "Awaken",        "name": "Lemongrass",     "fragrances": ["Lemongrass"],      "mrp": 999, "sp": 599, "images": [IMG["s_awaken_pair"]],       "image_crops": ["bottom", None], "desc": "Single Awaken candle · Lemongrass. Sharp, citrusy, morning-bright.",             "long_desc": "One 180 ml Lemongrass candle from the Awaken duet. Cool citrus with a herbal undertone — the top half of the Awaken ritual, on its own."},
-    {"id": "single-cedarwood",       "category": "jar-candles", "subcategory": "single", "collection": "Awaken",        "name": "Cedarwood",      "fragrances": ["Cedarwood"],       "mrp": 999, "sp": 599, "images": [IMG["s_awaken_pair"]],       "image_crops": ["top", None],    "desc": "Single Awaken candle · Cedarwood. Woody, warm, grounded.",                        "long_desc": "One 180 ml Cedarwood candle from the Awaken duet. Steady woody warmth — the base half of the Awaken ritual, burned solo."},
+    # Separate category — each fragrance sold on its own.
+    # NOTE: the Equilibrium and Oriental Café singles still point at shared duet
+    # "pair" photos (s_equilib_pair, s_oriental_pair).
+    # TODO: replace each with an individual, split single-image upload.
+    {"id": "single-lemongrass",      "category": "jar-candles", "subcategory": "single", "collection": "Awaken",        "name": "Lemongrass",     "fragrances": ["Lemongrass"],      "mrp": 999, "sp": 599, "images": [IMG["s_lemongrass"]], "desc": "Single Awaken candle · Lemongrass. Sharp, citrusy, morning-bright.",             "long_desc": "One 180 ml Lemongrass candle from the Awaken duet. Cool citrus with a herbal undertone — the top half of the Awaken ritual, on its own."},
+    {"id": "single-cedarwood",       "category": "jar-candles", "subcategory": "single", "collection": "Awaken",        "name": "Cedarwood",      "fragrances": ["Cedarwood"],       "mrp": 999, "sp": 599, "images": [IMG["s_cedarwood"]],    "desc": "Single Awaken candle · Cedarwood. Woody, warm, grounded.",                        "long_desc": "One 180 ml Cedarwood candle from the Awaken duet. Steady woody warmth — the base half of the Awaken ritual, burned solo."},
     {"id": "single-rose",            "category": "jar-candles", "subcategory": "single", "collection": "Bloom",         "name": "Rose",           "fragrances": ["Rose"],            "mrp": 999, "sp": 599, "images": [IMG["s_rose"]],        "desc": "Single Bloom candle · Rose. Fresh, dewy, garden-in-the-morning.",                "long_desc": "One 180 ml Rose candle from the Bloom duet. A clean, dewy rose — the fresh half of the Bloom ritual."},
     {"id": "single-jasmine",         "category": "jar-candles", "subcategory": "single", "collection": "Bloom",         "name": "Jasmine",        "fragrances": ["Jasmine"],         "mrp": 999, "sp": 599, "images": [IMG["s_jasmine"]],        "desc": "Single Bloom candle · Jasmine. Warm, indulgent, floral.",                         "long_desc": "One 180 ml Jasmine candle from the Bloom duet. Warm and full white-floral — the sweeter half of the Bloom ritual."},
     {"id": "single-white-sage",      "category": "jar-candles", "subcategory": "single", "collection": "Clarity",       "name": "White Sage",     "fragrances": ["White Sage"],      "mrp": 999, "sp": 599, "images": [IMG["s_white_sage"]],      "desc": "Single Clarity candle · White Sage. Herbal, cleansing, quietly smoky.",           "long_desc": "One 180 ml White Sage candle from the Clarity duet. A gentle, herbal reset — the clearing half of the Clarity ritual."},
     {"id": "single-aqua",            "category": "jar-candles", "subcategory": "single", "collection": "Clarity",       "name": "Aqua",           "fragrances": ["Aqua"],            "mrp": 999, "sp": 599, "images": [IMG["s_aqua"]],      "desc": "Single Clarity candle · Aqua. Cool, clean, quietly watery.",                      "long_desc": "One 180 ml Aqua candle from the Clarity duet. Cool and clean — the calming half of the Clarity ritual."},
-    {"id": "single-tea-tree",        "category": "jar-candles", "subcategory": "single", "collection": "Equilibrium",   "name": "Tea Tree",       "fragrances": ["Tea Tree"],        "mrp": 999, "sp": 599, "images": [IMG["s_equilib_pair"]],  "image_crops": ["top", None],    "desc": "Single Equilibrium candle · Tea Tree. Sharp, herbal, clearing.",                  "long_desc": "One 180 ml Tea Tree candle from the Equilibrium duet. Crisp and medicinal — the reset half of the Equilibrium ritual."},
-    {"id": "single-sandalwood",      "category": "jar-candles", "subcategory": "single", "collection": "Equilibrium",   "name": "Sandalwood",     "fragrances": ["Sandalwood"],      "mrp": 999, "sp": 599, "images": [IMG["s_equilib_pair"]],  "image_crops": ["bottom", None], "desc": "Single Equilibrium candle · Sandalwood. Woody, soft, calming.",                   "long_desc": "One 180 ml Sandalwood candle from the Equilibrium duet. Warm woody softness — the settling half of the Equilibrium ritual."},
-    {"id": "single-lavender",        "category": "jar-candles", "subcategory": "single", "collection": "Intimacy",      "name": "Lavender",       "fragrances": ["Lavender"],        "mrp": 999, "sp": 599, "images": [IMG["s_intimacy_pair"]],     "image_crops": ["bottom", None], "desc": "Single Intimacy candle · Lavender. Cool, floral, quietening.",                    "long_desc": "One 180 ml Lavender candle from the Intimacy duet. Soft and sleepy — the calming half of the Intimacy ritual."},
-    {"id": "single-mogra",           "category": "jar-candles", "subcategory": "single", "collection": "Intimacy",      "name": "Mogra",          "fragrances": ["Mogra"],           "mrp": 999, "sp": 599, "images": [IMG["s_intimacy_pair"]],     "image_crops": ["top", None],    "desc": "Single Intimacy candle · Mogra. Warm, floral, close.",                            "long_desc": "One 180 ml Mogra candle from the Intimacy duet. Warm and full jasmine-family floral — the deepening half of the Intimacy ritual."},
-    {"id": "single-turkish-coffee",  "category": "jar-candles", "subcategory": "single", "collection": "Oriental Cafe", "name": "Turkish Coffee", "fragrances": ["Turkish Coffee"],  "mrp": 999, "sp": 599, "images": [IMG["s_oriental_pair"]],     "image_crops": ["bottom", None], "desc": "Single Oriental Café candle · Turkish Coffee. Dark, roasted, café-warm.",         "long_desc": "One 180 ml Turkish Coffee candle from the Oriental Café duet. Deep and roasted — the café half of the ritual."},
-    {"id": "single-vanilla",         "category": "jar-candles", "subcategory": "single", "collection": "Oriental Cafe", "name": "Vanilla",        "fragrances": ["Vanilla"],         "mrp": 999, "sp": 599, "images": [IMG["s_oriental_pair"]],     "image_crops": ["top", None],    "desc": "Single Oriental Café candle · Vanilla. Soft, sweet, familiar.",                    "long_desc": "One 180 ml Vanilla candle from the Oriental Café duet. Soft and dessert-warm — the sweet half of the ritual."},
+    {"id": "single-tea-tree",        "category": "jar-candles", "subcategory": "single", "collection": "Equilibrium",   "name": "Tea Tree",       "fragrances": ["Tea Tree"],        "mrp": 999, "sp": 599, "images": [IMG["s_teatree"]],    "desc": "Single Equilibrium candle · Tea Tree. Sharp, herbal, clearing.",                  "long_desc": "One 180 ml Tea Tree candle from the Equilibrium duet. Crisp and medicinal — the reset half of the Equilibrium ritual."},
+    {"id": "single-sandalwood",      "category": "jar-candles", "subcategory": "single", "collection": "Equilibrium",   "name": "Sandalwood",     "fragrances": ["Sandalwood"],      "mrp": 999, "sp": 599, "images": [IMG["s_sandalwood"]], "desc": "Single Equilibrium candle · Sandalwood. Woody, soft, calming.",                   "long_desc": "One 180 ml Sandalwood candle from the Equilibrium duet. Warm woody softness — the settling half of the Equilibrium ritual."},
+    {"id": "single-lavender",        "category": "jar-candles", "subcategory": "single", "collection": "Intimacy",      "name": "Lavender",       "fragrances": ["Lavender"],        "mrp": 999, "sp": 599, "images": [IMG["s_lavender"]], "desc": "Single Intimacy candle · Lavender. Cool, floral, quietening.",                    "long_desc": "One 180 ml Lavender candle from the Intimacy duet. Soft and sleepy — the calming half of the Intimacy ritual."},
+    {"id": "single-mogra",           "category": "jar-candles", "subcategory": "single", "collection": "Intimacy",      "name": "Mogra",          "fragrances": ["Mogra"],           "mrp": 999, "sp": 599, "images": [IMG["s_mogra"]],    "desc": "Single Intimacy candle · Mogra. Warm, floral, close.",                            "long_desc": "One 180 ml Mogra candle from the Intimacy duet. Warm and full jasmine-family floral — the deepening half of the Intimacy ritual."},
+    {"id": "single-turkish-coffee",  "category": "jar-candles", "subcategory": "single", "collection": "Oriental Cafe", "name": "Turkish Coffee", "fragrances": ["Turkish Coffee"],  "mrp": 999, "sp": 599, "images": [IMG["s_turkish_coffee"]], "desc": "Single Oriental Café candle · Turkish Coffee. Dark, roasted, café-warm.",         "long_desc": "One 180 ml Turkish Coffee candle from the Oriental Café duet. Deep and roasted — the café half of the ritual."},
+    {"id": "single-vanilla",         "category": "jar-candles", "subcategory": "single", "collection": "Oriental Cafe", "name": "Vanilla",        "fragrances": ["Vanilla"],         "mrp": 999, "sp": 599, "images": [IMG["s_vanilla"]],    "desc": "Single Oriental Café candle · Vanilla. Soft, sweet, familiar.",                    "long_desc": "One 180 ml Vanilla candle from the Oriental Café duet. Soft and dessert-warm — the sweet half of the ritual."},
     {"id": "single-black-oudh",      "category": "jar-candles", "subcategory": "single", "collection": "Timeless",      "name": "Black Oudh",     "fragrances": ["Black Oudh"],      "mrp": 999, "sp": 599, "images": [IMG["s_black_oudh"]],     "desc": "Single Timeless candle · Black Oudh. Smoky, resinous, deep.",                     "long_desc": "One 180 ml Black Oudh candle from the Timeless duet. Smoky and deep — the darker half of the Timeless ritual."},
     {"id": "single-white-oudh",      "category": "jar-candles", "subcategory": "single", "collection": "Timeless",      "name": "White Oudh",     "fragrances": ["White Oudh"],      "mrp": 999, "sp": 599, "images": [IMG["s_white_oudh"]],     "desc": "Single Timeless candle · White Oudh. Creamy, powdery, refined.",                  "long_desc": "One 180 ml White Oudh candle from the Timeless duet. Creamy and refined — the softer half of the Timeless ritual."},
 
@@ -292,11 +314,11 @@ PRODUCTS = [
     {"id": "pillar-midnight-blue", "category": "pillar", "collection": "Pillar", "name": "Pillar Candle · Midnight Blue",
      "fragrances": ["Oudh"], "mrp": 799, "sp": 599,
      "images": [IMG["midnight-blue-4-inch"]],
-     "sizes": [
-        {"label": "4-inch", "image": IMG["midnight-blue-4-inch"], "mrp": 799, "sp": 599, "desc": "Our Shortest rustic finish pillar, at 4 inches. Long clean burn texted surface. Four colour fragrance pairing to choose from." },
-        {"label": "5-inch", "image": IMG["midnight-blue-5-inch"], "mrp": 899, "sp": 699, "desc": "The Middle height, at 5 inches. Same rustic finish, same 4 colour-fragrance, parings, longer burn than the 4-inch." },
-        {"label": "6-inch", "image": IMG["midnight-blue-6-inch"], "mrp": 999, "sp": 799, "desc": " The tallest at 6-inches. Statement height for a mantel, or bath, same finish same four pairings" },
-        {"label": "Pack of 3", "image": IMG["midnight-blue-pack"], "mrp": 2299, "sp": 1699, "desc": " the full pillar set: 4-inch, 5-inch and 6-inch pillars in one colour–fragrance pairing. Meant to be arranged together – the height variation is the point." },
+     "variants": [
+        {"label": "4-inch", "images": [IMG["midnight-blue-4-inch"]], "mrp": 799, "sp": 599, "desc": "Our Shortest rustic finish pillar, at 4 inches. Long clean burn texted surface. Four colour fragrance pairing to choose from." },
+        {"label": "5-inch", "images": [IMG["midnight-blue-5-inch"]], "mrp": 899, "sp": 699, "desc": "The Middle height, at 5 inches. Same rustic finish, same 4 colour-fragrance, parings, longer burn than the 4-inch." },
+        {"label": "6-inch", "images": [IMG["midnight-blue-6-inch"]], "mrp": 999, "sp": 799, "desc": " The tallest at 6-inches. Statement height for a mantel, or bath, same finish same four pairings" },
+        {"label": "Pack of 3", "images": [IMG["midnight-blue-pack"]], "mrp": 2299, "sp": 1699, "desc": " the full pillar set: 4-inch, 5-inch and 6-inch pillars in one colour–fragrance pairing. Meant to be arranged together – the height variation is the point." },
      ],
     },
 
@@ -306,11 +328,11 @@ PRODUCTS = [
     {"id": "pillar-deep-green", "category": "pillar", "collection": "Pillar", "name": "Pillar Candle · Deep Green",
      "fragrances": ["Spearmint"], "mrp": 799, "sp": 599,
      "images": [IMG["deep-green-4-inch"]],
-       "sizes": [
-        {"label": "4-inch", "image": IMG["deep-green-4-inch"], "mrp": 799, "sp": 599, "desc": "Our Shortest rustic finish pillar, at 4 inches. Long clean burn texted surface. Four colour fragrance pairing to choose from." },
-        {"label": "5-inch", "image": IMG["deep-green-5-inch"], "mrp": 899, "sp": 699, "desc": "The Middle height, at 5 inches. Same rustic finish, same 4 colour-fragrance, parings, longer burn than the 4-inch." },
-        {"label": "6-inch", "image": IMG["deep-green-6-inch"], "mrp": 999, "sp": 799, "desc": " The tallest at 6-inches. Statement height for a mantel, or bath, same finish same four pairings" },
-        {"label": "Pack of 3", "image": IMG["deep-green-pack"], "mrp": 2299, "sp": 1699, "desc": " the full pillar set: 4-inch, 5-inch and 6-inch pillars in one colour–fragrance pairing. Meant to be arranged together – the height variation is the point." },
+       "variants": [
+        {"label": "4-inch", "images": [IMG["deep-green-4-inch"]], "mrp": 799, "sp": 599, "desc": "Our Shortest rustic finish pillar, at 4 inches. Long clean burn texted surface. Four colour fragrance pairing to choose from." },
+        {"label": "5-inch", "images": [IMG["deep-green-5-inch"]], "mrp": 899, "sp": 699, "desc": "The Middle height, at 5 inches. Same rustic finish, same 4 colour-fragrance, parings, longer burn than the 4-inch." },
+        {"label": "6-inch", "images": [IMG["deep-green-6-inch"]], "mrp": 999, "sp": 799, "desc": " The tallest at 6-inches. Statement height for a mantel, or bath, same finish same four pairings" },
+        {"label": "Pack of 3", "images": [IMG["deep-green-pack"]], "mrp": 2299, "sp": 1699, "desc": " the full pillar set: 4-inch, 5-inch and 6-inch pillars in one colour–fragrance pairing. Meant to be arranged together – the height variation is the point." },
      ],
     },
 
@@ -318,11 +340,11 @@ PRODUCTS = [
     {"id": "pillar-sea-and-sand", "category": "pillar", "collection": "Pillar", "name": "Pillar Candle · Sea and Sand",
      "fragrances": ["Aqua"], "mrp": 799, "sp": 599,
      "images": [IMG["sea-and-sand-4-inch"]],
-     "sizes": [
-        {"label": "4-inch", "image": IMG["sea-and-sand-4-inch"], "mrp": 799, "sp": 599, "desc": "Our Shortest rustic finish pillar, at 4 inches. Long clean burn texted surface. Four colour fragrance pairing to choose from." },
-        {"label": "5-inch", "image": IMG["sea-and-sand-5-inch"], "mrp": 899, "sp": 699, "desc": "The Middle height, at 5 inches. Same rustic finish, same 4 colour-fragrance, parings, longer burn than the 4-inch." },
-        {"label": "6-inch", "image": IMG["sea-and-sand-6-inch"], "mrp": 999, "sp": 799, "desc": " The tallest at 6-inches. Statement height for a mantel, or bath, same finish same four pairings" },
-        {"label": "Pack of 3", "image": IMG["sea-and-sand-pack"], "mrp": 2299, "sp": 1699, "desc": " the full pillar set: 4-inch, 5-inch and 6-inch pillars in one colour–fragrance pairing. Meant to be arranged together – the height variation is the point." },
+     "variants": [
+        {"label": "4-inch", "images": [IMG["sea-and-sand-4-inch"]], "mrp": 799, "sp": 599, "desc": "Our Shortest rustic finish pillar, at 4 inches. Long clean burn texted surface. Four colour fragrance pairing to choose from." },
+        {"label": "5-inch", "images": [IMG["sea-and-sand-5-inch"]], "mrp": 899, "sp": 699, "desc": "The Middle height, at 5 inches. Same rustic finish, same 4 colour-fragrance, parings, longer burn than the 4-inch." },
+        {"label": "6-inch", "images": [IMG["sea-and-sand-6-inch"]], "mrp": 999, "sp": 799, "desc": " The tallest at 6-inches. Statement height for a mantel, or bath, same finish same four pairings" },
+        {"label": "Pack of 3", "images": [IMG["sea-and-sand-pack"]], "mrp": 2299, "sp": 1699, "desc": " the full pillar set: 4-inch, 5-inch and 6-inch pillars in one colour–fragrance pairing. Meant to be arranged together – the height variation is the point." },
      ],
     },
 
@@ -330,11 +352,11 @@ PRODUCTS = [
     {"id": "pillar-terracotta", "category": "pillar", "collection": "Pillar", "name": "Pillar Candle · Terracotta",
      "fragrances": ["Patchouli"], "mrp": 799, "sp": 599,
      "images": [IMG["terracotta-4-inch"]],
-     "sizes": [
-        {"label": "4-inch", "image": IMG["terracotta-4-inch"], "mrp": 799, "sp": 599},
-        {"label": "5-inch", "image": IMG["terracotta-5-inch"], "mrp": 899, "sp": 699},
-        {"label": "6-inch", "image": IMG["terracotta-6-inch"], "mrp": 999, "sp": 799},
-        {"label": "Pack of 3", "image": IMG["terracotta-pack"], "mrp": 2299, "sp": 1699},
+     "variants": [
+        {"label": "4-inch", "images": [IMG["terracotta-4-inch"]], "mrp": 799, "sp": 599},
+        {"label": "5-inch", "images": [IMG["terracotta-5-inch"]], "mrp": 899, "sp": 699},
+        {"label": "6-inch", "images": [IMG["terracotta-6-inch"]], "mrp": 999, "sp": 799},
+        {"label": "Pack of 3", "images": [IMG["terracotta-pack"]], "mrp": 2299, "sp": 1699},
      ],
     },
 
@@ -346,10 +368,10 @@ PRODUCTS = [
     #  "fragrances": ["Oudh", "Spearmint", "Patchouli", "Aqua"], "mrp": 899, "sp": 699,
     #  "images": [IMG["green"]],
     #  "variants": [
-    #     {"label": "4-inch", "image": IMG["midnight"]},
-    #     {"label": "5-inch", "image": IMG["green"]},
-    #     {"label": "6-inch", "image": IMG["terracotta"]},
-    #     {"label": "Pack of 3", "image": IMG["seasand"]},
+    #     {"label": "4-inch", "images": [IMG["midnight"]]},
+    #     {"label": "5-inch", "images": [IMG["green"]]},
+    #     {"label": "6-inch", "images": [IMG["terracotta"]]},
+    #     {"label": "Pack of 3", "images": [IMG["seasand"]]},
     #  ],
     #  "desc": "Rustic-finish 5-inch pillar. Choose your colour and fragrance.",
     #  "long_desc": "The middle height, at 5 inches. Same rustic finish, same four colour-fragrance pairings, longer burn than the 4-inch."},
@@ -358,10 +380,10 @@ PRODUCTS = [
     #  "images": [IMG["terracotta"]],
     #  "variants": [
 
-    #     {"label": "4-inch", "image": IMG["midnight"]},
-    #     {"label": "5-inch", "image": IMG["green"]},
-    #     {"label": "6-inch", "image": IMG["terracotta"]},
-    #     {"label": "Pack of 3", "image": IMG["seasand"]},
+    #     {"label": "4-inch", "images": [IMG["midnight"]]},
+    #     {"label": "5-inch", "images": [IMG["green"]]},
+    #     {"label": "6-inch", "images": [IMG["terracotta"]]},
+    #     {"label": "Pack of 3", "images": [IMG["seasand"]]},
     #  ],
     #  "desc": "Rustic-finish 6-inch pillar. Choose your colour and fragrance.",
     #  "long_desc": "The tallest, at 6 inches. Statement height for a mantel, table or bath — same finish, same four pairings."},
@@ -369,10 +391,10 @@ PRODUCTS = [
     #  "fragrances": ["Oudh", "Spearmint", "Patchouli", "Aqua"], "mrp": 999, "sp": 799,
     #  "images": [IMG["terracotta"]],
     #  "variants": [
-    #     {"label": "4-inch", "image": IMG["midnight"]},
-    #     {"label": "5-inch", "image": IMG["green"]},
-    #     {"label": "6-inch", "image": IMG["terracotta"]},
-    #     {"label": "Pack of 3", "image": IMG["seasand"]},
+    #     {"label": "4-inch", "images": [IMG["midnight"]]},
+    #     {"label": "5-inch", "images": [IMG["green"]]},
+    #     {"label": "6-inch", "images": [IMG["terracotta"]]},
+    #     {"label": "Pack of 3", "images": [IMG["seasand"]]},
     #  ],
     #  "desc": "Rustic-finish 6-inch pillar. Choose your colour and fragrance.",
     #  "long_desc": "The tallest, at 6 inches. Statement height for a mantel, table or bath — same finish, same four pairings."},
@@ -381,10 +403,10 @@ PRODUCTS = [
     #  "fragrances": ["Oudh", "Spearmint", "Patchouli", "Aqua"], "mrp": 2299, "sp": 1699,
     #  "images": [IMG["seasand"]],
     #  "variants": [
-    #     {"label": "Midnight Blue · Oudh", "image": IMG["midnight"]},
-    #     {"label": "Deep Green · Spearmint", "image": IMG["green"]},
-    #     {"label": "Terracotta · Patchouli", "image": IMG["terracotta"]},
-    #     {"label": "Sea & Sand · Aqua", "image": IMG["seasand"]},
+    #     {"label": "Midnight Blue · Oudh", "images": [IMG["midnight"]]},
+    #     {"label": "Deep Green · Spearmint", "images": [IMG["green"]]},
+    #     {"label": "Terracotta · Patchouli", "images": [IMG["terracotta"]]},
+    #     {"label": "Sea & Sand · Aqua", "images": [IMG["seasand"]]},
     #  ],
     #  "desc": "All three heights — 4, 5 and 6 inches — in your chosen colour.",
     #  "long_desc": "The full pillar set: 4-inch, 5-inch and 6-inch pillars in one colour-fragrance pairing. Meant to be arranged together — the height variation is the point."},
@@ -454,6 +476,7 @@ CATEGORIES = [
         "id": "jar-candles",
         "title": "Jar Candles",
         "tagline": "Every fragrance we make, cast in glass or metal.",
+        "order": 0,
         "subcategories": [
             {"id": "duet", "title": "Duet Collection", "tagline": "Two fragrances, one ritual."},
             {"id": "single", "title": "Individual Candles", "tagline": "Every Duet fragrance available on its own."},
@@ -463,29 +486,111 @@ CATEGORIES = [
             {"id": "concrete-jar", "title": "Concrete Jars", "tagline": "Coming soon."},
         ],
     },
-    {"id": "aroma-stones", "title": "Aroma Stones", "tagline": "Objects for a quiet, sensory home."},
-    {"id": "aroma-oils", "title": "Aroma Oils", "tagline": "Signature oils, inspired by the five elements."},
-    {"id": "pillar", "title": "Pillar Candles", "tagline": "Rustic-finish pillars in three heights, or as a set of three."},
-    {"id": "taper", "title": "Taper Candles", "tagline": "Sculptural tapers, in a set of three."},
-    {"id": "wax", "title": "Wax Bars", "tagline": "Handcrafted wax melts, in a set of two."},
+    {"id": "aroma-stones", "title": "Aroma Stones", "tagline": "Objects for a quiet, sensory home.", "order": 1},
+    {"id": "aroma-oils", "title": "Aroma Oils", "tagline": "Signature oils, inspired by the five elements.", "order": 2},
+    {"id": "pillar", "title": "Pillar Candles", "tagline": "Rustic-finish pillars in three heights, or as a set of three.", "order": 3},
+    {"id": "taper", "title": "Taper Candles", "tagline": "Sculptural tapers, in a set of three.", "order": 4},
+    {"id": "wax", "title": "Wax Bars", "tagline": "Handcrafted wax melts, in a set of two.", "order": 5},
 ]
+
+
+# ---------- Image upload helpers ----------
+_EXT_MIME = {
+    "png": "image/png",
+    "jpg": "image/jpeg",
+    "jpeg": "image/jpeg",
+    "webp": "image/webp",
+    "gif": "image/gif",
+    "avif": "image/avif",
+}
+
+
+def _download_base(url: str) -> str:
+    """Rewrite the display base (VANALUME_URL) to the seed download base.
+
+    Display URLs point at the frontend (e.g. http://localhost:3000/...), which the
+    backend process may not be able to reach. SEED_IMAGE_BASE_URL lets the seed
+    fetch from a container-internal host (e.g. http://frontend:3000) instead.
+    """
+    seed_base = os.environ.get("SEED_IMAGE_BASE_URL", "").rstrip("/")
+    if not seed_base:
+        return url
+    if url.startswith(A):
+        path = url[len(A):]
+        if not path.startswith("/"):
+            path = "/" + path
+        return f"{seed_base}{path}"
+    return url
+
+
+async def _upload_one(url: str) -> tuple[str, str]:
+    ext = (urlparse(url).path.rsplit(".", 1)[-1] if "." in urlparse(url).path else "").lower()
+    content_type = _EXT_MIME.get(ext, "image/png")
+    source = _download_base(url)
+    try:
+        async with httpx.AsyncClient(timeout=30) as client:
+            resp = await client.get(source)
+            resp.raise_for_status()
+            content = resp.content
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("seed image download failed for %s: %s", source, exc)
+        return url, url
+    key = f"catalog/{hashlib.md5(url.encode()).hexdigest()[:16]}.{ext or 'img'}"
+    try:
+        uploaded = await asyncio.to_thread(storage.put_object, key, content, content_type)
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("seed image upload failed for %s: %s", source, exc)
+        return url, url
+    return url, uploaded
+
+
+async def _upload_product_images(products: list) -> None:
+    """Upload every product/variant image to Supabase and rewrite URLs in place."""
+    if not storage.is_configured():
+        logger.warning("object storage not configured — skipping seed image upload")
+        return
+
+    urls = set()
+    for p in products:
+        for u in (p.get("images") or []):
+            if u:
+                urls.add(u)
+        for v in (p.get("variants") or []):
+            for u in (v.get("images") or []):
+                if u:
+                    urls.add(u)
+
+    sem = asyncio.Semaphore(6)
+
+    async def guarded(u):
+        async with sem:
+            return await _upload_one(u)
+
+    mapping = dict(await asyncio.gather(*(guarded(u) for u in urls)))
+
+    for p in products:
+        if p.get("images"):
+            p["images"] = [mapping.get(u, u) for u in p["images"]]
+        for v in (p.get("variants") or []):
+            if v.get("images"):
+                v["images"] = [mapping.get(u, u) for u in v["images"]]
 
 
 # ---------- Seed helper (runs once at startup) ----------
 async def seed_catalog(db) -> None:
-    """Replace the catalogue in MongoDB with the canonical seed data.
+    """Seed the catalogue on first boot only.
 
-    Flushes existing products/categories first, then inserts PRODUCTS /
-    CATEGORIES from this module so the DB always mirrors the seed lists on
-    startup.
+    Uploads every product image to Supabase object storage and rewrites the image
+    URLs to the new public links, then inserts PRODUCTS / CATEGORIES when the
+    collections are empty so admin CRUD becomes authoritative afterwards.
     """
-    await db.products.delete_many({})
-    await db.categories.delete_many({})
+    if await db.products.count_documents({}) == 0:
+        products = [Product(**p).model_dump() for p in PRODUCTS]
+        if products:
+            await _upload_product_images(products)
+            await db.products.insert_many(products)
 
-    products = [Product(**p).model_dump() for p in PRODUCTS]
-    categories = [Category(**c).model_dump() for c in CATEGORIES]
-
-    if products:
-        await db.products.insert_many(products)
-    if categories:
-        await db.categories.insert_many(categories)
+    if await db.categories.count_documents({}) == 0:
+        categories = [Category(**c).model_dump() for c in CATEGORIES]
+        if categories:
+            await db.categories.insert_many(categories)

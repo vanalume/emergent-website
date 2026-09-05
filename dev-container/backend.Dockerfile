@@ -22,7 +22,9 @@ RUN pip install --upgrade pip \
         "httpx==0.28.1" \
         "pydantic==2.13.4" \
         "email-validator==2.3.0" \
-        "razorpay==2.0.1"
+        "razorpay==2.0.1" \
+        "boto3==1.43.49" \
+        "python-multipart==0.0.32"
 
 WORKDIR /app
 

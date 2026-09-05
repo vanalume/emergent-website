@@ -82,8 +82,8 @@ class ShipRocketProvider(DeliveryProvider):
         c = order_doc["customer"]
         items = [
             {
-                "name": li["name"] + (f" · {li['size']}" if li.get("size") else "") + (f" · {li['variant']}" if li.get("variant") else ""),
-                "sku": li["product_id"] + ("-" + str(li.get("size") or "")) + ("-" + str(li.get("variant") or "")),
+                "name": li["name"] + (f" · {li['variant']}" if li.get("variant") else ""),
+                "sku": li["product_id"] + (("-" + str(li.get("variant"))) if li.get("variant") else ""),
                 "units": int(li["quantity"]),
                 "selling_price": float(li["unit_price"]),
                 "discount": 0,

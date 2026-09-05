@@ -17,7 +17,6 @@ export default function ProductDetail() {
   const [loading, setLoading] = useState(true);
   const [imgIdx, setImgIdx] = useState(0);
   const [variant, setVariant] = useState(null);
-  const [size, setSize] = useState(null);
 
   useEffect(() => {
     axios.get(`${API}/products`).then(r => setData(r.data)).finally(() => setLoading(false));
@@ -40,30 +39,24 @@ export default function ProductDetail() {
   useEffect(() => {
     if (!product) return;
     setVariant(product.variants?.[0]?.label ?? null);
-    setSize(product.sizes?.[0]?.label ?? null);
   }, [product]);
 
   const chosenVariant = product?.variants?.find(v => v.label === variant) || null;
-  const chosenSize = product?.sizes?.find(s => s.label === size) || null;
 
   const images = useMemo(() => {
     if (!product) return [];
     const base = product.images || [];
-    const primary = chosenSize?.image || chosenVariant?.image;
+    const primary = chosenVariant?.images?.[0];
     if (primary) return [primary, ...base.filter(x => x !== primary)];
     return base;
-  }, [product, chosenVariant, chosenSize]);
+  }, [product, chosenVariant]);
 
-  const imageCrops = product?.image_crops || [];
-  const currentCrop = imageCrops[imgIdx] || null;
-  const cropStyle = currentCrop
-    ? { height: "200%", top: currentCrop === "top" ? 0 : "auto", bottom: currentCrop === "bottom" ? 0 : "auto", left: 0, right: 0, position: "absolute", objectFit: "cover", width: "100%" }
-    : null;
-
-  const sp = chosenSize?.sp ?? chosenVariant?.sp ?? product?.sp ?? 0;
-  const mrp = chosenSize?.mrp ?? chosenVariant?.mrp ?? product?.mrp ?? 0;
+  const sp = chosenVariant?.sp ?? product?.sp ?? 0;
+  const mrp = chosenVariant?.mrp ?? product?.mrp ?? 0;
+  const offer = product?.offer;
+  const finalSp = offer ? Math.round(sp * (100 - offer.discount_percent) / 100) : sp;
   const save = mrp > sp ? Math.round(((mrp - sp) / mrp) * 100) : 0;
-  const desc = chosenSize?.desc || product?.long_desc || product?.desc;
+  const desc = chosenVariant?.desc || product?.long_desc || product?.desc;
 
   const related = useMemo(() => {
     if (!product) return [];
@@ -79,8 +72,8 @@ export default function ProductDetail() {
     </div>
   );
 
-  const doAdd = () => { add(product, { variant, size, qty: 1 }); };
-  const doBuyNow = () => { buyNow(product, { variant, size, qty: 1 }); toast.success("Redirecting to checkout"); };
+  const doAdd = () => { add(product, { variant, qty: 1 }); };
+  const doBuyNow = () => { buyNow(product, { variant, qty: 1 }); toast.success("Redirecting to checkout"); };
 
   const prev = () => setImgIdx((imgIdx - 1 + images.length) % images.length);
   const next = () => setImgIdx((imgIdx + 1) % images.length);
@@ -100,21 +93,12 @@ export default function ProductDetail() {
           {/* --------- Gallery --------- */}
           <div>
             <div className="relative overflow-hidden rounded-sm bg-[#ece3d4] aspect-[4/5]">
-              {currentCrop ? (
-                <img
-                  key={images[imgIdx]}
-                  src={images[imgIdx]}
-                  alt={product.name}
-                  style={cropStyle}
-                />
-              ) : (
-                <img
-                  key={images[imgIdx]}
-                  src={images[imgIdx]}
-                  alt={product.name}
-                  className="h-full w-full object-cover"
-                />
-              )}
+              <img
+                key={images[imgIdx]}
+                src={images[imgIdx]}
+                alt={product.name}
+                className="h-full w-full object-cover"
+              />
               {images.length > 1 && (
                 <>
                   <button data-testid="pdp-prev" onClick={prev} aria-label="Previous image"
@@ -156,51 +140,36 @@ export default function ProductDetail() {
             )}
 
             <div className="flex items-baseline gap-4 mt-7">
-              <span data-testid="pdp-sp" className="font-display text-4xl">{formatINR(sp)}</span>
-              {mrp > sp && (
+              <span data-testid="pdp-sp" className="font-display text-4xl">{formatINR(offer ? finalSp : sp)}</span>
+              {offer ? (
+                <>
+                  <span className="text-xl text-[#2b2320]/40 line-through">{formatINR(sp)}</span>
+                  <span className="text-xs tracking-[0.12em] uppercase bg-[#395439] text-[#f8f6f2] rounded-full px-3 py-1">
+                    {offer.name} · {offer.discount_percent}% off
+                  </span>
+                </>
+              ) : mrp > sp ? (
                 <>
                   <span className="text-xl text-[#2b2320]/40 line-through">{formatINR(mrp)}</span>
                   <span className="text-xs tracking-[0.12em] uppercase text-[#395439]">Save {save}%</span>
                 </>
-              )}
+              ) : null}
             </div>
 
             {desc && (
               <p className="text-base text-[#2b2320]/75 mt-6 leading-relaxed">{desc}</p>
             )}
 
-            {/* Size */}
-            {product.sizes?.length > 0 && (
-              <div className="mt-7">
-                <p className="text-[10px] tracking-[0.18em] uppercase text-[#5c3e2b] mb-2">Size</p>
-                <div className="flex flex-wrap gap-2">
-                  {product.sizes.map(s => (
-                    <button
-                      key={s.label}
-                      onClick={() => setSize(s.label)}
-                      data-testid={`pdp-size-${s.label.replace(/[^a-z0-9]+/gi,'-').toLowerCase()}`}
-                      className={`text-sm px-4 py-2 rounded-full border transition-colors duration-300 ${
-                        size === s.label ? "bg-[#2b2320] text-[#f8f6f2] border-[#2b2320]" : "border-[#2b2320]/25 text-[#2b2320]/75 hover:border-[#2b2320]"
-                      }`}
-                    >
-                      {s.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Colour / Variant */}
+            {/* Variants */}
             {product.variants?.length > 0 && (
-              <div className="mt-6">
-                <p className="text-[10px] tracking-[0.18em] uppercase text-[#5c3e2b] mb-2">
-                  {product.sizes?.length > 0 ? "Colour" : "Choose fragrance"}
-                </p>
+              <div className="mt-7">
+                <p className="text-[10px] tracking-[0.18em] uppercase text-[#5c3e2b] mb-2">Variant</p>
                 <div className="flex flex-wrap gap-2">
                   {product.variants.map(v => (
                     <button
                       key={v.label}
                       onClick={() => setVariant(v.label)}
+                      data-testid={`pdp-variant-${v.label.replace(/[^a-z0-9]+/gi,'-').toLowerCase()}`}
                       className={`text-sm px-4 py-2 rounded-full border transition-colors duration-300 ${
                         variant === v.label ? "bg-[#2b2320] text-[#f8f6f2] border-[#2b2320]" : "border-[#2b2320]/25 text-[#2b2320]/75 hover:border-[#2b2320]"
                       }`}

@@ -8,17 +8,19 @@ import StatCard from "@/admin/primitives/StatCard";
 import RangePicker from "@/admin/primitives/RangePicker";
 import EditorPanel from "@/admin/primitives/EditorPanel";
 import ConfirmDialog from "@/admin/primitives/ConfirmDialog";
+import { useAdminAuth } from "@/admin/AdminAuth";
 
 /**
  * KitchenSink — a working showcase of every reusable admin primitive.
  * Not linked from production nav; only visible in dev / directly.
  */
 export default function KitchenSink() {
+  const { key: adminKey } = useAdminAuth();
   const [text, setText] = useState("Clarity");
   const [num, setNum] = useState(1499);
   const [longText, setLongText] = useState("A composed morning ritual…");
   const [category, setCategory] = useState("duet");
-  const [enquire, setEnquire] = useState(false);
+  const [live, setLive] = useState(true);
   const [fragrances, setFragrances] = useState(["White Sage", "Aqua"]);
   const [ritualSteps, setRitualSteps] = useState([
     "Light White Sage first. Let it fill the room.",
@@ -97,7 +99,7 @@ export default function KitchenSink() {
         <FormField as="number" label="SP (₹)" value={num} onChange={setNum} min={0} />
         <FormField as="select" label="Category" value={category} onChange={setCategory}
           options={[{value:"duet",label:"Duet"},{value:"pillar",label:"Pillar"},{value:"aroma-stones",label:"Aroma Stones"}]} />
-        <FormField as="toggle" label="Enquire only" checked={enquire} onChange={setEnquire} hint="If on, this product cannot be added to cart." />
+        <FormField as="toggle" label="Live" checked={live} onChange={setLive} hint="If off, the product is a draft." />
         <div className="lg:col-span-2">
           <FormField as="textarea" label="Long description" value={longText} onChange={setLongText} rows={4} />
         </div>
@@ -111,7 +113,7 @@ export default function KitchenSink() {
 
       {/* Image dropzone */}
       <section className="mt-14">
-        <ImageDropzone label="Product images" value={images} onChange={setImages} />
+        <ImageDropzone label="Product images" value={images} onChange={setImages} endpoint="/admin/upload" adminKey={adminKey} />
       </section>
 
       {/* Editor panel + Confirm dialog */}
@@ -132,7 +134,7 @@ export default function KitchenSink() {
           <FormField as="textarea" label="Description" value={longText} onChange={setLongText} rows={4} />
           <FormField as="number" label="MRP" value={num} onChange={setNum} />
           <StringArrayEditor label="Fragrances" value={fragrances} onChange={setFragrances} />
-          <ImageDropzone label="Images" value={images} onChange={setImages} />
+          <ImageDropzone label="Images" value={images} onChange={setImages} endpoint="/admin/upload" adminKey={adminKey} />
         </div>
       </EditorPanel>
 

@@ -8,7 +8,7 @@
  *   <FormField as="textarea" label="Long description" value={x} onChange={setX} rows={5} />
  *   <FormField as="select" label="Category" value={x} onChange={setX} options={[{value,label}...]} />
  *   <FormField as="number" label="SP" value={x} onChange={setX} min={0} />
- *   <FormField as="toggle" label="Enquire only" checked={x} onChange={setX} />
+ *   <FormField as="toggle" label="Live" checked={x} onChange={setX} />
  */
 export default function FormField({
   as = "text",
@@ -59,7 +59,7 @@ export default function FormField({
           <button type="button" role="switch" aria-checked={!!checked}
             onClick={() => onChange?.(!checked)}
             className={`relative h-6 w-11 rounded-full transition-colors ${checked ? "bg-[#395439]" : "bg-[#2b2320]/20"}`}>
-            <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow-sm transition-transform ${checked ? "translate-x-5" : "translate-x-0.5"}`} />
+            <span className={`absolute left-0 top-0.5 h-5 w-5 rounded-full bg-white shadow-sm transition-transform ${checked ? "translate-x-5" : "translate-x-0.5"}`} />
           </button>
         );
       default:

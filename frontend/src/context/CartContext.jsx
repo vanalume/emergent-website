@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useState, useCallback } 
 
 const CartContext = createContext(null);
 const KEY = "vanalume_cart_v2";
-const lineKey = (id, variant, size) => `${id}::${variant || ""}::${size || ""}`;
+const lineKey = (id, variant) => `${id}::${variant || ""}`;
 
 export function CartProvider({ children }) {
   const [items, setItems] = useState(() => {
@@ -12,25 +12,24 @@ export function CartProvider({ children }) {
 
   useEffect(() => { localStorage.setItem(KEY, JSON.stringify(items)); }, [items]);
 
-  const add = useCallback((product, { variant = null, size = null, qty = 1 } = {}) => {
+  const add = useCallback((product, { variant = null, qty = 1 } = {}) => {
     const chosenV = variant && product.variants ? product.variants.find(v => v.label === variant) : null;
-    const chosenS = size && product.sizes ? product.sizes.find(s => s.label === size) : null;
-    const price = chosenS?.sp ?? chosenV?.sp ?? product.sp;
-    const image = chosenV?.image ?? (product.images?.[0] || product.image);
+    const price = chosenV?.sp ?? product.sp;
+    const image = chosenV?.images?.[0] ?? (product.images?.[0] || product.image);
     setItems(prev => {
-      const k = lineKey(product.id, variant, size);
-      const found = prev.find(i => lineKey(i.id, i.variant, i.size) === k);
-      if (found) return prev.map(i => lineKey(i.id, i.variant, i.size) === k ? { ...i, qty: i.qty + qty } : i);
-      return [...prev, { id: product.id, name: product.name, collection: product.collection, price, image, variant, size, qty }];
+      const k = lineKey(product.id, variant);
+      const found = prev.find(i => lineKey(i.id, i.variant) === k);
+      if (found) return prev.map(i => lineKey(i.id, i.variant) === k ? { ...i, qty: i.qty + qty } : i);
+      return [...prev, { id: product.id, name: product.name, collection: product.collection, price, image, variant, qty }];
     });
     setOpen(true);
   }, []);
 
-  const remove = useCallback((id, variant, size) => {
-    setItems(prev => prev.filter(i => lineKey(i.id, i.variant, i.size) !== lineKey(id, variant, size)));
+  const remove = useCallback((id, variant) => {
+    setItems(prev => prev.filter(i => lineKey(i.id, i.variant) !== lineKey(id, variant)));
   }, []);
-  const setQty = useCallback((id, variant, size, qty) => {
-    setItems(prev => prev.map(i => lineKey(i.id, i.variant, i.size) === lineKey(id, variant, size) ? { ...i, qty: Math.max(1, qty) } : i));
+  const setQty = useCallback((id, variant, qty) => {
+    setItems(prev => prev.map(i => lineKey(i.id, i.variant) === lineKey(id, variant) ? { ...i, qty: Math.max(1, qty) } : i));
   }, []);
   const clear = useCallback(() => setItems([]), []);
 

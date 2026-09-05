@@ -6,7 +6,6 @@ import { useCart, formatINR } from "@/context/CartContext";
 export default function ProductCard({ product }) {
   const { add } = useCart();
   const hasVariants = Array.isArray(product.variants) && product.variants.length > 0;
-  const hasSizes = Array.isArray(product.sizes) && product.sizes.length > 0;
   const [variant, setVariant] = useState(hasVariants ? product.variants[0].label : null);
 
   const chosenVariant = useMemo(
@@ -16,11 +15,10 @@ export default function ProductCard({ product }) {
 
   const images = useMemo(() => {
     const base = product.images || (product.image ? [product.image] : []);
-    if (chosenVariant?.image) return [chosenVariant.image, ...base.filter(x => x !== chosenVariant.image)];
+    const primary = chosenVariant?.images?.[0];
+    if (primary) return [primary, ...base.filter(x => x !== primary)];
     return base;
   }, [product.images, product.image, chosenVariant]);
-
-  const imageCrops = product.image_crops || [];
 
   const [idx, setIdx] = useState(0);
   const total = images.length;
@@ -28,51 +26,30 @@ export default function ProductCard({ product }) {
   const next = (e) => { stopLink(e); setIdx((idx + 1) % total); };
   const prev = (e) => { stopLink(e); setIdx((idx - 1 + total) % total); };
 
-  const currentCrop = imageCrops[idx] || null;
-  // Pair photos are two 4:5 frames stacked. Scale img to 200% height and shift.
-  const cropStyle = currentCrop
-    ? { height: "200%", top: currentCrop === "top" ? 0 : "auto", bottom: currentCrop === "bottom" ? 0 : "auto", left: 0, right: 0, position: "absolute", objectFit: "cover", width: "100%" }
-    : null;
-
   const sp = chosenVariant?.sp ?? product.sp;
   const mrp = chosenVariant?.mrp ?? product.mrp;
-  const enquire = product.enquire;
-  const hasChoices = hasSizes || hasVariants;
+  const offer = product.offer;
+  const finalSp = offer ? Math.round(sp * (100 - offer.discount_percent) / 100) : sp;
+  const hasChoices = hasVariants;
 
   const to = `/product/${product.id}`;
 
   const onAdd = (e) => {
     stopLink(e);
-    // If choices exist (size or multi-variant), send to detail so user can choose properly.
-    if (hasSizes) {
-      window.location.href = to;
-      return;
-    }
-    add(product, { variant, size: null, qty: 1 });
+    add(product, { variant, qty: 1 });
   };
 
   return (
     <div data-testid={`product-${product.id}`} className="group flex flex-col">
       <Link to={to} className="block">
         <div className="relative overflow-hidden rounded-sm bg-[#ece3d4] aspect-[4/5]">
-          {currentCrop ? (
-            <img
-              key={images[idx]}
-              src={images[idx]}
-              alt={product.name}
-              loading="lazy"
-              style={cropStyle}
-              className="transition-transform duration-[900ms] ease-out group-hover:scale-105"
-            />
-          ) : (
-            <img
-              key={images[idx]}
-              src={images[idx]}
-              alt={product.name}
-              loading="lazy"
-              className="h-full w-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-105"
-            />
-          )}
+          <img
+            key={images[idx]}
+            src={images[idx]}
+            alt={product.name}
+            loading="lazy"
+            className="h-full w-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-105"
+          />
           <div className="absolute inset-0 ring-1 ring-inset ring-[#5c3e2b]/12" />
           {total > 1 && (
             <>
@@ -103,18 +80,30 @@ export default function ProductCard({ product }) {
             {product.fragrances?.length > 0 && (
               <p className="text-xs text-[#5c3e2b] mt-1 tracking-wide">{product.fragrances.join(" · ")}</p>
             )}
+            {offer && (
+              <span className="inline-block mt-2 text-[10px] tracking-[0.1em] uppercase bg-[#395439] text-[#f8f6f2] rounded-full px-2.5 py-1">
+                {offer.name} · {offer.discount_percent}% off
+              </span>
+            )}
           </div>
-          {!enquire && (
-            <div className="text-right shrink-0 pt-1">
-              <div className="text-sm">{formatINR(sp)}</div>
-              {mrp > sp && <div className="text-xs text-[#2b2320]/40 line-through">{formatINR(mrp)}</div>}
-            </div>
-          )}
+          <div className="text-right shrink-0 pt-1">
+            {offer ? (
+              <>
+                <div className="text-sm">{formatINR(finalSp)}</div>
+                <div className="text-xs text-[#2b2320]/40 line-through">{formatINR(sp)}</div>
+              </>
+            ) : (
+              <>
+                <div className="text-sm">{formatINR(sp)}</div>
+                {mrp > sp && <div className="text-xs text-[#2b2320]/40 line-through">{formatINR(mrp)}</div>}
+              </>
+            )}
+          </div>
         </div>
 
         {product.desc && <p className="text-sm text-[#2b2320]/55 mt-2 leading-relaxed">{product.desc}</p>}
 
-        {hasVariants && !hasSizes && (
+        {hasVariants && (
           <div className="flex flex-wrap gap-2 mt-4">
             {product.variants.map(v => (
               <button
@@ -131,9 +120,7 @@ export default function ProductCard({ product }) {
         )}
 
         <div className="mt-5">
-          {enquire ? (
-            <Link to="/contact" className="inline-flex items-center gap-2 text-sm border border-[#2b2320] rounded-full px-6 py-2.5">Enquire</Link>
-          ) : hasChoices ? (
+          {hasChoices ? (
             <Link
               to={to}
               data-testid={`view-${product.id}`}

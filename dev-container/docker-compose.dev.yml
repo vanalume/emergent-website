@@ -43,6 +43,8 @@ services:
     environment:
       # Reliable file watching over macOS bind mounts (uvicorn --reload)
       WATCHFILES_FORCE_POLLING: "true"
+      # Where the seed downloads product images from (container-internal frontend)
+      SEED_IMAGE_BASE_URL: "http://frontend:3000"
     depends_on:
       mongo:
         condition: service_healthy

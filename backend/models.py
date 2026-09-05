@@ -21,14 +21,7 @@ class Variant(BaseModel):
     sku: Optional[str] = None
     mrp: Optional[int] = None
     sp: Optional[int] = None
-    image: Optional[str] = None
-
-
-class Size(BaseModel):
-    label: str
-    mrp: Optional[int] = None
-    sp: Optional[int] = None
-    image: Optional[str] = None
+    images: List[str] = Field(default_factory=list)
     desc: Optional[str] = None
 
 
@@ -50,11 +43,10 @@ class Product(BaseModel):
     images: List[str]
     fragrances: List[str] = Field(default_factory=list)
     variants: Optional[List[Variant]] = None
-    sizes: Optional[List[Size]] = None
     desc: Optional[str] = None
     long_desc: Optional[str] = None
     ritual: Optional[Ritual] = None
-    enquire: bool = False
+    draft: bool = False
 
 
 class SubCategory(BaseModel):
@@ -67,6 +59,13 @@ class Category(BaseModel):
     id: str
     title: str
     tagline: str
+    subcategories: Optional[List[SubCategory]] = None
+    order: Optional[int] = None
+
+
+class CategoryUpdate(BaseModel):
+    title: Optional[str] = None
+    tagline: Optional[str] = None
     subcategories: Optional[List[SubCategory]] = None
 
 
@@ -96,7 +95,6 @@ class CartItem(BaseModel):
     product_id: str
     quantity: int = Field(ge=1, le=50)
     variant: Optional[str] = None
-    size: Optional[str] = None
 
 
 class OrderItem(CartItem):
@@ -148,3 +146,15 @@ class VerifyPayment(BaseModel):
     razorpay_order_id: str
     razorpay_payment_id: str
     razorpay_signature: str
+
+
+# ----------------------------- Offers -----------------------------
+class Offer(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    category_ids: List[str] = Field(default_factory=list)
+    discount_percent: int = Field(ge=0, le=90)
+    active: bool = True
+    starts_at: Optional[str] = None
+    ends_at: Optional[str] = None
+    created_at: str = Field(default_factory=now_iso)

@@ -106,7 +106,7 @@ export default function CartDrawer() {
     try {
       const payload = { ...c, phone: c.phone.replace(/\D/g, "").replace(/^91/, "") };
       const { data } = await axios.post(`${API}/orders`, {
-        items: items.map(i => ({ product_id: i.id, quantity: i.qty, variant: i.variant || null, size: i.size || null })),
+        items: items.map(i => ({ product_id: i.id, quantity: i.qty, variant: i.variant || null })),
         customer: payload,
       });
 
@@ -215,7 +215,7 @@ export default function CartDrawer() {
                   {view === "cart" ? (
                     <div className="space-y-5">
                       {items.map(i => (
-                        <div key={`${i.id}-${i.variant}-${i.size}`} className="flex gap-4">
+                        <div key={`${i.id}-${i.variant}`} className="flex gap-4">
                           <div className="h-20 w-20 rounded-sm overflow-hidden bg-[#e6dfd3] shrink-0">
                             <img src={i.image} alt={i.name} className="h-full w-full object-cover" />
                           </div>
@@ -223,19 +223,19 @@ export default function CartDrawer() {
                             <div className="flex justify-between gap-2">
                               <div className="min-w-0">
                                 <p className="font-display text-lg leading-tight truncate">{i.name}</p>
-                                {(i.variant || i.size) && (
+                                {i.variant && (
                                   <p className="text-xs text-[#5c3e2b] mt-0.5 truncate">
-                                    {[i.size, i.variant].filter(Boolean).join(" · ")}
+                                    {i.variant}
                                   </p>
                                 )}
                               </div>
-                              <button onClick={() => remove(i.id, i.variant, i.size)} aria-label="Remove" className="text-[#2b2320]/40 hover:text-[#9a3b2e]"><Trash2 size={16} /></button>
+                              <button onClick={() => remove(i.id, i.variant)} aria-label="Remove" className="text-[#2b2320]/40 hover:text-[#9a3b2e]"><Trash2 size={16} /></button>
                             </div>
                             <div className="flex items-center justify-between mt-3">
                               <div className="flex items-center border border-[#2b2320]/20 rounded-full">
-                                <button onClick={() => setQty(i.id, i.variant, i.size, i.qty - 1)} className="p-2"><Minus size={13} /></button>
+                                <button onClick={() => setQty(i.id, i.variant, i.qty - 1)} className="p-2"><Minus size={13} /></button>
                                 <span className="w-7 text-center text-sm">{i.qty}</span>
-                                <button onClick={() => setQty(i.id, i.variant, i.size, i.qty + 1)} className="p-2"><Plus size={13} /></button>
+                                <button onClick={() => setQty(i.id, i.variant, i.qty + 1)} className="p-2"><Plus size={13} /></button>
                               </div>
                               <span className="text-sm">{formatINR(i.price * i.qty)}</span>
                             </div>
