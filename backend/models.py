@@ -6,7 +6,7 @@ schema documented in `catalog.py` so the database conforms to the same models.
 """
 import uuid
 from datetime import datetime, timezone
-from typing import List, Optional
+from typing import Any, List, Optional
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
@@ -158,3 +158,16 @@ class Offer(BaseModel):
     starts_at: Optional[str] = None
     ends_at: Optional[str] = None
     created_at: str = Field(default_factory=now_iso)
+
+
+# ----------------------------- Content (CMS) -----------------------------
+class Section(BaseModel):
+    key: str
+    type: str
+    value: Any = None
+
+
+class Page(BaseModel):
+    slug: str
+    sections: List[Section]
+    updated_at: str = Field(default_factory=now_iso)

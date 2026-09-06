@@ -1,0 +1,295 @@
+{
+  "about": {
+    "sections": [
+      {
+        "key": "intro_heading",
+        "type": "text",
+        "value": "Luxury should be lived, not displayed"
+      },
+      {
+        "key": "meaning_lead",
+        "type": "richtext",
+        "value": "Vana, the forest - lume, the light"
+      },
+      {
+        "key": "meaning_body",
+        "type": "richtext",
+        "value": "Vanalume is the glow of the forest carried indoors, the warmth of a living flame, the calm of green, the quiet luminosity that lingers long after the day has gone"
+      },
+      {
+        "key": "meaning_tagline",
+        "type": "richtext",
+        "value": "Quiet, warm, restrained, no neon, no glitter, no floral candle clichés"
+      },
+      {
+        "key": "mission",
+        "type": "richtext",
+        "value": "To create thoughtfully crafted fragrance experiences that inspire slower, calmer and more intentional living"
+      },
+      {
+        "key": "vision",
+        "type": "richtext",
+        "value": "To build a global lifestyle brand where fragrance, design and ritual come together to transform everyday spaces into meaningful experiences"
+      },
+      {
+        "key": "senses",
+        "type": "list",
+        "value": [
+          {
+            "key": "Smell",
+            "desc": "Our signature candles and fragrances.",
+            "icon": "Flower2"
+          },
+          {
+            "key": "Sight",
+            "desc": "Objects and designs that elevate everyday spaces.",
+            "icon": "Eye"
+          },
+          {
+            "key": "Touch",
+            "desc": "The texture of handcrafted aroma stones.",
+            "icon": "Hand"
+          },
+          {
+            "key": "Sound",
+            "desc": "Curated ritual playlists designed to accompany moments of calm.",
+            "icon": "AudioLines"
+          },
+          {
+            "key": "Taste",
+            "desc": "Future tea rituals inspired by nature.",
+            "icon": "Leaf"
+          }
+        ]
+      },
+      {
+        "key": "founder_hero_heading",
+        "type": "richtext",
+        "value": "Built with patience, purpose and a belief that everyday rituals deserve beautiful design."
+      },
+      {
+        "key": "beginning",
+        "type": "list_of_text",
+        "value": [
+          "Vanalume was founded with a simple belief: the spaces we live in shape the way we feel. What began as an exploration of fragrance has grown into a vision for a lifestyle brand centred around composed living.",
+          "Every product is created with care, balancing thoughtful design, quality craftsmanship and sensory experiences. Rather than following trends, Vanalume seeks to create timeless pieces that become part of everyday rituals.",
+          "This journey is being built by founders who believe luxury is defined not by excess, but by meaning, simplicity and lasting experiences."
+        ]
+      },
+      {
+        "key": "founders",
+        "type": "list",
+        "value": [
+          {
+            "name": "Nishant Sharma",
+            "role": "Co-Founder",
+            "img": "https://customer-assets-gfyr7b9c.emergentagent.net/job_vanalume-preview/artifacts/ndkrjhiv_nishant.PNG",
+            "bio": "Nishant is a Business Management student at Shiv Nadar University, a competitive cricketer and a trained musician. He draws on the quiet balance between performance and creativity, guided by patience, precision and purpose. Vanalume grew from a simple idea of his: to create everyday moments people can truly feel."
+          },
+          {
+            "name": "Dr. Alok Sharma",
+            "role": "Co-Founder",
+            "img": "https://customer-assets-gfyr7b9c.emergentagent.net/job_vanalume-preview/artifacts/s5gjf4zw_alok.PNG",
+            "bio": "Dr. Alok Sharma is an eminent renal pathologist and researcher, and a lifelong maker at heart. He brings scientific rigour, creative instinct and a genuine respect for good craftsmanship. For him, Vanalume is thoughtful precision: everyday objects, made well, that bring lasting warmth into ordinary moments."
+          },
+          {
+            "name": "Dr. Bharati Malhotra",
+            "role": "Co-Founder",
+            "img": "https://customer-assets-gfyr7b9c.emergentagent.net/job_vanalume-preview/artifacts/8z71o6x2_bharati.PNG",
+            "bio": "Dr. Bharati Malhotra is a senior radiologist and a lifelong artist. She believes the spaces we create and the objects we choose quietly shape how we feel. For her, Vanalume is composed living: slowing down, living with intention and finding beauty in everyday rituals."
+          }
+        ]
+      },
+      {
+        "key": "closing_quote",
+        "type": "richtext",
+        "value": "We are not building products, we are creating rituals worth returning to"
+      }
+    ],
+    "updated_at": "2026-09-06T12:29:25.678959+00:00"
+  },
+  "contact": {
+    "sections": [
+      {
+        "key": "intro_heading",
+        "type": "text",
+        "value": "Let's create something beautiful together"
+      },
+      {
+        "key": "business_enquiries",
+        "type": "list_of_text",
+        "value": [
+          "Wholesale",
+          "Corporate Gifting",
+          "Hospitality",
+          "Interior Designers",
+          "Retail Partnerships",
+          "Custom Fragrance Projects"
+        ]
+      },
+      {
+        "key": "contact_email",
+        "type": "text",
+        "value": "support@vanalume.com"
+      }
+    ],
+    "updated_at": "2026-09-06T12:29:25.715459+00:00"
+  },
+  "footer": {
+    "sections": [
+      {
+        "key": "tagline_title",
+        "type": "text",
+        "value": "Composed Living"
+      },
+      {
+        "key": "tagline_description",
+        "type": "richtext",
+        "value": "Fragrances, rituals and thoughtful designs for spaces that feel calm, intentional and beautifully lived in."
+      },
+      {
+        "key": "quick_links_heading",
+        "type": "text",
+        "value": "Quick Links"
+      },
+      {
+        "key": "quick_links",
+        "type": "list",
+        "value": [
+          {
+            "label": "Shop",
+            "to": "/shop"
+          },
+          {
+            "label": "About Us",
+            "to": "/about"
+          },
+          {
+            "label": "Contact",
+            "to": "/contact"
+          }
+        ]
+      },
+      {
+        "key": "newsletter_heading",
+        "type": "text",
+        "value": "Newsletter"
+      },
+      {
+        "key": "newsletter_description",
+        "type": "richtext",
+        "value": "Slow letters on fragrance, ritual and design. No noise."
+      },
+      {
+        "key": "copyright",
+        "type": "text",
+        "value": "VANALUME"
+      },
+      {
+        "key": "copyright_tagline",
+        "type": "text",
+        "value": "Composed Living"
+      }
+    ],
+    "updated_at": "2026-09-06T12:29:25.749702+00:00"
+  },
+  "home": {
+    "sections": [
+      {
+        "key": "hero_slides",
+        "type": "list",
+        "value": [
+          {
+            "id": "candles",
+            "image": "/hero/candles.png",
+            "link": "/shop#group-jar-candles",
+            "alt": "Vanalume scented candles collection"
+          },
+          {
+            "id": "stones",
+            "image": "/hero/stones.png",
+            "link": "/shop#group-aroma-stones",
+            "alt": "Vanalume aroma stones"
+          },
+          {
+            "id": "oils",
+            "image": "/hero/oils.png",
+            "link": "/shop#group-aroma-oils",
+            "alt": "Vanalume aroma oils, inspired by the elements"
+          }
+        ]
+      },
+      {
+        "key": "fragrance_strip_enabled",
+        "type": "toggle",
+        "value": false
+      },
+      {
+        "key": "fragrances",
+        "type": "list_of_text",
+        "value": [
+          "Lavender",
+          "Sandalwood",
+          "Turkish Coffee",
+          "Mulberry",
+          "Tea Tree",
+          "Cedarwood",
+          "Black Oudh",
+          "Mogra",
+          "Jasmine",
+          "Rose",
+          "White Sage",
+          "Musk"
+        ]
+      },
+      {
+        "key": "belief_body",
+        "type": "richtext",
+        "value": "Luxury isn't loud, it is the quiet confidence of a thoughtfully lit candle, and rituals that slow everyday life"
+      },
+      {
+        "key": "cta_headline",
+        "type": "text",
+        "value": "Experience Composed Living"
+      },
+      {
+        "key": "cta_button_label",
+        "type": "text",
+        "value": "Explore Products"
+      }
+    ],
+    "updated_at": "2026-09-06T12:29:25.611226+00:00"
+  },
+  "navbar": {
+    "sections": [
+      {
+        "key": "links",
+        "type": "list",
+        "value": [
+          {
+            "label": "Home",
+            "to": "/"
+          },
+          {
+            "label": "Shop",
+            "to": "/shop"
+          },
+          {
+            "label": "About Us",
+            "to": "/about"
+          },
+          {
+            "label": "Contact",
+            "to": "/contact"
+          }
+        ]
+      },
+      {
+        "key": "explore_button_label",
+        "type": "text",
+        "value": "Explore Products"
+      }
+    ],
+    "updated_at": "2026-09-06T12:29:25.788385+00:00"
+  }
+}
