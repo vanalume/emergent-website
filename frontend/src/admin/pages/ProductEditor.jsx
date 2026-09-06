@@ -146,7 +146,7 @@ export default function ProductEditor({ open, product, categories, onClose, onSa
           <FormField label="Long description" as="textarea" value={form.long_desc} onChange={(v) => set({ long_desc: v })} rows={4} />
           <FormField label="Live" as="toggle" checked={!form.draft} onChange={(v) => set({ draft: !v })} hint="If off, the product is a draft and hidden from the store." />
           <StringArrayEditor label="Fragrances" value={form.fragrances} onChange={(v) => set({ fragrances: v })} placeholder="Type a fragrance, press Enter" />
-          <StringArrayEditor label="What's inside (includes)" value={form.includes} onChange={(v) => set({ includes: v })} placeholder="Add a line, press Enter" />
+          <StringArrayEditor label="What's inside (includes)" as="list" value={form.includes} onChange={(v) => set({ includes: v })} />
           <ImageDropzone label="Images" value={form.images} onChange={(v) => set({ images: v })} multiple endpoint="/admin/upload" adminKey={adminKey} />
         </div>
       )}
@@ -157,7 +157,7 @@ export default function ProductEditor({ open, product, categories, onClose, onSa
         <div className="space-y-6">
           <FormField label="Ritual title" value={form.ritual?.title || ""}
             onChange={(v) => set({ ritual: { ...(form.ritual || { steps: [] }), title: v } })} />
-          <StringArrayEditor label="Ritual steps" as="list" value={form.ritual?.steps || []}
+          <StringArrayEditor label="Ritual steps" as="list" newItemText="New step" value={form.ritual?.steps || []}
             onChange={(v) => set({ ritual: { ...(form.ritual || { title: "" }), steps: v } })} />
         </div>
       )}

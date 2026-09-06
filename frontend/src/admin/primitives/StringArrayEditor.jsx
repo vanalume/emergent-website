@@ -16,6 +16,7 @@ export default function StringArrayEditor({
   placeholder = "Type and press Enter",
   as = "chips",
   rowsPerItem = 2,
+  newItemText = "New item",
   className = "",
 }) {
   const [draft, setDraft] = useState("");
@@ -64,7 +65,7 @@ export default function StringArrayEditor({
           ))}
           <button
             type="button"
-            onClick={() => push("New step")}
+            onClick={() => push(newItemText)}
             className="mt-1 inline-flex items-center gap-1 text-xs tracking-[0.14em] uppercase text-[#5c3e2b] hover:text-[#2b2320]"
           >
             <Plus size={14} /> Add item

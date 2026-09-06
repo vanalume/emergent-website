@@ -169,6 +169,25 @@ class TestDelete:
         r2 = client.delete(f"{API}/admin/categories/{cid}", headers=_hdr())
         assert r2.status_code == 404
 
+    def test_delete_clears_offers(self, client):
+        if not ADMIN_KEY:
+            pytest.skip("ADMIN_KEY not available")
+        cid, _ = _create(client)
+        r = client.post(f"{API}/admin/offers", json={
+            "name": "Z Offer", "category_ids": ["jar-candles", cid], "discount_percent": 10, "active": True,
+        }, headers=_hdr())
+        offer_id = r.json().get("id") if r.status_code == 201 else None
+        try:
+            assert client.delete(f"{API}/admin/categories/{cid}", headers=_hdr()).status_code == 200
+            offers = client.get(f"{API}/admin/offers", headers=_hdr()).json()
+            offer = next((o for o in offers if o["id"] == offer_id), None)
+            assert offer is not None
+            assert cid not in offer["category_ids"]
+            assert "jar-candles" in offer["category_ids"]
+        finally:
+            if offer_id:
+                client.delete(f"{API}/admin/offers/{offer_id}", headers=_hdr())
+
 
 class TestReorder:
     def test_reorder_persists(self, client):

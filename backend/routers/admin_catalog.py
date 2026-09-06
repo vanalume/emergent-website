@@ -87,6 +87,11 @@ async def delete_category(category_id: str):
             status_code=409,
             detail=f"Category '{existing['title']}' has {used} product(s). Move or delete them first.",
         )
+    # Remove this category from any offer's category_ids before deleting it.
+    await db.offers.update_many(
+        {"category_ids": category_id},
+        {"$pull": {"category_ids": category_id}},
+    )
     await db.categories.delete_one({"id": category_id})
     return {"ok": True}
 

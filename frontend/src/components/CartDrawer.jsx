@@ -26,9 +26,9 @@ const FIELDS = [
   { name: "email", label: "Email", col: "", placeholder: "you@example.com" },
   { name: "phone", label: "Phone (10-digit mobile)", col: "", placeholder: "9876543210" },
   { name: "address", label: "Address", col: "md:col-span-2", placeholder: "Flat / building, street" },
+  { name: "pincode", label: "Pincode", col: "", placeholder: "110001" },
   { name: "city", label: "City", col: "", placeholder: "Auto-detected", auto: true },
   { name: "state", label: "State", col: "", placeholder: "Auto-detected", auto: true },
-  { name: "pincode", label: "Pincode", col: "", placeholder: "110001" },
 ];
 
 export default function CartDrawer() {
