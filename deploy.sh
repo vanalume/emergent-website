@@ -13,7 +13,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
 COMPOSE_FILE="dev-container/docker-compose.prod.yml"
-BASE_URL="${BASE_URL:-http://localhost}"
+BASE_URL="${BASE_URL:-https://localhost}"
 
 compose() { docker compose -f "$COMPOSE_FILE" "$@"; }
 say() { printf "\033[1;34m==>\033[0m %s\n" "$*"; }
@@ -43,7 +43,7 @@ git_pull() {
 
 wait_for_url() {
   local url="$1" timeout="${2:-60}" elapsed=0
-  until curl -fsS -o /dev/null "$url"; do
+  until curl -kfsS -o /dev/null "$url"; do
     elapsed=$((elapsed + 2))
     [ "$elapsed" -ge "$timeout" ] && return 1
     sleep 2
@@ -85,6 +85,12 @@ check_env
 if [ "$PULL" = "true" ]; then git_pull; fi
 say "build + start ($COMPOSE_FILE)"
 compose up -d --build
+
+say "TLS certificate (Let's Encrypt)"
+if [ -x "$SCRIPT_DIR/dev-container/init-letsencrypt.sh" ]; then
+  bash "$SCRIPT_DIR/dev-container/init-letsencrypt.sh" || say "certbot step failed — continuing with the placeholder cert"
+fi
+
 healthcheck
 say "deploy complete"
 compose ps

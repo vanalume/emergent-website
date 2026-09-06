@@ -1,5 +1,5 @@
-# Production stack: nginx serves the built frontend and proxies /api to the
-# backend. MongoDB is external (DB_URL from backend/.env, injected via env_file).
+# Production stack: nginx serves the built frontend (HTTPS on 443) and proxies
+# /api to the backend. MongoDB is external (DB_URL from backend/.env, via env_file).
 #
 # Usage:
 #   docker compose -f dev-container/docker-compose.prod.yml up --build
@@ -7,6 +7,10 @@
 # No bind mounts — backend + frontend/public images are COPY'd into the image at
 # build time. LAUNCH_ENV=production makes the backend delete the local
 # frontend/public images (/opt/site-images) after the seed shifts them to S3.
+#
+# TLS: a self-signed placeholder cert lets nginx boot on 443 immediately; run
+# ./init-letsencrypt.sh (or `deploy.sh`) to obtain the real cert from Let's
+# Encrypt and reload nginx.
 
 services:
   backend:
@@ -18,8 +22,6 @@ services:
     environment:
       LAUNCH_ENV: production
       LOCAL_IMAGES_DIR: /opt/site-images
-      # Download seeded images from the nginx frontend (build output).
-      SEED_IMAGE_BASE_URL: http://frontend
     depends_on:
       frontend:
         condition: service_healthy
@@ -30,8 +32,26 @@ services:
       dockerfile: dev-container/frontend.prod.Dockerfile
     ports:
       - "80:80"
+      - "443:443"
+    volumes:
+      - certbot_www:/var/www/certbot
+      - certbot_conf:/etc/letsencrypt
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1/ >/dev/null 2>&1 || exit 1"]
+      test: ["CMD-SHELL", "curl -kfsS https://127.0.0.1/ -o /dev/null || exit 1"]
       interval: 5s
-      timeout: 3s
+      timeout: 5s
       retries: 20
+
+  # One-shot helper: obtain/renew the Let's Encrypt cert via webroot.
+  # Run with:  docker compose -f dev-container/docker-compose.prod.yml run --rm certbot ...
+  certbot:
+    image: certbot/certbot
+    restart: "no"
+    command: ["true"]
+    volumes:
+      - certbot_www:/var/www/certbot
+      - certbot_conf:/etc/letsencrypt
+
+volumes:
+  certbot_www:
+  certbot_conf:

@@ -547,20 +547,33 @@ def _delete_local_image(url: str) -> None:
 async def _upload_one(url: str) -> tuple[str, str]:
     ext = (urlparse(url).path.rsplit(".", 1)[-1] if "." in urlparse(url).path else "").lower()
     content_type = _EXT_MIME.get(ext, "image/png")
-    source = _download_base(url)
-    try:
-        async with httpx.AsyncClient(timeout=30) as client:
-            resp = await client.get(source)
-            resp.raise_for_status()
-            content = resp.content
-    except Exception as exc:  # noqa: BLE001
-        logger.warning("seed image download failed for %s: %s", source, exc)
-        return url, url
+
+    # Prefer the local public/ copy (baked into the image at LOCAL_IMAGES_DIR) so
+    # seeding needs no HTTP round-trip to the frontend. Falls back to HTTP when a
+    # local file isn't present (e.g. dev with a bind-mounted frontend).
+    content = None
+    if LOCAL_IMAGES_DIR:
+        rel = unquote(urlparse(url).path).lstrip("/")
+        local = Path(LOCAL_IMAGES_DIR) / rel
+        if local.is_file():
+            content = local.read_bytes()
+
+    if content is None:
+        source = _download_base(url)
+        try:
+            async with httpx.AsyncClient(timeout=30) as client:
+                resp = await client.get(source)
+                resp.raise_for_status()
+                content = resp.content
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("seed image download failed for %s: %s", source, exc)
+            return url, url
+
     key = f"catalog/{hashlib.md5(url.encode()).hexdigest()[:16]}.{ext or 'img'}"
     try:
         uploaded = await asyncio.to_thread(storage.put_object, key, content, content_type)
     except Exception as exc:  # noqa: BLE001
-        logger.warning("seed image upload failed for %s: %s", source, exc)
+        logger.warning("seed image upload failed for %s: %s", key, exc)
         return url, url
     _delete_local_image(url)
     return url, uploaded

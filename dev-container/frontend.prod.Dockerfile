@@ -16,5 +16,12 @@ RUN corepack yarn build
 
 FROM nginx:alpine
 
+# openssl is needed by the entrypoint to generate a placeholder self-signed cert.
+RUN apk add --no-cache openssl
+
 COPY dev-container/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/build /usr/share/nginx/html
+COPY dev-container/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["nginx", "-g", "daemon off;"]
