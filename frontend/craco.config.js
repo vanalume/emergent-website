@@ -85,6 +85,11 @@ let webpackConfig = {
     },
     configure: (webpackConfig) => {
 
+      // Quill 2.x's ESM entry re-imports `quill-delta` (CommonJS). Webpack's
+      // scope hoisting (`concatenateModules`, on by default in production) breaks
+      // that interop at build time ("a is not a constructor" in `new Delta()`).
+      webpackConfig.optimization.concatenateModules = false;
+
       // Add ignored patterns to reduce watched directories
         webpackConfig.watchOptions = {
           ...webpackConfig.watchOptions,
