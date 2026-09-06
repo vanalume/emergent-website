@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from database import db
 from dependencies import require_admin
+from inventory import effective_stock
 from models import Category, CategoryUpdate, Product
 
 router = APIRouter(tags=["admin-catalog"], dependencies=[Depends(require_admin)])
@@ -121,6 +122,8 @@ async def create_product(payload: Product):
         raise HTTPException(status_code=409, detail=f"Product id '{payload.id}' already exists.")
     await _validate_category_ref(payload.category, payload.subcategory)
     doc = payload.model_dump()
+    if effective_stock(doc) == 0:
+        doc["draft"] = True
     await db.products.insert_one(doc)
     doc.pop("_id", None)  # insert_one mutates the dict with an ObjectId
     return doc
@@ -135,6 +138,8 @@ async def update_product(product_id: str, payload: Product):
         raise HTTPException(status_code=404, detail="Product not found.")
     await _validate_category_ref(payload.category, payload.subcategory)
     doc = payload.model_dump()
+    if effective_stock(doc) == 0:
+        doc["draft"] = True
     await db.products.replace_one({"id": product_id}, doc)
     doc.pop("_id", None)
     return doc

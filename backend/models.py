@@ -23,6 +23,7 @@ class Variant(BaseModel):
     sp: Optional[int] = None
     images: List[str] = Field(default_factory=list)
     desc: Optional[str] = None
+    stock: int = 0
 
 
 class Ritual(BaseModel):
@@ -47,6 +48,7 @@ class Product(BaseModel):
     long_desc: Optional[str] = None
     ritual: Optional[Ritual] = None
     draft: bool = False
+    stock: int = 0
 
 
 class SubCategory(BaseModel):

@@ -20,10 +20,16 @@ const TABS = [
 const emptyForm = () => ({
   id: "", name: "", collection: "", category: "", subcategory: "",
   mrp: 0, sp: 0, desc: "", long_desc: "",
-  fragrances: [], images: [], includes: [], draft: true,
+  fragrances: [], images: [], includes: [], draft: true, stock: 0,
   variants: [], ritual: { title: "", steps: [] },
   isEdit: false, idTouched: false,
 });
+
+const effectiveStock = (product) => {
+  const variants = product.variants || [];
+  if (variants.length) return variants.reduce((s, v) => s + (Number(v.stock) || 0), 0);
+  return Number(product.stock) || 0;
+};
 
 export default function ProductEditor({ open, product, categories, onClose, onSaved }) {
   const { authHeaders, key: adminKey } = useAdminAuth();
@@ -41,6 +47,7 @@ export default function ProductEditor({ open, product, categories, onClose, onSa
         idTouched: true,
         mrp: product.mrp ?? 0,
         sp: product.sp ?? 0,
+        stock: product.stock ?? 0,
         images: product.images || [],
         fragrances: product.fragrances || [],
         includes: product.includes || [],
@@ -53,6 +60,9 @@ export default function ProductEditor({ open, product, categories, onClose, onSa
   }, [open, product]);
 
   const set = (patch) => setForm((p) => ({ ...p, ...patch }));
+
+  const hasVariants = (form.variants || []).length > 0;
+  const stock = effectiveStock(form);
 
   const categoryObj = categories.find((c) => c.id === form.category);
   const subOptions = (categoryObj?.subcategories || []).map((s) => ({ value: s.id, label: s.title }));
@@ -77,6 +87,7 @@ export default function ProductEditor({ open, product, categories, onClose, onSa
       images: form.images || [],
       includes: form.includes || [],
       draft: !!form.draft,
+      stock: Number(form.stock) || 0,
       variants: form.variants || [],
       ritual: form.ritual?.title ? form.ritual : null,
     };
@@ -144,7 +155,19 @@ export default function ProductEditor({ open, product, categories, onClose, onSa
           </div>
           <FormField label="Card description" as="textarea" value={form.desc} onChange={(v) => set({ desc: v })} rows={2} />
           <FormField label="Long description" as="textarea" value={form.long_desc} onChange={(v) => set({ long_desc: v })} rows={4} />
-          <FormField label="Live" as="toggle" checked={!form.draft} onChange={(v) => set({ draft: !v })} hint="If off, the product is a draft and hidden from the store." />
+          {hasVariants ? (
+            <p className="text-sm text-[#5c3e2b]/70">Stock is set per variant in the Variants tab. Total stock: <span className="font-medium">{stock}</span>.</p>
+          ) : (
+            <FormField label="Stock" as="number" value={form.stock} onChange={(v) => set({ stock: Math.max(0, Number(v) || 0) })} min={0} hint="Units available. Zero stock keeps the product off the site." />
+          )}
+          <FormField
+            label="Live"
+            as="toggle"
+            checked={!form.draft}
+            onChange={(v) => set({ draft: !v })}
+            disabled={stock === 0}
+            hint={stock === 0 ? "Zero stock — the product stays hidden (draft) until stock is added." : "If off, the product is a draft and hidden from the store."}
+          />
           <StringArrayEditor label="Fragrances" value={form.fragrances} onChange={(v) => set({ fragrances: v })} placeholder="Type a fragrance, press Enter" />
           <StringArrayEditor label="What's inside (includes)" as="list" value={form.includes} onChange={(v) => set({ includes: v })} />
           <ImageDropzone label="Images" value={form.images} onChange={(v) => set({ images: v })} multiple endpoint="/admin/upload" adminKey={adminKey} />

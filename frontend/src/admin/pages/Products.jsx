@@ -9,6 +9,12 @@ import ProductEditor from "@/admin/pages/ProductEditor";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
+const effectiveStock = (p) => {
+  const variants = p.variants || [];
+  if (variants.length) return variants.reduce((s, v) => s + (Number(v.stock) || 0), 0);
+  return Number(p.stock) || 0;
+};
+
 export default function Products() {
   const { authHeaders } = useAdminAuth();
   const [rows, setRows] = useState([]);
@@ -61,7 +67,7 @@ export default function Products() {
     let n = 2;
     const used = new Set(rows.map((r) => r.id));
     while (used.has(id)) id = `${base}-${n++}`;
-    const copy = { ...p, id, name: `${p.name} (copy)` };
+    const copy = { ...p, id, name: `${p.name} (copy)`, stock: 0, variants: (p.variants || []).map((v) => ({ ...v, stock: 0 })) };
     try {
       await axios.post(`${API}/admin/products`, copy, { headers: authHeaders });
       toast.success("Product duplicated");
@@ -139,6 +145,12 @@ export default function Products() {
             { key: "category", header: "Category", render: (r) => <span className="text-[#2b2320]/70">{catTitle(r.category)}</span> },
             { key: "mrp", header: "MRP", render: (r) => <span className="text-[#2b2320]/50 line-through">₹{r.mrp}</span> },
             { key: "sp", header: "SP", render: (r) => <span className="font-medium">₹{r.sp}</span> },
+            { key: "stock", header: "Stock", render: (r) => {
+              const s = effectiveStock(r);
+              return s === 0
+                ? <span className="text-xs font-medium text-[#9a3b2e]">Out of stock</span>
+                : <span className="font-medium">{s}</span>;
+            } },
             { key: "status", header: "Status", render: (r) => r.draft
               ? <span className="text-xs rounded-full px-2 py-0.5 bg-[#d4a574]/20 text-[#5c3e2b]">Draft</span>
               : <span className="text-xs rounded-full px-2 py-0.5 bg-[#395439]/10 text-[#395439]">Live</span> },

@@ -9,6 +9,7 @@ from typing import Sequence
 from fastapi import HTTPException
 
 from database import db
+from inventory import effective_stock
 from models import CartItem
 
 SHIPPING_FLAT = 100
@@ -98,6 +99,8 @@ async def compute_amount(items: Sequence[CartItem]):
             raise HTTPException(status_code=400, detail=f"Unknown product: {it.product_id}")
         if product.get("draft"):
             raise HTTPException(status_code=400, detail=f"{product['name']} is not available.")
+        if it.quantity > effective_stock(product):
+            raise HTTPException(status_code=400, detail=f"{product['name']} is out of stock.")
         base = resolve_line_price(product, it.variant)
         if base is None:
             raise HTTPException(status_code=400, detail=f"{product['name']} has no price set.")

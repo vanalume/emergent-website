@@ -2,6 +2,7 @@
 from fastapi import APIRouter
 
 from database import db
+from inventory import effective_stock
 from models import Category, Product
 from pricing import apply_discount, get_active_offers, offer_for_product
 
@@ -11,6 +12,7 @@ router = APIRouter(tags=["products"])
 @router.get("/products")
 async def get_products():
     products = await db.products.find({"draft": {"$ne": True}}, {"_id": 0}).to_list(1000)
+    products = [p for p in products if effective_stock(p) > 0]
     categories = await db.categories.find({}, {"_id": 0}).to_list(100)
     categories.sort(key=lambda c: (c.get("order") is None, c.get("order") or 0))
 

@@ -63,6 +63,8 @@ def _product(**overrides):
         "images": ["https://example.com/x.png"],
         "desc": "test desc",
         "long_desc": "test long desc",
+        "draft": False,
+        "stock": 10,
     }
     payload.update(overrides)
     return payload
@@ -198,7 +200,7 @@ class TestPricing:
             pytest.skip("ADMIN_KEY not available")
         payload = _product(
             sp=800,
-            variants=[{"label": "Large", "sp": 1200, "mrp": 1500, "images": []}],
+            variants=[{"label": "Large", "sp": 1200, "mrp": 1500, "images": [], "stock": 10}],
         )
         client.post(f"{API}/admin/products", json=payload, headers=_hdr())
         try:

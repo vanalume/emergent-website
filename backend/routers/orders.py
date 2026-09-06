@@ -7,6 +7,7 @@ from fastapi import APIRouter, HTTPException
 import delivery_provider
 from config import RZP_KEY_ID, rzp_client
 from database import db
+from inventory import decrement_stock
 from models import Order, OrderItem, VerifyPayment, now_iso
 from pricing import compute_amount
 
@@ -66,6 +67,20 @@ async def verify_payment(payload: VerifyPayment):
     except razorpay.errors.SignatureVerificationError:
         await db.orders.update_one({"id": payload.order_id}, {"$set": {"status": "failed"}})
         raise HTTPException(status_code=400, detail="Payment verification failed.")
+
+    existing = await db.orders.find_one({"id": payload.order_id}, {"_id": 0})
+    if existing is None:
+        raise HTTPException(status_code=404, detail="Order not found.")
+
+    # Deduct inventory only on the first successful verification (idempotent on
+    # retries). A 409 here means the order could not be fulfilled (e.g. an
+    # oversell race) — mark it failed rather than charging without stock.
+    if existing.get("status") != "paid":
+        try:
+            await decrement_stock(existing.get("items", []))
+        except HTTPException:
+            await db.orders.update_one({"id": payload.order_id}, {"$set": {"status": "failed"}})
+            raise
 
     order_doc = await db.orders.find_one_and_update(
         {"id": payload.order_id},
