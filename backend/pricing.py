@@ -3,12 +3,13 @@
 Prices and shipping are computed against the catalogue stored in MongoDB, never
 against static in-memory data.
 """
+from datetime import datetime, timedelta, timezone
 from typing import Sequence
 
 from fastapi import HTTPException
 
 from database import db
-from models import CartItem, now_iso
+from models import CartItem
 
 SHIPPING_FLAT = 100
 SHIPPING_FREE_THRESHOLD = 2000
@@ -31,17 +32,39 @@ async def get_product(product_id: str) -> dict | None:
     return await db.products.find_one({"id": product_id}, {"_id": 0})
 
 
+def _parse_dt(s):
+    if not s:
+        return None
+    try:
+        dt = datetime.fromisoformat(s)
+    except (TypeError, ValueError):
+        return None
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return dt
+
+
+def _offer_active(offer: dict, now: datetime) -> bool:
+    starts = _parse_dt(offer.get("starts_at"))
+    ends = _parse_dt(offer.get("ends_at"))
+    if starts is not None and now < starts:
+        return False
+    if ends is not None and now >= ends + timedelta(days=1):
+        return False
+    return True
+
+
 async def get_active_offers() -> list:
-    """Return all offers that are active now (active flag + start/end window)."""
-    now = now_iso()
+    """Return offers active now (active flag + start/end window).
+
+    Both the start and end dates are inclusive of their whole day.
+    """
+    now = datetime.now(timezone.utc)
     active = []
     cursor = db.offers.find({"active": True}, {"_id": 0})
     async for o in cursor:
-        if o.get("starts_at") and o["starts_at"] > now:
-            continue
-        if o.get("ends_at") and o["ends_at"] <= now:
-            continue
-        active.append(o)
+        if _offer_active(o, now):
+            active.append(o)
     return active
 
 

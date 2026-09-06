@@ -1,6 +1,7 @@
 """HTTP tests for seasonal offers (requires a running backend)."""
 import os
 import uuid
+from datetime import datetime, timezone
 
 import pytest
 import requests
@@ -161,6 +162,19 @@ class TestPricing:
             products = client.get(f"{API}/products").json()["products"]
             duet = next(p for p in products if p["id"] == "duet-bloom")
             assert duet["offer_price"] is None
+        finally:
+            _delete_offer(client, offer_id)
+
+    def test_end_date_inclusive(self, client):
+        if not ADMIN_KEY:
+            pytest.skip("ADMIN_KEY not available")
+        today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+        r = _new_offer(client, discount_percent=20, ends_at=today)
+        offer_id = r.json().get("id") if r.status_code == 201 else None
+        try:
+            products = client.get(f"{API}/products").json()["products"]
+            duet = next(p for p in products if p["id"] == "duet-bloom")
+            assert duet["offer_price"] == 1199  # still active on the end date
         finally:
             _delete_offer(client, offer_id)
 

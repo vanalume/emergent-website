@@ -13,7 +13,7 @@ import delivery_provider
 from catalog import seed_catalog
 from config import CORS_ORIGINS
 from database import close_db_client, db
-from routers import admin, admin_catalog, admin_offers, config, inquiries, newsletter, offers, orders, products, root, shipping
+from routers import admin, admin_analytics, admin_catalog, admin_offers, config, inquiries, newsletter, offers, orders, products, root, shipping
 
 app = FastAPI(title="Vanalume API")
 api_router = APIRouter(prefix="/api")
@@ -22,6 +22,7 @@ api_router.include_router(products.router)
 api_router.include_router(config.router)
 api_router.include_router(inquiries.router)
 api_router.include_router(admin.router)
+api_router.include_router(admin_analytics.router)
 api_router.include_router(admin_catalog.router)
 api_router.include_router(admin_offers.router)
 api_router.include_router(newsletter.router)

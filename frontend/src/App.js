@@ -16,6 +16,7 @@ import Submissions from "@/admin/pages/Submissions";
 import Categories from "@/admin/pages/Categories";
 import Products from "@/admin/pages/Products";
 import Offers from "@/admin/pages/Offers";
+import Sales from "@/admin/pages/Sales";
 import KitchenSink from "@/admin/pages/KitchenSink";
 import ComingSoon from "@/admin/pages/ComingSoon";
 
@@ -38,7 +39,7 @@ function App() {
                 <Route path="products" element={<Products />} />
                 <Route path="categories" element={<Categories />} />
                 <Route path="offers" element={<Offers />} />
-                <Route path="sales" element={<ComingSoon kicker="Analytics" title="Sales" description="Revenue, orders, top products, top categories — with presets and custom date ranges. Ships in Phase 6." />} />
+                <Route path="sales" element={<Sales />} />
                 <Route path="content" element={<ComingSoon kicker="Website" title="Content" description="Edit Home, About, Contact intro, Footer and Navbar labels. Ships in Phase 7." />} />
                 <Route path="submissions" element={<Submissions />} />
                 <Route path="kitchensink" element={<KitchenSink />} />
