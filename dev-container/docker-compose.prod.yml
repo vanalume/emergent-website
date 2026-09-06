@@ -1,0 +1,37 @@
+# Production stack: nginx serves the built frontend and proxies /api to the
+# backend. MongoDB is external (DB_URL from backend/.env, injected via env_file).
+#
+# Usage:
+#   docker compose -f dev-container/docker-compose.prod.yml up --build
+#
+# No bind mounts — backend + frontend/public images are COPY'd into the image at
+# build time. LAUNCH_ENV=production makes the backend delete the local
+# frontend/public images (/opt/site-images) after the seed shifts them to S3.
+
+services:
+  backend:
+    build:
+      context: ..
+      dockerfile: dev-container/backend.prod.Dockerfile
+    env_file:
+      - ../backend/.env
+    environment:
+      LAUNCH_ENV: production
+      LOCAL_IMAGES_DIR: /opt/site-images
+      # Download seeded images from the nginx frontend (build output).
+      SEED_IMAGE_BASE_URL: http://frontend
+    depends_on:
+      frontend:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: dev-container/frontend.prod.Dockerfile
+    ports:
+      - "80:80"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost/ >/dev/null 2>&1 || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 20

@@ -35,7 +35,7 @@ def _read_env(key):
 
 
 ADMIN_KEY = _read_env("ADMIN_KEY")
-MONGO_URL = _read_env("MONGO_URL")
+MONGO_URL = _read_env("DB_URL") or _read_env("MONGO_URL")
 DB_NAME = _read_env("DB_NAME")
 
 

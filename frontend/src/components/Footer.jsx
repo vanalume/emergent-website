@@ -4,12 +4,27 @@ import axios from "axios";
 import { toast } from "sonner";
 import { Instagram, Linkedin, Mail } from "lucide-react";
 import { IMAGES } from "@/lib/data";
+import useContent from "@/hooks/useContent";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 export default function Footer() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const { value } = useContent("footer");
+
+  const taglineTitle = value("tagline_title", "Composed Living");
+  const taglineDescription = value("tagline_description", "Fragrances, rituals and thoughtful designs for spaces that feel calm, intentional and beautifully lived in.");
+  const quickLinksHeading = value("quick_links_heading", "Quick Links");
+  const quickLinks = value("quick_links", [
+    { label: "Shop", to: "/shop" },
+    { label: "About Us", to: "/about" },
+    { label: "Contact", to: "/contact" },
+  ]);
+  const newsletterHeading = value("newsletter_heading", "Newsletter");
+  const newsletterDescription = value("newsletter_description", "Slow letters on fragrance, ritual and design. No noise.");
+  const copyright = value("copyright", "VANALUME");
+  const copyrightTagline = value("copyright_tagline", "Composed Living");
 
   const subscribe = async (e) => {
     e.preventDefault();
@@ -32,20 +47,16 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-14">
           <div className="md:col-span-5">
             <img src={IMAGES.logo} alt="Vanalume" className="h-9 w-auto object-contain" style={{ filter: "invert(1)" }} />
-            <p className="font-display text-3xl md:text-4xl mt-6 text-[#f8f6f2]/90">Composed Living</p>
+            <p className="font-display text-3xl md:text-4xl mt-6 text-[#f8f6f2]/90">{taglineTitle}</p>
             <p className="text-sm text-[#f8f6f2]/55 mt-5 max-w-sm leading-relaxed">
-              Fragrances, rituals and thoughtful designs for spaces that feel calm, intentional and beautifully lived in.
+              {taglineDescription}
             </p>
           </div>
 
           <div className="md:col-span-3">
-            <p className="text-xs tracking-[0.24em] uppercase text-[#e6b980]">Quick Links</p>
+            <p className="text-xs tracking-[0.24em] uppercase text-[#e6b980]">{quickLinksHeading}</p>
             <ul className="mt-6 space-y-3 text-sm">
-              {[
-                { to: "/shop", label: "Shop" },
-                { to: "/about", label: "About Us" },
-                { to: "/contact", label: "Contact" },
-              ].map((l) => (
+              {quickLinks.map((l) => (
                 <li key={l.to}>
                   <Link to={l.to} className="vl-link-underline text-[#f8f6f2]/70 hover:text-[#f8f6f2] transition-colors duration-300">
                     {l.label}
@@ -61,8 +72,8 @@ export default function Footer() {
           </div>
 
           <div className="md:col-span-4">
-            <p className="text-xs tracking-[0.24em] uppercase text-[#e6b980]">Newsletter</p>
-            <p className="text-sm text-[#f8f6f2]/60 mt-6 leading-relaxed">Slow letters on fragrance, ritual and design. No noise.</p>
+            <p className="text-xs tracking-[0.24em] uppercase text-[#e6b980]">{newsletterHeading}</p>
+            <p className="text-sm text-[#f8f6f2]/60 mt-6 leading-relaxed">{newsletterDescription}</p>
             <form onSubmit={subscribe} className="mt-5 flex items-center gap-3 border-b border-[#f8f6f2]/25 focus-within:border-[#e6b980] transition-colors">
               <input
                 data-testid="newsletter-email"
@@ -86,8 +97,8 @@ export default function Footer() {
         </div>
 
         <div className="mt-20 pt-8 border-t border-[#f8f6f2]/10 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-[#f8f6f2]/40 tracking-wide">
-          <span>© {new Date().getFullYear()} VANALUME</span>
-          <span className="tracking-[0.2em] uppercase">Composed Living</span>
+          <span>© {new Date().getFullYear()} {copyright}</span>
+          <span className="tracking-[0.2em] uppercase">{copyrightTagline}</span>
         </div>
       </div>
     </footer>

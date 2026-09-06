@@ -29,3 +29,11 @@ design_guidelines.json
 
 .pytest_cache
 **/.pytest_cache
+
+# Environment files (secrets) are injected at runtime, never baked into images
+.env
+**/.env
+*.env*
+
+# Tests are not shipped in production images
+backend/tests

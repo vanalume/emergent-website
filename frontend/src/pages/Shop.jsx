@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { Reveal, Kicker } from "@/components/Motion";
 import ProductCard from "@/components/ProductCard";
+import useContent from "@/hooks/useContent";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -13,6 +14,11 @@ export default function Shop() {
   const [activeGroup, setActiveGroup] = useState("all");
   const [selectedSub, setSelectedSub] = useState({});
   const { hash } = useLocation();
+  const { value } = useContent("shop");
+
+  const partnershipTitle = value("partnership_title", "Partnerships & Gifting");
+  const partnershipText = value("partnership_text", "Interested in custom gifting or bulk orders?");
+  const partnershipButton = value("partnership_button_label", "Contact Us");
 
   useEffect(() => {
     axios.get(`${API}/products`).then((r) => {
@@ -159,10 +165,10 @@ export default function Shop() {
 
       <section className="py-28 md:py-40 bg-[#2b2320] text-[#f8f6f2]">
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 text-center">
-          <Reveal><Kicker className="text-[#e6b980]">Partnerships & Gifting</Kicker></Reveal>
+          <Reveal><Kicker className="text-[#e6b980]">{partnershipTitle}</Kicker></Reveal>
           <Reveal delay={0.05}>
             <h2 className="font-display text-4xl md:text-6xl mt-6 max-w-3xl mx-auto tracking-tight">
-              Interested in custom gifting or bulk orders?
+              {partnershipText}
             </h2>
           </Reveal>
           <Reveal delay={0.1}>
@@ -171,7 +177,7 @@ export default function Shop() {
               data-testid="shop-cta-btn"
               className="group mt-10 inline-flex items-center gap-2 bg-[#f8f6f2] text-[#2b2320] px-9 py-4 rounded-full text-sm tracking-wide hover:bg-[#e6b980] transition-colors duration-300"
             >
-              Contact Us
+              {partnershipButton}
               <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
             </Link>
           </Reveal>

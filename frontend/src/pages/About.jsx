@@ -3,12 +3,13 @@ import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
 import { Hand, Flower2, Eye, Leaf, AudioLines, X, Plus } from "lucide-react";
 import { Reveal, MaskLine, Kicker } from "@/components/Motion";
 import { SENSES, FOUNDERS, IMAGES } from "@/lib/data";
+import useContent from "@/hooks/useContent";
 
 const ICONS = { Hand, Flower2, Eye, Leaf, AudioLines };
 
-function Senses() {
+function Senses({ senses }) {
   const [active, setActive] = useState(0);
-  const ActiveIcon = ICONS[SENSES[active].icon];
+  const ActiveIcon = ICONS[senses[active].icon];
   return (
     <section className="py-28 md:py-40 bg-[#2b2320] text-[#f8f6f2] overflow-hidden">
       <div className="max-w-[1440px] mx-auto px-6 md:px-12">
@@ -34,7 +35,7 @@ function Senses() {
             </div>
           </div>
           <div className="divide-y divide-[#f8f6f2]/12 border-t border-[#f8f6f2]/12">
-            {SENSES.map((s, i) => {
+            {senses.map((s, i) => {
               const Icon = ICONS[s.icon];
               const on = active === i;
               return (
@@ -56,7 +57,7 @@ function Senses() {
   );
 }
 
-function FounderHero() {
+function FounderHero({ heading }) {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"]);
@@ -69,7 +70,7 @@ function FounderHero() {
       <div className="relative z-10 h-full max-w-[1440px] mx-auto px-6 md:px-12 flex flex-col justify-end pb-14 md:pb-20">
         <Kicker className="text-[#f8f6f2]/80">Founder Story</Kicker>
         <h2 className="mt-5 font-display text-[#f8f6f2] text-3xl md:text-5xl lg:text-6xl leading-[1.08] tracking-tight max-w-4xl">
-          Built with patience, purpose and a belief that everyday rituals deserve beautiful design.
+          {heading}
         </h2>
       </div>
     </section>
@@ -78,6 +79,23 @@ function FounderHero() {
 
 export default function About() {
   const [activeFounder, setActiveFounder] = useState(null);
+  const { value } = useContent("about");
+
+  const introHeading = value("intro_heading", "Luxury should be lived, not displayed");
+  const meaningLead = value("meaning_lead", "Vana, the forest - lume, the light");
+  const meaningBody = value("meaning_body", "Vanalume is the glow of the forest carried indoors, the warmth of a living flame, the calm of green, the quiet luminosity that lingers long after the day has gone");
+  const meaningTagline = value("meaning_tagline", "Quiet, warm, restrained, no neon, no glitter, no floral candle clichés");
+  const mission = value("mission", "To create thoughtfully crafted fragrance experiences that inspire slower, calmer and more intentional living");
+  const vision = value("vision", "To build a global lifestyle brand where fragrance, design and ritual come together to transform everyday spaces into meaningful experiences");
+  const senses = value("senses", SENSES);
+  const founderHeroHeading = value("founder_hero_heading", "Built with patience, purpose and a belief that everyday rituals deserve beautiful design.");
+  const beginning = value("beginning", [
+    { text: "Vanalume was founded with a simple belief: the spaces we live in shape the way we feel. What began as an exploration of fragrance has grown into a vision for a lifestyle brand centred around composed living." },
+    { text: "Every product is created with care, balancing thoughtful design, quality craftsmanship and sensory experiences. Rather than following trends, Vanalume seeks to create timeless pieces that become part of everyday rituals." },
+    { text: "This journey is being built by founders who believe luxury is defined not by excess, but by meaning, simplicity and lasting experiences." },
+  ]);
+  const founders = value("founders", FOUNDERS);
+  const closingQuote = value("closing_quote", "We are not building products, we are creating rituals worth returning to");
 
   useEffect(() => {
     if (activeFounder) {
@@ -99,8 +117,7 @@ export default function About() {
         <div className="max-w-[1440px] mx-auto px-6 md:px-12">
           <Kicker>About Us</Kicker>
           <h1 className="font-display text-5xl md:text-7xl lg:text-8xl mt-6 tracking-tight leading-[1.02] max-w-4xl">
-            <MaskLine delay={0.15}>Luxury should be</MaskLine>
-            <MaskLine delay={0.32}><span className="italic text-[#395439]">lived,</span> not displayed</MaskLine>
+            <MaskLine delay={0.15}>{introHeading}</MaskLine>
           </h1>
         </div>
       </section>
@@ -111,17 +128,17 @@ export default function About() {
           <div className="lg:col-span-8">
             <Reveal>
               <p className="font-read italic text-3xl md:text-5xl leading-[1.2] tracking-tight text-[#2b2320]">
-                <span className="text-[#395439]">Vana</span>, the forest - <span className="text-[#395439]">lume</span>, the light
+                {meaningLead}
               </p>
             </Reveal>
             <Reveal delay={0.08}>
               <p className="mt-8 text-lg md:text-xl leading-relaxed text-[#2b2320]/80 max-w-2xl">
-                Vanalume is the glow of the forest carried indoors, the warmth of a living flame, the calm of green, the quiet luminosity that lingers long after the day has gone
+                {meaningBody}
               </p>
             </Reveal>
             <Reveal delay={0.14}>
               <p className="mt-5 font-read italic text-lg md:text-xl text-[#5c3e2b] max-w-2xl">
-                Quiet, warm, restrained, no neon, no glitter, no floral candle clichés
+                {meaningTagline}
               </p>
             </Reveal>
           </div>
@@ -132,26 +149,26 @@ export default function About() {
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 gap-16">
           <Reveal>
             <Kicker>Mission</Kicker>
-            <p className="font-read italic text-3xl md:text-4xl mt-6 leading-[1.35] tracking-tight">To create thoughtfully crafted fragrance experiences that inspire slower, calmer and more intentional living</p>
+            <p className="font-read italic text-3xl md:text-4xl mt-6 leading-[1.35] tracking-tight">{mission}</p>
           </Reveal>
           <Reveal delay={0.1}>
             <Kicker>Vision</Kicker>
-            <p className="font-read italic text-3xl md:text-4xl mt-6 leading-[1.35] tracking-tight">To build a global lifestyle brand where fragrance, design and ritual come together to transform everyday spaces into meaningful experiences</p>
+            <p className="font-read italic text-3xl md:text-4xl mt-6 leading-[1.35] tracking-tight">{vision}</p>
           </Reveal>
         </div>
       </section>
 
-      <Senses />
+      <Senses senses={senses} />
 
-      <FounderHero />
+      <FounderHero heading={founderHeroHeading} />
 
       <section className="py-24 md:py-36">
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12">
           <Reveal className="lg:col-span-4"><Kicker>The Beginning</Kicker></Reveal>
           <div className="lg:col-span-8 space-y-8 text-[#2b2320]/85 text-lg md:text-xl leading-relaxed">
-            <Reveal><p>Vanalume was founded with a simple belief: the spaces we live in shape the way we feel. What began as an exploration of fragrance has grown into a vision for a lifestyle brand centred around composed living.</p></Reveal>
-            <Reveal delay={0.05}><p>Every product is created with care, balancing thoughtful design, quality craftsmanship and sensory experiences. Rather than following trends, Vanalume seeks to create timeless pieces that become part of everyday rituals.</p></Reveal>
-            <Reveal delay={0.1}><p>This journey is being built by founders who believe luxury is defined not by excess, but by meaning, simplicity and lasting experiences.</p></Reveal>
+            {beginning.map((item, i) => (
+              <Reveal key={i} delay={i * 0.05}><p>{item.text}</p></Reveal>
+            ))}
           </div>
         </div>
       </section>
@@ -160,7 +177,7 @@ export default function About() {
         <div className="max-w-[1440px] mx-auto px-6 md:px-12">
           <Reveal><Kicker>The Founders</Kicker></Reveal>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mt-12">
-            {FOUNDERS.map((f, i) => (
+            {founders.map((f, i) => (
               <Reveal key={f.name} delay={i * 0.1}>
                 <button
                   type="button"
@@ -189,7 +206,7 @@ export default function About() {
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 text-center">
           <Reveal>
             <p className="font-read text-4xl md:text-6xl lg:text-7xl leading-[1.15] tracking-tight max-w-4xl mx-auto">
-              &ldquo;We are not building products, we are creating rituals worth returning to&rdquo;
+              &ldquo;{closingQuote}&rdquo;
             </p>
           </Reveal>
         </div>

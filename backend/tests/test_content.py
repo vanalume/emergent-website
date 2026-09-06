@@ -62,7 +62,7 @@ class TestAdmin:
         r = client.get(f"{API}/admin/content/pages", headers=_hdr())
         assert r.status_code == 200, r.text
         slugs = {p["slug"] for p in r.json()}
-        assert {"home", "about", "contact", "footer", "navbar"} <= slugs
+        assert {"home", "about", "contact", "footer", "navbar", "shop"} <= slugs
 
     def test_get_single_page(self, client):
         if not ADMIN_KEY:

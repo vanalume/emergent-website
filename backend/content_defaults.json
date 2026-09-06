@@ -40,11 +40,11 @@
     { "key": "founder_hero_heading", "type": "richtext", "value": "Built with patience, purpose and a belief that everyday rituals deserve beautiful design." },
     {
       "key": "beginning",
-      "type": "list_of_text",
+      "type": "list",
       "value": [
-        "Vanalume was founded with a simple belief: the spaces we live in shape the way we feel. What began as an exploration of fragrance has grown into a vision for a lifestyle brand centred around composed living.",
-        "Every product is created with care, balancing thoughtful design, quality craftsmanship and sensory experiences. Rather than following trends, Vanalume seeks to create timeless pieces that become part of everyday rituals.",
-        "This journey is being built by founders who believe luxury is defined not by excess, but by meaning, simplicity and lasting experiences."
+        { "text": "Vanalume was founded with a simple belief: the spaces we live in shape the way we feel. What began as an exploration of fragrance has grown into a vision for a lifestyle brand centred around composed living." },
+        { "text": "Every product is created with care, balancing thoughtful design, quality craftsmanship and sensory experiences. Rather than following trends, Vanalume seeks to create timeless pieces that become part of everyday rituals." },
+        { "text": "This journey is being built by founders who believe luxury is defined not by excess, but by meaning, simplicity and lasting experiences." }
       ]
     },
     {
@@ -108,5 +108,10 @@
       ]
     },
     { "key": "explore_button_label", "type": "text", "value": "Explore Products" }
+  ],
+  "shop": [
+    { "key": "partnership_title", "type": "text", "value": "Partnerships & Gifting" },
+    { "key": "partnership_text", "type": "text", "value": "Interested in custom gifting or bulk orders?" },
+    { "key": "partnership_button_label", "type": "text", "value": "Contact Us" }
   ]
 }

@@ -4,8 +4,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ShoppingBag } from "lucide-react";
 import { IMAGES } from "@/lib/data";
 import { useCart } from "@/context/CartContext";
+import useContent from "@/hooks/useContent";
 
-const LINKS = [
+const DEFAULT_LINKS = [
   { to: "/", label: "Home" },
   { to: "/shop", label: "Shop" },
   { to: "/about", label: "About Us" },
@@ -17,6 +18,10 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
   const { count, setOpen: setCartOpen } = useCart();
+  const { value } = useContent("navbar");
+
+  const links = value("links", DEFAULT_LINKS);
+  const exploreLabel = value("explore_button_label", "Explore Products");
 
   const dark = false; // Home hero is now a light poster slideshow; navbar always uses dark text on light bg
 
@@ -48,7 +53,7 @@ export default function Navbar() {
         </Link>
 
         <div className="hidden lg:flex items-center gap-10">
-          {LINKS.map((l) => (
+          {links.map((l) => (
             <Link
               key={l.to}
               to={l.to}
@@ -65,7 +70,7 @@ export default function Navbar() {
               dark ? "border-[#f8f6f2]/60 text-[#f8f6f2] hover:bg-[#f8f6f2] hover:text-[#2b2823]" : "border-[#5c3e2b] text-[#5c3e2b] hover:bg-[#5c3e2b] hover:text-[#f8f6f2]"
             }`}
           >
-            Explore Products
+            {exploreLabel}
           </Link>
           <button
             onClick={() => setCartOpen(true)}
@@ -115,7 +120,7 @@ export default function Navbar() {
             className="lg:hidden overflow-hidden bg-[#f5f1ea]/97 backdrop-blur-xl border-b border-[#5c3e2b]/12"
           >
             <div className="px-6 py-6 flex flex-col gap-5">
-              {LINKS.map((l) => (
+              {links.map((l) => (
                 <Link key={l.to} to={l.to} data-testid={`nav-mobile-${l.label.toLowerCase().replace(/\s+/g, "-")}`} className="font-display text-3xl text-[#2b2823]">
                   {l.label}
                 </Link>

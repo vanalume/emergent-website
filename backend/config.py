@@ -13,12 +13,20 @@ ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / ".env")
 
 # MongoDB
-MONGO_URL = os.environ["DB_URL"]
-DB_NAME = os.environ["DB_NAME"]
+MONGO_URL = os.environ["DB_URL"].strip().strip('"').strip("'")
+DB_NAME = os.environ["DB_NAME"].strip().strip('"').strip("'")
 
 # Frontend asset base URL (catalogue images live in the frontend's public/ folder).
 # Empty means relative paths (e.g. "/duet/awaken.png"), resolved against the frontend origin.
 VANALUME_URL = os.environ.get("VANALUME_URL", "").rstrip("/")
+
+# Launch environment — "dev" or "production". Production deletes the local
+# public/ copies of seeded images after they are shifted to S3.
+LAUNCH_ENV = os.environ.get("LAUNCH_ENV", "dev").strip().lower()
+
+# Local directory holding the frontend public/ images (used for post-seed cleanup
+# in production). Empty disables deletion.
+LOCAL_IMAGES_DIR = os.environ.get("LOCAL_IMAGES_DIR", "").rstrip("/")
 
 # Razorpay (both keys required before payments activate)
 RZP_KEY_ID = os.environ.get("RAZORPAY_KEY_ID", "").strip()

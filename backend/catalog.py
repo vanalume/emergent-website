@@ -22,12 +22,13 @@ import asyncio
 import hashlib
 import logging
 import os
-from urllib.parse import urlparse
+from pathlib import Path
+from urllib.parse import unquote, urlparse
 
 import httpx
 
 import storage
-from config import VANALUME_URL
+from config import LAUNCH_ENV, LOCAL_IMAGES_DIR, VANALUME_URL
 from models import Category, Product
 
 logger = logging.getLogger(__name__)
@@ -523,6 +524,26 @@ def _download_base(url: str) -> str:
     return url
 
 
+def _delete_local_image(url: str) -> None:
+    """Delete the local public/ copy of an image after it's shifted to S3.
+
+    Only runs in production (LAUNCH_ENV == "production") and only when
+    LOCAL_IMAGES_DIR is configured.
+    """
+    if LAUNCH_ENV != "production" or not LOCAL_IMAGES_DIR:
+        return
+    rel = unquote(urlparse(url).path).lstrip("/")
+    if not rel:
+        return
+    target = Path(LOCAL_IMAGES_DIR) / rel
+    try:
+        if target.exists():
+            target.unlink()
+            logger.info("deleted local image %s", target)
+    except OSError as exc:  # noqa: BLE001
+        logger.warning("failed to delete local image %s: %s", target, exc)
+
+
 async def _upload_one(url: str) -> tuple[str, str]:
     ext = (urlparse(url).path.rsplit(".", 1)[-1] if "." in urlparse(url).path else "").lower()
     content_type = _EXT_MIME.get(ext, "image/png")
@@ -541,6 +562,7 @@ async def _upload_one(url: str) -> tuple[str, str]:
     except Exception as exc:  # noqa: BLE001
         logger.warning("seed image upload failed for %s: %s", source, exc)
         return url, url
+    _delete_local_image(url)
     return url, uploaded
 
 

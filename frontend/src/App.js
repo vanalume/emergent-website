@@ -17,6 +17,7 @@ import Categories from "@/admin/pages/Categories";
 import Products from "@/admin/pages/Products";
 import Offers from "@/admin/pages/Offers";
 import Sales from "@/admin/pages/Sales";
+import Content from "@/admin/pages/Content";
 import KitchenSink from "@/admin/pages/KitchenSink";
 import ComingSoon from "@/admin/pages/ComingSoon";
 
@@ -40,7 +41,7 @@ function App() {
                 <Route path="categories" element={<Categories />} />
                 <Route path="offers" element={<Offers />} />
                 <Route path="sales" element={<Sales />} />
-                <Route path="content" element={<ComingSoon kicker="Website" title="Content" description="Edit Home, About, Contact intro, Footer and Navbar labels. Ships in Phase 7." />} />
+                <Route path="content" element={<Content />} />
                 <Route path="submissions" element={<Submissions />} />
                 <Route path="kitchensink" element={<KitchenSink />} />
               </Route>

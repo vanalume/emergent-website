@@ -69,11 +69,17 @@
       },
       {
         "key": "beginning",
-        "type": "list_of_text",
+        "type": "list",
         "value": [
-          "Vanalume was founded with a simple belief: the spaces we live in shape the way we feel. What began as an exploration of fragrance has grown into a vision for a lifestyle brand centred around composed living.",
-          "Every product is created with care, balancing thoughtful design, quality craftsmanship and sensory experiences. Rather than following trends, Vanalume seeks to create timeless pieces that become part of everyday rituals.",
-          "This journey is being built by founders who believe luxury is defined not by excess, but by meaning, simplicity and lasting experiences."
+          {
+            "text": "Vanalume was founded with a simple belief: the spaces we live in shape the way we feel. What began as an exploration of fragrance has grown into a vision for a lifestyle brand centred around composed living."
+          },
+          {
+            "text": "Every product is created with care, balancing thoughtful design, quality craftsmanship and sensory experiences. Rather than following trends, Vanalume seeks to create timeless pieces that become part of everyday rituals."
+          },
+          {
+            "text": "This journey is being built by founders who believe luxury is defined not by excess, but by meaning, simplicity and lasting experiences."
+          }
         ]
       },
       {
@@ -106,7 +112,7 @@
         "value": "We are not building products, we are creating rituals worth returning to"
       }
     ],
-    "updated_at": "2026-09-06T12:29:25.678959+00:00"
+    "updated_at": "2026-09-06T13:42:51.879449+00:00"
   },
   "contact": {
     "sections": [
@@ -133,7 +139,7 @@
         "value": "support@vanalume.com"
       }
     ],
-    "updated_at": "2026-09-06T12:29:25.715459+00:00"
+    "updated_at": "2026-09-06T13:42:51.914130+00:00"
   },
   "footer": {
     "sections": [
@@ -191,7 +197,7 @@
         "value": "Composed Living"
       }
     ],
-    "updated_at": "2026-09-06T12:29:25.749702+00:00"
+    "updated_at": "2026-09-06T13:42:51.947128+00:00"
   },
   "home": {
     "sections": [
@@ -258,7 +264,7 @@
         "value": "Explore Products"
       }
     ],
-    "updated_at": "2026-09-06T12:29:25.611226+00:00"
+    "updated_at": "2026-09-06T13:42:51.830474+00:00"
   },
   "navbar": {
     "sections": [
@@ -290,6 +296,26 @@
         "value": "Explore Products"
       }
     ],
-    "updated_at": "2026-09-06T12:29:25.788385+00:00"
+    "updated_at": "2026-09-06T13:42:51.980973+00:00"
+  },
+  "shop": {
+    "sections": [
+      {
+        "key": "partnership_title",
+        "type": "text",
+        "value": "Partnerships & Gifting"
+      },
+      {
+        "key": "partnership_text",
+        "type": "text",
+        "value": "Interested in custom gifting or bulk orders?"
+      },
+      {
+        "key": "partnership_button_label",
+        "type": "text",
+        "value": "Contact Us"
+      }
+    ],
+    "updated_at": "2026-09-06T13:42:52.013165+00:00"
   }
 }

@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Instagram, Linkedin, Mail, Check } from "lucide-react";
 import { Reveal, MaskLine, Kicker } from "@/components/Motion";
 import { BUSINESS_ENQUIRIES } from "@/lib/data";
+import useContent from "@/hooks/useContent";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -22,6 +23,11 @@ export default function Contact() {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
+  const { value } = useContent("contact");
+
+  const introHeading = value("intro_heading", "Let's create something beautiful together");
+  const businessEnquiries = value("business_enquiries", BUSINESS_ENQUIRIES);
+  const contactEmail = value("contact_email", "support@vanalume.com");
 
   const setField = (k, v) => {
     setForm((f) => ({ ...f, [k]: v }));
@@ -61,8 +67,7 @@ export default function Contact() {
         <div className="max-w-[1440px] mx-auto px-6 md:px-12">
           <Kicker>Contact</Kicker>
           <h1 className="font-display text-4xl md:text-6xl lg:text-7xl mt-6 tracking-tight leading-[1.05] max-w-4xl">
-            <MaskLine delay={0.15}>Let&rsquo;s create something</MaskLine>
-            <MaskLine delay={0.32}>beautiful together</MaskLine>
+            <MaskLine delay={0.15}>{introHeading}</MaskLine>
           </h1>
         </div>
       </section>
@@ -119,7 +124,7 @@ export default function Contact() {
                 <div>
                   <label className="text-xs tracking-[0.16em] uppercase text-[#5c3e2b]">Nature of enquiry</label>
                   <div className="flex flex-wrap gap-3 mt-4">
-                    {BUSINESS_ENQUIRIES.map((b) => (
+                    {businessEnquiries.map((b) => (
                       <button
                         key={b}
                         type="button"
@@ -154,7 +159,7 @@ export default function Contact() {
             <Reveal>
               <Kicker>Business Enquiries</Kicker>
               <ul className="mt-6 space-y-4">
-                {BUSINESS_ENQUIRIES.map((b) => (
+                {businessEnquiries.map((b) => (
                   <li key={b} className="font-display text-2xl md:text-3xl text-[#2b2823]/85 border-b border-[#2b2823]/10 pb-3">{b}</li>
                 ))}
               </ul>
@@ -166,7 +171,7 @@ export default function Contact() {
                 {[
                   { Icon: Instagram, href: "https://www.instagram.com/vanalume.studio/", label: "Instagram" },
                   { Icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
-                  { Icon: Mail, href: "mailto:support@vanalume.com", label: "Email" },
+                  { Icon: Mail, href: `mailto:${contactEmail}`, label: "Email" },
                 ].map(({ Icon, href, label }) => (
                   <a
                     key={label}
