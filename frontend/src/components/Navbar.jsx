@@ -9,6 +9,7 @@ import useContent from "@/hooks/useContent";
 const DEFAULT_LINKS = [
   { to: "/", label: "Home" },
   { to: "/shop", label: "Shop" },
+  { to: "/blogs", label: "Blogs" },
   { to: "/about", label: "About Us" },
   { to: "/contact", label: "Contact" },
 ];

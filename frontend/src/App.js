@@ -7,6 +7,8 @@ import Shop from "@/pages/Shop";
 import ProductDetail from "@/pages/ProductDetail";
 import About from "@/pages/About";
 import Contact from "@/pages/Contact";
+import Blogs from "@/pages/Blogs";
+import BlogDetail from "@/pages/BlogDetail";
 import { CartProvider } from "@/context/CartContext";
 import { AdminAuthProvider } from "@/admin/AdminAuth";
 import AdminGuard from "@/admin/AdminGuard";
@@ -18,6 +20,7 @@ import Products from "@/admin/pages/Products";
 import Offers from "@/admin/pages/Offers";
 import Sales from "@/admin/pages/Sales";
 import Content from "@/admin/pages/Content";
+import AdminBlogs from "@/admin/pages/Blogs";
 import KitchenSink from "@/admin/pages/KitchenSink";
 import ComingSoon from "@/admin/pages/ComingSoon";
 
@@ -34,6 +37,8 @@ function App() {
                 <Route path="/product/:id" element={<ProductDetail />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/blogs" element={<Blogs />} />
+                <Route path="/blog/:slug" element={<BlogDetail />} />
               </Route>
               <Route path="/admin" element={<AdminGuard><AdminShell /></AdminGuard>}>
                 <Route index element={<AdminOverview />} />
@@ -42,6 +47,7 @@ function App() {
                 <Route path="offers" element={<Offers />} />
                 <Route path="sales" element={<Sales />} />
                 <Route path="content" element={<Content />} />
+                <Route path="blogs" element={<AdminBlogs />} />
                 <Route path="submissions" element={<Submissions />} />
                 <Route path="kitchensink" element={<KitchenSink />} />
               </Route>

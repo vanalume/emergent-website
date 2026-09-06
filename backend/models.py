@@ -171,3 +171,16 @@ class Page(BaseModel):
     slug: str
     sections: List[Section]
     updated_at: str = Field(default_factory=now_iso)
+
+
+# ----------------------------- Blogs -----------------------------
+class Blog(BaseModel):
+    """A journal entry. `id` is the URL slug (auto-derived from the title by the
+    admin and immutable after creation). `content` is the Quill editor's HTML."""
+    id: str
+    title: str
+    excerpt: str = ""
+    cover_image: Optional[str] = None
+    content: str = ""
+    author: str = ""
+    published: bool = False

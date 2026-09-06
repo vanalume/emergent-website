@@ -1,4 +1,5 @@
 """/admin — admin key verification, exported data, and image uploads."""
+import re
 import uuid
 
 from fastapi import APIRouter, File, Header, HTTPException, UploadFile
@@ -12,6 +13,7 @@ from models import now_iso
 router = APIRouter(tags=["admin"])
 
 MAX_UPLOAD_BYTES = 10 * 1024 * 1024
+_FOLDER_RE = re.compile(r"^[a-z0-9][a-z0-9\-]*(/[a-z0-9][a-z0-9\-]*)*$")
 _IMAGE_EXT = {
     "image/jpeg": "jpg",
     "image/png": "png",
@@ -41,7 +43,11 @@ async def admin_data(x_admin_key: str | None = Header(default=None)):
 
 
 @router.post("/admin/upload")
-async def admin_upload(file: UploadFile = File(...), x_admin_key: str | None = Header(default=None)):
+async def admin_upload(
+    file: UploadFile = File(...),
+    folder: str = "uploads",
+    x_admin_key: str | None = Header(default=None),
+):
     _check_admin(x_admin_key)
     content = await file.read()
     content_type = (file.content_type or "").lower()
@@ -50,7 +56,10 @@ async def admin_upload(file: UploadFile = File(...), x_admin_key: str | None = H
     if len(content) > MAX_UPLOAD_BYTES:
         raise HTTPException(status_code=413, detail="File too large (max 10 MB).")
     ext = _IMAGE_EXT.get(content_type, "img")
-    path = f"uploads/{uuid.uuid4().hex}.{ext}"
+    folder = (folder or "uploads").strip().strip("/") or "uploads"
+    if not _FOLDER_RE.match(folder):
+        raise HTTPException(status_code=422, detail="folder must be a lowercase path (letters, digits, hyphens).")
+    path = f"{folder}/{uuid.uuid4().hex}.{ext}"
     try:
         url = await run_in_threadpool(storage.put_object, path, content, content_type)
     except storage.StorageNotConfigured as exc:

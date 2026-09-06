@@ -113,3 +113,125 @@
 @media (prefers-reduced-motion: reduce) {
     .vl-glow { animation: none; }
 }
+
+/* ------------------------------------------------------------------ */
+/* Blog / rich-text content                                            */
+/* The Quill editor stores semantic HTML (h1/h2/h3, p, ul, ol, li,     */
+/* blockquote, strong, em, a, img). These rules style that markup with */
+/* the site theme, so the theme lives here rather than in the data.    */
+/* ------------------------------------------------------------------ */
+.blog-content {
+    font-family: var(--font-body);
+    color: #2b2320;
+    line-height: 1.8;
+}
+.blog-content h1,
+.blog-content h2,
+.blog-content h3 {
+    font-family: var(--font-display);
+    color: #2b2320;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin: 2.2em 0 0.6em;
+}
+.blog-content h1 { font-size: 2.6rem; }
+.blog-content h2 { font-size: 2rem; }
+.blog-content h3 { font-size: 1.5rem; }
+.blog-content h1:first-child,
+.blog-content h2:first-child,
+.blog-content h3:first-child,
+.blog-content p:first-child {
+    margin-top: 0;
+}
+.blog-content p {
+    margin: 1.4em 0;
+    font-size: 1.125rem;
+    color: rgba(43, 40, 35, 0.85);
+}
+.blog-content a {
+    color: #395439;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+.blog-content strong { font-weight: 600; }
+.blog-content em { font-style: italic; }
+.blog-content ul,
+.blog-content ol {
+    margin: 1.4em 0;
+    padding-left: 1.5em;
+    font-size: 1.125rem;
+    color: rgba(43, 40, 35, 0.85);
+}
+.blog-content ul { list-style: disc; }
+.blog-content ol { list-style: decimal; }
+.blog-content li { margin: 0.4em 0; }
+.blog-content blockquote {
+    border-left: 2px solid #d4a574;
+    padding-left: 1.25em;
+    margin: 1.8em 0;
+    font-family: var(--font-read);
+    font-style: italic;
+    font-size: 1.25rem;
+    color: #5c3e2b;
+}
+.blog-content img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 2em auto;
+    border-radius: 2px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Quill editor, themed to the site                                    */
+/* ------------------------------------------------------------------ */
+.vl-quill-editor .ql-toolbar {
+    border: 1px solid rgba(43, 40, 35, 0.14);
+    border-bottom: none;
+    border-radius: 2px 2px 0 0;
+    background: #faf7f1;
+}
+.vl-quill-editor .ql-container {
+    border: 1px solid rgba(43, 40, 35, 0.14);
+    border-radius: 0 0 2px 2px;
+    background: #faf7f1;
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: #2b2320;
+}
+.vl-quill-editor .ql-editor {
+    min-height: 280px;
+    line-height: 1.7;
+}
+.vl-quill-editor .ql-editor h1,
+.vl-quill-editor .ql-editor h2,
+.vl-quill-editor .ql-editor h3 {
+    font-family: var(--font-display);
+    line-height: 1.2;
+}
+.vl-quill-editor .ql-editor h1 { font-size: 2.25rem; }
+.vl-quill-editor .ql-editor h2 { font-size: 1.8rem; }
+.vl-quill-editor .ql-editor h3 { font-size: 1.4rem; }
+.vl-quill-editor .ql-editor.ql-blank::before {
+    color: rgba(43, 40, 35, 0.3);
+    font-style: italic;
+}
+.vl-quill-editor .ql-snow .ql-stroke { stroke: #5c3e2b; }
+.vl-quill-editor .ql-snow .ql-fill { fill: #5c3e2b; }
+.vl-quill-editor .ql-snow .ql-picker { color: #5c3e2b; }
+.vl-quill-editor .ql-snow.ql-toolbar button:hover .ql-stroke,
+.vl-quill-editor .ql-snow.ql-toolbar button.ql-active .ql-stroke,
+.vl-quill-editor .ql-snow .ql-picker-label:hover .ql-stroke,
+.vl-quill-editor .ql-snow .ql-picker-label.ql-active .ql-stroke {
+    stroke: #395439;
+}
+.vl-quill-editor .ql-snow.ql-toolbar button:hover .ql-fill,
+.vl-quill-editor .ql-snow.ql-toolbar button.ql-active .ql-fill,
+.vl-quill-editor .ql-snow .ql-picker-label:hover .ql-fill,
+.vl-quill-editor .ql-snow .ql-picker-label.ql-active .ql-fill {
+    fill: #395439;
+}
+.vl-quill-editor .ql-snow .ql-picker-label:hover,
+.vl-quill-editor .ql-snow .ql-picker-label.ql-active {
+    color: #395439;
+}

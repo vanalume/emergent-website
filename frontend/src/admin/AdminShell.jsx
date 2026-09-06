@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useLocation } from "react-router-dom";
-import { LayoutDashboard, Package, FolderTree, Tag, LineChart, FileText, Inbox, Beaker, LogOut, ExternalLink } from "lucide-react";
+import { LayoutDashboard, Package, FolderTree, Tag, LineChart, FileText, BookOpen, Inbox, Beaker, LogOut, ExternalLink } from "lucide-react";
 import { useAdminAuth } from "@/admin/AdminAuth";
 
 const NAV = [
@@ -9,6 +9,7 @@ const NAV = [
   { to: "/admin/offers", label: "Offers", icon: Tag },
   { to: "/admin/sales", label: "Sales", icon: LineChart },
   { to: "/admin/content", label: "Website content", icon: FileText },
+  { to: "/admin/blogs", label: "Blogs", icon: BookOpen },
   { to: "/admin/submissions", label: "Submissions", icon: Inbox },
 ];
 
