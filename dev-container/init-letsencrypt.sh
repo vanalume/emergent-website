@@ -18,9 +18,9 @@ say() { printf "\033[1;34m==>\033[0m %s\n" "$*"; }
 say "removing any placeholder cert so certbot can write the real one"
 compose exec -T frontend sh -c "rm -rf /etc/letsencrypt/live/$DOMAIN /etc/letsencrypt/archive/$DOMAIN /etc/letsencrypt/renewal/$DOMAIN.conf" || true
 
-say "requesting certificate for $DOMAIN (webroot)"
+say "requesting certificate for $DOMAIN + www.$DOMAIN (webroot)"
 compose run --rm certbot certonly --webroot -w /var/www/certbot \
-  -d "$DOMAIN" \
+  -d "$DOMAIN" -d "www.$DOMAIN" \
   --email "$EMAIL" --agree-tos --no-eff-email \
   --keep-until-expiring --expand
 

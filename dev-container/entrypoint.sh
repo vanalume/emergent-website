@@ -12,7 +12,8 @@ if [ ! -f "$CERT_DIR/fullchain.pem" ] || [ ! -f "$CERT_DIR/privkey.pem" ]; then
     openssl req -x509 -nodes -newkey rsa:2048 -days 30 \
         -keyout "$CERT_DIR/privkey.pem" \
         -out "$CERT_DIR/fullchain.pem" \
-        -subj "/CN=vanalume.com" >/dev/null 2>&1
+        -subj "/CN=vanalume.com" \
+        -addext "subjectAltName=DNS:vanalume.com,DNS:www.vanalume.com" >/dev/null 2>&1
 fi
 
 exec "$@"
