@@ -21,6 +21,7 @@ export default function Navbar() {
   const { count, setOpen: setCartOpen } = useCart();
   const { value } = useContent("navbar");
 
+  // const links = value("links", DEFAULT_LINKS);
   const links = value("links", DEFAULT_LINKS);
   const exploreLabel = value("explore_button_label", "Explore Products");
 
