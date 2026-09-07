@@ -110,13 +110,16 @@ export default function ImageDropzone({
         ))}
       </div>
 
-      <button
-        type="button"
+      <div
+        role="button"
+        tabIndex={0}
         onClick={() => fileRef.current?.click()}
+        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") fileRef.current?.click(); }}
+        onDragEnter={(e) => { e.preventDefault(); setDragOver(true); }}
         onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
         onDragLeave={() => setDragOver(false)}
         onDrop={onDrop}
-        className={`mt-3 w-full border-2 border-dashed rounded-sm py-8 flex flex-col items-center justify-center gap-2 transition-colors ${
+        className={`mt-3 w-full border-2 border-dashed rounded-sm py-8 flex flex-col items-center justify-center gap-2 cursor-pointer transition-colors ${
           dragOver ? "border-[#395439] bg-[#e8ddc9]/60" : "border-[#2b2320]/25 hover:border-[#2b2320]/50"
         }`}
       >
@@ -129,7 +132,7 @@ export default function ImageDropzone({
             <span className="text-[11px] text-[#5c3e2b]/70">PNG / JPG / WEBP · up to {maxSizeMb} MB each</span>
           </>
         )}
-      </button>
+      </div>
 
       <input
         ref={fileRef}
