@@ -7,7 +7,8 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
-COMPOSE_FILE="dev-container/docker-compose.prod.yml"
+# This script lives in dev-container/, so the compose file is a sibling.
+COMPOSE_FILE="docker-compose.prod.yml"
 DOMAIN="${DOMAIN:-vanalume.com}"
 EMAIL="${EMAIL:-vanalume@vanalume.com}"
 
