@@ -137,7 +137,8 @@ export default function Shop() {
                 <div className="space-y-20 md:space-y-28">
                   {visibleSubs.map((s) => (
                     <div key={s.id} id={`sub-${s.id}`} className="scroll-mt-40">
-                      <Reveal className="mb-8 md:mb-10 flex items-end justify-between flex-wrap gap-3">
+                      {g.hasSubs && (
+                        <Reveal className="mb-8 md:mb-10 flex items-end justify-between flex-wrap gap-3">
                         <div>
                           <h3 className="font-display text-3xl md:text-4xl tracking-tight">{s.title}</h3>
                           <p className="text-[#5c3e2b]/80 mt-2 max-w-xl">{s.tagline}</p>
@@ -146,6 +147,8 @@ export default function Shop() {
                           {`${s.products.length} ${s.products.length === 1 ? "product" : "products"}`}
                         </span>
                       </Reveal>
+                      )}
+                      
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-14">
                         {s.products.map((p, i) => (
