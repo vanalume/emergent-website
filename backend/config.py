@@ -40,6 +40,10 @@ RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "").strip()
 EMAIL_FROM = os.environ.get("EMAIL_FROM", "Vanalume <support@vanalume.com>")
 OWNER_EMAIL = os.environ.get("OWNER_EMAIL", "support@vanalume.com")
 
+# Customer-facing support contact + refund disclosure used in the refund email.
+SUPPORT_EMAIL = os.environ.get("SUPPORT_EMAIL", "support@vanalume.com").strip()
+REFUND_WINDOW = "5–7 business days"
+
 # Admin
 ADMIN_KEY = os.environ.get("ADMIN_KEY", "").strip()
 

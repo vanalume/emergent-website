@@ -9,7 +9,9 @@ from config import RZP_KEY_ID, rzp_client
 from database import db
 from inventory import decrement_stock
 from models import Order, OrderItem, VerifyPayment, now_iso
+from notifications import send_refund_email
 from pricing import compute_amount
+from refunds import refund_payment
 
 router = APIRouter(tags=["orders"])
 
@@ -74,12 +76,20 @@ async def verify_payment(payload: VerifyPayment):
 
     # Deduct inventory only on the first successful verification (idempotent on
     # retries). A 409 here means the order could not be fulfilled (e.g. an
-    # oversell race) — mark it failed rather than charging without stock.
+    # oversell race) — mark it failed, refund the captured payment, and notify
+    # the customer rather than charging without stock.
     if existing.get("status") != "paid":
         try:
             await decrement_stock(existing.get("items", []))
         except HTTPException:
             await db.orders.update_one({"id": payload.order_id}, {"$set": {"status": "failed"}})
+            refund = refund_payment(payload.razorpay_payment_id, existing.get("amount") or 0)
+            if refund and refund.get("id"):
+                await db.orders.update_one(
+                    {"id": payload.order_id},
+                    {"$set": {"status": "refunded", "refund_id": refund["id"], "refunded_at": now_iso()}},
+                )
+            await send_refund_email(existing)
             raise
 
     order_doc = await db.orders.find_one_and_update(
