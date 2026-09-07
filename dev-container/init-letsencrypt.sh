@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Obtain (or renew) the Let's Encrypt certificate for the site.
-# Run after `docker compose up` (nginx must be serving the ACME webroot on :80).
+# Obtain (first run) or renew the Let's Encrypt certificate for the site.
+# Safe to run repeatedly (and from cron) — it only issues a fresh cert when a
+# self-signed placeholder is still present; otherwise it runs `certbot renew`,
+# which is a no-op unless the cert is near expiry.
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
@@ -13,19 +15,29 @@ DOMAIN="${DOMAIN:-vanalume.com}"
 EMAIL="${EMAIL:-vanalume@vanalume.com}"
 
 compose() { docker compose -f "$COMPOSE_FILE" "$@"; }
-
 say() { printf "\033[1;34m==>\033[0m %s\n" "$*"; }
 
-say "removing any placeholder cert so certbot can write the real one"
-compose exec -T frontend sh -c "rm -rf /etc/letsencrypt/live/$DOMAIN /etc/letsencrypt/archive/$DOMAIN /etc/letsencrypt/renewal/$DOMAIN.conf" || true
+CERT_PATH="/etc/letsencrypt/live/$DOMAIN/fullchain.pem"
 
-say "requesting certificate for $DOMAIN + www.$DOMAIN (webroot)"
-compose run --rm certbot certonly --webroot -w /var/www/certbot \
-  -d "$DOMAIN" -d "www.$DOMAIN" \
-  --email "$EMAIL" --agree-tos --no-eff-email \
-  --keep-until-expiring --expand
+# Real certs are issued by "Let's Encrypt"; the boot placeholder is "CN=vanalume.com".
+is_real() {
+  compose exec -T frontend sh -c \
+    "test -f '$CERT_PATH' && openssl x509 -in '$CERT_PATH' -noout -issuer | grep -qi 'Encrypt'"
+}
 
-say "reloading nginx with the new certificate"
+if is_real; then
+  say "certificate already issued — renewing if near expiry"
+  compose run --rm certbot renew
+else
+  say "no real certificate yet — removing placeholder and issuing for $DOMAIN + www.$DOMAIN"
+  compose exec -T frontend sh -c \
+    "rm -rf /etc/letsencrypt/live/$DOMAIN /etc/letsencrypt/archive/$DOMAIN /etc/letsencrypt/renewal/$DOMAIN.conf" || true
+  compose run --rm certbot certonly --webroot -w /var/www/certbot \
+    -d "$DOMAIN" -d "www.$DOMAIN" \
+    --email "$EMAIL" --agree-tos --no-eff-email --expand
+fi
+
+say "reloading nginx"
 compose exec -T frontend nginx -s reload
 
-say "SSL certificate ready for $DOMAIN"
+say "certificate ready for $DOMAIN + www.$DOMAIN"
