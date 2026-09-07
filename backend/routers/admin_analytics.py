@@ -4,7 +4,7 @@ Sales are every ``db.orders`` document with ``status="paid"``. No new tracking i
 needed; aggregation happens server-side and category is resolved by joining each
 order item's ``product_id`` to ``db.products``.
 """
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from fastapi import APIRouter, Depends, Query
 
@@ -15,10 +15,16 @@ router = APIRouter(tags=["admin-analytics"], dependencies=[Depends(require_admin
 
 
 def _parse(s: str):
+    if not s:
+        return None
     try:
-        return datetime.fromisoformat(s)
+        dt = datetime.fromisoformat(s)
     except (TypeError, ValueError):
         return None
+    # Normalize to naive UTC so aware order timestamps and naive date params compare.
+    if dt.tzinfo is not None:
+        dt = dt.astimezone(timezone.utc).replace(tzinfo=None)
+    return dt
 
 
 async def _paid_orders() -> list:
