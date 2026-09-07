@@ -54,7 +54,7 @@ services:
       context: ..
       dockerfile: dev-container/frontend.Dockerfile
     working_dir: /app
-    command: yarn start
+    command: bun run start
     volumes:
       - ../frontend:/app
       - /app/node_modules
