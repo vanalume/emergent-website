@@ -23,7 +23,7 @@ export default function Blogs() {
       <section className="pt-40 md:pt-56 pb-16 md:pb-20">
         <div className="max-w-[1440px] mx-auto px-6 md:px-12">
           <Kicker>Journal</Kicker>
-          <h1 className="font-display text-5xl md:text-7xl lg:text-8xl mt-6 tracking-tight leading-[1.02]">Blogs</h1>
+          <h1 className="font-display fs-page_heading mt-6 tracking-tight leading-[1.02]">Blogs</h1>
         </div>
       </section>
 
@@ -46,8 +46,8 @@ export default function Blogs() {
                       )}
                       <div className="absolute inset-0 ring-1 ring-inset ring-[#2b2320]/10" />
                     </div>
-                    <h2 className="font-display text-3xl mt-5 leading-tight">{b.title}</h2>
-                    {b.excerpt && <p className="text-[#5c3e2b]/75 mt-3 leading-relaxed line-clamp-2">{b.excerpt}</p>}
+                    <h2 className="font-display fs-blog_card_title mt-5 leading-tight">{b.title}</h2>
+                    {b.excerpt && <p className="text-[#5c3e2b]/75 mt-3 leading-relaxed line-clamp-2 fs-blog_card_excerpt">{b.excerpt}</p>}
                     <span className="inline-flex items-center gap-2 text-xs tracking-[0.16em] uppercase text-[#395439] mt-4">
                       Read <ArrowRight size={13} className="transition-transform duration-300 group-hover:translate-x-1" />
                     </span>

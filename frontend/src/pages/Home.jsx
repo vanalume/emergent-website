@@ -102,7 +102,7 @@ function Belief({ body }) {
       <div className="max-w-[1440px] mx-auto px-6 md:px-12">
         <Reveal><Kicker>Our Belief</Kicker></Reveal>
         <Reveal delay={0.05}>
-          <p className="mt-8 max-w-3xl font-read italic text-3xl md:text-4xl lg:text-5xl leading-[1.3] tracking-tight text-[#2b2823]">
+          <p className="mt-8 max-w-3xl font-read italic fs-belief_body leading-[1.3] tracking-tight text-[#2b2823]">
             {body}
           </p>
         </Reveal>
@@ -119,9 +119,9 @@ function CTA({ headline, buttonLabel }) {
         <div className="absolute inset-0 bg-[#241a10]/65" />
       </div>
       <div className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-12 text-center">
-        <Reveal><h2 className="font-display text-5xl md:text-7xl lg:text-8xl text-[#f8f6f2] tracking-tight">{headline}</h2></Reveal>
+        <Reveal><h2 className="font-display fs-cta_headline text-[#f8f6f2] tracking-tight">{headline}</h2></Reveal>
         <Reveal delay={0.1}>
-          <Link to="/shop" data-testid="cta-explore-btn" className="group mt-10 inline-flex items-center gap-2 bg-[#f8f6f2] text-[#2b2823] px-9 py-4 rounded-full text-sm tracking-wide hover:bg-[#d4a574] transition-colors duration-300">
+          <Link to="/shop" data-testid="cta-explore-btn" className="group mt-10 inline-flex items-center gap-2 bg-[#f8f6f2] text-[#2b2823] px-9 py-4 rounded-full fs-cta_button tracking-wide hover:bg-[#d4a574] transition-colors duration-300">
             {buttonLabel} <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
           </Link>
         </Reveal>

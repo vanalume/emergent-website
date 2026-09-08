@@ -5,10 +5,12 @@ import Lenis from "lenis";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
+import useTypography from "@/hooks/useTypography";
 
 export default function Layout() {
   const { pathname } = useLocation();
   const [lenis, setLenis] = useState(null);
+  useTypography();
 
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;

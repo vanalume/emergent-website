@@ -66,7 +66,7 @@ export default function Contact() {
       <section className="pt-40 md:pt-56 pb-16 md:pb-20">
         <div className="max-w-[1440px] mx-auto px-6 md:px-12">
           <Kicker>Contact</Kicker>
-          <h1 className="font-display text-4xl md:text-6xl lg:text-7xl mt-6 tracking-tight leading-[1.05] max-w-4xl">
+          <h1 className="font-display fs-contact_heading mt-6 tracking-tight leading-[1.05] max-w-4xl">
             <MaskLine delay={0.15}>{introHeading}</MaskLine>
           </h1>
         </div>
@@ -160,7 +160,7 @@ export default function Contact() {
               <Kicker>Business Enquiries</Kicker>
               <ul className="mt-6 space-y-4">
                 {businessEnquiries.map((b) => (
-                  <li key={b} className="font-display text-2xl md:text-3xl text-[#2b2823]/85 border-b border-[#2b2823]/10 pb-3">{b}</li>
+                  <li key={b} className="font-display fs-contact_list_item text-[#2b2823]/85 border-b border-[#2b2823]/10 pb-3">{b}</li>
                 ))}
               </ul>
             </Reveal>

@@ -47,15 +47,15 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-14">
           <div className="md:col-span-5">
             <img src={IMAGES.logo} alt="Vanalume" className="h-9 w-auto object-contain" style={{ filter: "invert(1)" }} />
-            <p className="font-display text-3xl md:text-4xl mt-6 text-[#f8f6f2]/90">{taglineTitle}</p>
-            <p className="text-sm text-[#f8f6f2]/55 mt-5 max-w-sm leading-relaxed">
+            <p className="font-display fs-footer_title mt-6 text-[#f8f6f2]/90">{taglineTitle}</p>
+            <p className="fs-footer_body text-[#f8f6f2]/55 mt-5 max-w-sm leading-relaxed">
               {taglineDescription}
             </p>
           </div>
 
           <div className="md:col-span-3">
-            <p className="text-xs tracking-[0.24em] uppercase text-[#e6b980]">{quickLinksHeading}</p>
-            <ul className="mt-6 space-y-3 text-sm">
+            <p className="fs-footer_heading tracking-[0.24em] uppercase text-[#e6b980]">{quickLinksHeading}</p>
+            <ul className="mt-6 space-y-3 fs-footer_link">
               {quickLinks.map((l) => (
                 <li key={l.to}>
                   <Link to={l.to} className="vl-link-underline text-[#f8f6f2]/70 hover:text-[#f8f6f2] transition-colors duration-300">
@@ -72,8 +72,8 @@ export default function Footer() {
           </div>
 
           <div className="md:col-span-4">
-            <p className="text-xs tracking-[0.24em] uppercase text-[#e6b980]">{newsletterHeading}</p>
-            <p className="text-sm text-[#f8f6f2]/60 mt-6 leading-relaxed">{newsletterDescription}</p>
+            <p className="fs-footer_heading tracking-[0.24em] uppercase text-[#e6b980]">{newsletterHeading}</p>
+            <p className="fs-footer_body text-[#f8f6f2]/60 mt-6 leading-relaxed">{newsletterDescription}</p>
             <form onSubmit={subscribe} className="mt-5 flex items-center gap-3 border-b border-[#f8f6f2]/25 focus-within:border-[#e6b980] transition-colors">
               <input
                 data-testid="newsletter-email"
@@ -96,7 +96,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-20 pt-8 border-t border-[#f8f6f2]/10 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-[#f8f6f2]/40 tracking-wide">
+        <div className="mt-20 pt-8 border-t border-[#f8f6f2]/10 flex flex-col md:flex-row items-center justify-between gap-4 fs-footer_copyright text-[#f8f6f2]/40 tracking-wide">
           <span>© {new Date().getFullYear()} {copyright}</span>
           <span className="tracking-[0.2em] uppercase">{copyrightTagline}</span>
         </div>

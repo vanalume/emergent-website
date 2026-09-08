@@ -133,14 +133,14 @@ export default function ProductDetail() {
           {/* --------- Details --------- */}
           <div>
             <Kicker>{subcategory?.title || category?.title || product.collection}</Kicker>
-            <h1 data-testid="pdp-name" className="font-display text-5xl md:text-6xl tracking-tight mt-4 leading-none">{product.name}</h1>
+            <h1 data-testid="pdp-name" className="font-display fs-product_title tracking-tight mt-4 leading-none">{product.name}</h1>
 
             {product.fragrances?.length > 0 && (
               <p className="text-sm text-[#5c3e2b] mt-4 tracking-wide">{product.fragrances.join(" · ")}</p>
             )}
 
             <div className="flex items-baseline gap-4 mt-7">
-              <span data-testid="pdp-sp" className="font-display text-4xl">{formatINR(offer ? finalSp : sp)}</span>
+              <span data-testid="pdp-sp" className="font-display fs-product_price">{formatINR(offer ? finalSp : sp)}</span>
               {offer ? (
                 <>
                   <span className="text-xl text-[#2b2320]/40 line-through">{formatINR(sp)}</span>
@@ -157,7 +157,7 @@ export default function ProductDetail() {
             </div>
 
             {desc && (
-              <p className="text-base text-[#2b2320]/75 mt-6 leading-relaxed">{desc}</p>
+              <p className="fs-product_description text-[#2b2320]/75 mt-6 leading-relaxed">{desc}</p>
             )}
 
             {/* Variants */}
@@ -226,14 +226,14 @@ export default function ProductDetail() {
           <section data-testid="pdp-ritual" className="mt-24 md:mt-32 bg-[#2b2320] text-[#f8f6f2] rounded-sm px-6 md:px-16 py-16 md:py-20">
             <Reveal>
               <Kicker className="text-[#e6b980]">The Ritual</Kicker>
-              <h2 className="font-display text-3xl md:text-5xl mt-4 leading-tight max-w-2xl">{product.ritual.title}</h2>
+              <h2 className="font-display fs-ritual_title mt-4 leading-tight max-w-2xl">{product.ritual.title}</h2>
             </Reveal>
             <ol className="mt-10 md:mt-12 grid grid-cols-1 md:grid-cols-2 gap-x-14 gap-y-8 max-w-4xl">
               {product.ritual.steps.map((step, i) => (
                 <Reveal key={i} delay={i * 0.05}>
                   <li className="flex gap-5">
                     <span className="font-display text-3xl text-[#e6b980] shrink-0 leading-none">{String(i + 1).padStart(2, "0")}</span>
-                    <p className="text-[15px] leading-relaxed text-[#f8f6f2]/85">{step}</p>
+                    <p className="fs-ritual_step leading-relaxed text-[#f8f6f2]/85">{step}</p>
                   </li>
                 </Reveal>
               ))}
@@ -255,8 +255,8 @@ export default function ProductDetail() {
                     <img src={r.images?.[0]} alt={r.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
                   </div>
                   <div className="mt-3 flex items-baseline justify-between gap-3">
-                    <p className="font-display text-lg leading-tight">{r.name}</p>
-                    <p className="text-sm shrink-0">{formatINR(r.sp)}</p>
+                    <p className="font-display fs-related_name leading-tight">{r.name}</p>
+                    <p className="fs-product_card_price shrink-0">{formatINR(r.sp)}</p>
                   </div>
                 </Link>
               ))}

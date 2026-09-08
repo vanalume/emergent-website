@@ -7,6 +7,7 @@ import FormField from "@/admin/primitives/FormField";
 import StringArrayEditor from "@/admin/primitives/StringArrayEditor";
 import SingleImagePicker from "@/admin/primitives/SingleImagePicker";
 import ListEditor from "@/admin/primitives/ListEditor";
+import TypographyEditor from "@/admin/pages/TypographyEditor";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -18,6 +19,29 @@ const PAGES = [
   { slug: "footer", label: "Footer" },
   { slug: "navbar", label: "Navbar" },
 ];
+
+const MODES = [
+  { key: "content", label: "Content" },
+  { key: "typography", label: "Typography" },
+];
+
+function ModeToggle({ mode, onChange }) {
+  return (
+    <div className="inline-flex items-center gap-1 border border-[#2b2320]/20 rounded-full p-1">
+      {MODES.map((m) => (
+        <button
+          key={m.key}
+          onClick={() => onChange(m.key)}
+          className={`px-6 py-2 rounded-full text-sm transition-colors ${
+            mode === m.key ? "bg-[#2b2320] text-[#f8f6f2]" : "text-[#2b2320]/70 hover:text-[#2b2320]"
+          }`}
+        >
+          {m.label}
+        </button>
+      ))}
+    </div>
+  );
+}
 
 const LIST_SCHEMAS = {
   hero_slides: [
@@ -53,6 +77,7 @@ const prettify = (key) => key.replace(/_/g, " ");
 
 export default function Content() {
   const { authHeaders, key: adminKey } = useAdminAuth();
+  const [mode, setMode] = useState("content");
   const [slug, setSlug] = useState("home");
   const [sections, setSections] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -116,9 +141,22 @@ export default function Content() {
     }
   };
 
+  if (mode === "typography") {
+    return (
+      <div>
+        <ModeToggle mode={mode} onChange={setMode} />
+        <div className="mt-8">
+          <TypographyEditor />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
-      <div className="flex items-start justify-between gap-4 flex-wrap">
+      <ModeToggle mode={mode} onChange={setMode} />
+
+      <div className="flex items-start justify-between gap-4 flex-wrap mt-8">
         <div>
           <p className="text-[10px] tracking-[0.24em] uppercase text-[#5c3e2b]">Website</p>
           <h1 className="font-display text-5xl mt-2 leading-none">Content</h1>

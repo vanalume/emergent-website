@@ -8,7 +8,7 @@ const NAV = [
   { to: "/admin/categories", label: "Categories", icon: FolderTree },
   { to: "/admin/offers", label: "Offers", icon: Tag },
   { to: "/admin/sales", label: "Sales", icon: LineChart },
-  { to: "/admin/content", label: "Website content", icon: FileText },
+  { to: "/admin/content", label: "Website", icon: FileText },
   { to: "/admin/blogs", label: "Blogs", icon: BookOpen },
   { to: "/admin/submissions", label: "Submissions", icon: Inbox },
 ];

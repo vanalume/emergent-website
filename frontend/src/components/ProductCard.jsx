@@ -75,7 +75,7 @@ export default function ProductCard({ product }) {
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <Link to={to} className="block">
-              <h3 className="font-display text-2xl leading-tight hover:text-[#5c3e2b] transition-colors">{product.name}</h3>
+              <h3 className="font-display fs-product_card_name leading-tight hover:text-[#5c3e2b] transition-colors">{product.name}</h3>
             </Link>
             {product.fragrances?.length > 0 && (
               <p className="text-xs text-[#5c3e2b] mt-1 tracking-wide">{product.fragrances.join(" · ")}</p>
@@ -89,19 +89,19 @@ export default function ProductCard({ product }) {
           <div className="text-right shrink-0 pt-1">
             {offer ? (
               <>
-                <div className="text-sm">{formatINR(finalSp)}</div>
+                <div className="fs-product_card_price">{formatINR(finalSp)}</div>
                 <div className="text-xs text-[#2b2320]/40 line-through">{formatINR(sp)}</div>
               </>
             ) : (
               <>
-                <div className="text-sm">{formatINR(sp)}</div>
+                <div className="fs-product_card_price">{formatINR(sp)}</div>
                 {mrp > sp && <div className="text-xs text-[#2b2320]/40 line-through">{formatINR(mrp)}</div>}
               </>
             )}
           </div>
         </div>
 
-        {product.desc && <p className="text-sm text-[#2b2320]/55 mt-2 leading-relaxed">{product.desc}</p>}
+        {product.desc && <p className="fs-product_card_desc text-[#2b2320]/55 mt-2 leading-relaxed">{product.desc}</p>}
 
         {hasVariants && (
           <div className="flex flex-wrap gap-2 mt-4">
@@ -109,7 +109,7 @@ export default function ProductCard({ product }) {
               <button
                 key={v.label}
                 onClick={(e) => { stopLink(e); setVariant(v.label); }}
-                className={`text-xs px-3 py-1.5 rounded-full border transition-colors duration-300 ${
+                className={`fs-product_card_variant px-3 py-1.5 rounded-full border transition-colors duration-300 ${
                   variant === v.label ? "bg-[#2b2320] text-[#f8f6f2] border-[#2b2320]" : "border-[#2b2320]/25 text-[#2b2320]/70 hover:border-[#2b2320]"
                 }`}
               >

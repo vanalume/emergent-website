@@ -84,7 +84,7 @@ export default function Shop() {
               key={g.id}
               data-testid={`filter-${g.id}`}
               onClick={() => goToGroup(g.id)}
-              className={`shrink-0 text-sm px-5 py-2 rounded-full border transition-colors duration-300 ${
+              className={`shrink-0 fs-filter_chip px-5 py-2 rounded-full border transition-colors duration-300 ${
                 activeGroup === g.id ? "bg-[#2b2320] text-[#f8f6f2] border-[#2b2320]" : "border-[#2b2320]/20 text-[#2b2320]/70 hover:border-[#2b2320]"
               }`}
             >
@@ -110,8 +110,8 @@ export default function Shop() {
               <div className="max-w-[1440px] mx-auto px-6 md:px-12">
                 {/* Group header */}
                 <Reveal className="mb-14 md:mb-20">
-                  <h2 className="font-display text-5xl md:text-7xl mt-3 tracking-tight leading-[1.05]">{g.title}</h2>
-                  <p className="text-[#5c3e2b]/85 mt-4 max-w-xl text-lg">{g.tagline}</p>
+                  <h2 className="font-display fs-category_title mt-3 tracking-tight leading-[1.05]">{g.title}</h2>
+                  <p className="text-[#5c3e2b]/85 mt-4 max-w-xl fs-category_tagline">{g.tagline}</p>
                 </Reveal>
 
                 {g.hasSubs && (
@@ -140,8 +140,8 @@ export default function Shop() {
                       {g.hasSubs && (
                         <Reveal className="mb-8 md:mb-10 flex items-end justify-between flex-wrap gap-3">
                         <div>
-                          <h3 className="font-display text-3xl md:text-4xl tracking-tight">{s.title}</h3>
-                          <p className="text-[#5c3e2b]/80 mt-2 max-w-xl">{s.tagline}</p>
+                          <h3 className="font-display fs-subcategory_title tracking-tight">{s.title}</h3>
+                          <p className="text-[#5c3e2b]/80 mt-2 max-w-xl fs-subcategory_tagline">{s.tagline}</p>
                         </div>
                         <span className="text-xs tracking-[0.16em] uppercase text-[#5c3e2b]/70">
                           {`${s.products.length} ${s.products.length === 1 ? "product" : "products"}`}
@@ -170,7 +170,7 @@ export default function Shop() {
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 text-center">
           <Reveal><Kicker className="text-[#e6b980]">{partnershipTitle}</Kicker></Reveal>
           <Reveal delay={0.05}>
-            <h2 className="font-display text-4xl md:text-6xl mt-6 max-w-3xl mx-auto tracking-tight">
+            <h2 className="font-display fs-section_heading mt-6 max-w-3xl mx-auto tracking-tight">
               {partnershipText}
             </h2>
           </Reveal>

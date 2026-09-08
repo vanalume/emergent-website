@@ -134,9 +134,9 @@
     letter-spacing: -0.01em;
     margin: 2.2em 0 0.6em;
 }
-.blog-content h1 { font-size: 2.6rem; }
-.blog-content h2 { font-size: 2rem; }
-.blog-content h3 { font-size: 1.5rem; }
+.blog-content h1 { font-size: var(--fs-blog_heading_h1-mobile); }
+.blog-content h2 { font-size: var(--fs-blog_heading_h2-mobile); }
+.blog-content h3 { font-size: var(--fs-blog_heading_h3-mobile); }
 .blog-content h1:first-child,
 .blog-content h2:first-child,
 .blog-content h3:first-child,
@@ -145,7 +145,7 @@
 }
 .blog-content p {
     margin: 1.4em 0;
-    font-size: 1.125rem;
+    font-size: var(--fs-blog_body-mobile);
     color: rgba(43, 40, 35, 0.85);
 }
 .blog-content a {
@@ -159,7 +159,7 @@
 .blog-content ol {
     margin: 1.4em 0;
     padding-left: 1.5em;
-    font-size: 1.125rem;
+    font-size: var(--fs-blog_body-mobile);
     color: rgba(43, 40, 35, 0.85);
 }
 .blog-content ul { list-style: disc; }
@@ -180,6 +180,15 @@
     height: auto;
     margin: 2em auto;
     border-radius: 2px;
+}
+
+@media (min-width: 768px) {
+    .blog-content h1 { font-size: var(--fs-blog_heading_h1-desktop); }
+    .blog-content h2 { font-size: var(--fs-blog_heading_h2-desktop); }
+    .blog-content h3 { font-size: var(--fs-blog_heading_h3-desktop); }
+    .blog-content p { font-size: var(--fs-blog_body-desktop); }
+    .blog-content ul,
+    .blog-content ol { font-size: var(--fs-blog_body-desktop); }
 }
 
 /* ------------------------------------------------------------------ */
@@ -234,4 +243,215 @@
 .vl-quill-editor .ql-snow .ql-picker-label:hover,
 .vl-quill-editor .ql-snow .ql-picker-label.ql-active {
     color: #395439;
+}
+
+/* ------------------------------------------------------------------ */
+
+/* ------------------------------------------------------------------ */
+
+/* ------------------------------------------------------------------ */
+/* Typography — font-size tokens (editable from the admin dashboard). */
+/* `mobile` is the base; `desktop` applies at >=768px.                 */
+/* ------------------------------------------------------------------ */
+:root {
+    --fs-nav_link-mobile: 0.875rem;
+    --fs-nav_link-desktop: 0.875rem;
+    --fs-nav_button-mobile: 0.875rem;
+    --fs-nav_button-desktop: 0.875rem;
+    --fs-kicker-mobile: 1.25rem;
+    --fs-kicker-desktop: 1.5rem;
+    --fs-belief_body-mobile: 1.875rem;
+    --fs-belief_body-desktop: 3rem;
+    --fs-cta_headline-mobile: 3rem;
+    --fs-cta_headline-desktop: 6rem;
+    --fs-cta_button-mobile: 0.875rem;
+    --fs-cta_button-desktop: 0.875rem;
+    --fs-category_title-mobile: 3rem;
+    --fs-category_title-desktop: 4.5rem;
+    --fs-category_tagline-mobile: 1.125rem;
+    --fs-category_tagline-desktop: 1.125rem;
+    --fs-subcategory_title-mobile: 1.875rem;
+    --fs-subcategory_title-desktop: 2.25rem;
+    --fs-subcategory_tagline-mobile: 1rem;
+    --fs-subcategory_tagline-desktop: 1rem;
+    --fs-filter_chip-mobile: 0.875rem;
+    --fs-filter_chip-desktop: 0.875rem;
+    --fs-product_card_name-mobile: 1.5rem;
+    --fs-product_card_name-desktop: 1.5rem;
+    --fs-product_card_price-mobile: 0.875rem;
+    --fs-product_card_price-desktop: 0.875rem;
+    --fs-product_card_desc-mobile: 0.875rem;
+    --fs-product_card_desc-desktop: 0.875rem;
+    --fs-product_card_variant-mobile: 0.75rem;
+    --fs-product_card_variant-desktop: 0.75rem;
+    --fs-product_title-mobile: 3rem;
+    --fs-product_title-desktop: 3.75rem;
+    --fs-product_price-mobile: 2.25rem;
+    --fs-product_price-desktop: 2.25rem;
+    --fs-product_description-mobile: 1rem;
+    --fs-product_description-desktop: 1rem;
+    --fs-ritual_title-mobile: 1.875rem;
+    --fs-ritual_title-desktop: 3rem;
+    --fs-ritual_step-mobile: 0.9375rem;
+    --fs-ritual_step-desktop: 0.9375rem;
+    --fs-related_name-mobile: 1.125rem;
+    --fs-related_name-desktop: 1.125rem;
+    --fs-about_heading-mobile: 3rem;
+    --fs-about_heading-desktop: 6rem;
+    --fs-about_section_heading-mobile: 2.25rem;
+    --fs-about_section_heading-desktop: 3.75rem;
+    --fs-founder_hero_heading-mobile: 1.875rem;
+    --fs-founder_hero_heading-desktop: 3.75rem;
+    --fs-about_lead-mobile: 1.875rem;
+    --fs-about_lead-desktop: 3rem;
+    --fs-about_body-mobile: 1.125rem;
+    --fs-about_body-desktop: 1.25rem;
+    --fs-about_quote-mobile: 1.875rem;
+    --fs-about_quote-desktop: 2.25rem;
+    --fs-sense_title-mobile: 1.875rem;
+    --fs-sense_title-desktop: 2.25rem;
+    --fs-sense_body-mobile: 0.875rem;
+    --fs-sense_body-desktop: 1rem;
+    --fs-founder_name-mobile: 1.875rem;
+    --fs-founder_name-desktop: 1.875rem;
+    --fs-founder_role-mobile: 0.75rem;
+    --fs-founder_role-desktop: 0.75rem;
+    --fs-founder_bio-mobile: 1rem;
+    --fs-founder_bio-desktop: 1.125rem;
+    --fs-closing_quote-mobile: 2.25rem;
+    --fs-closing_quote-desktop: 4.5rem;
+    --fs-contact_heading-mobile: 2.25rem;
+    --fs-contact_heading-desktop: 4.5rem;
+    --fs-contact_list_item-mobile: 1.5rem;
+    --fs-contact_list_item-desktop: 1.875rem;
+    --fs-footer_title-mobile: 1.875rem;
+    --fs-footer_title-desktop: 2.25rem;
+    --fs-footer_body-mobile: 0.875rem;
+    --fs-footer_body-desktop: 0.875rem;
+    --fs-footer_heading-mobile: 0.75rem;
+    --fs-footer_heading-desktop: 0.75rem;
+    --fs-footer_link-mobile: 0.875rem;
+    --fs-footer_link-desktop: 0.875rem;
+    --fs-footer_copyright-mobile: 0.75rem;
+    --fs-footer_copyright-desktop: 0.75rem;
+    --fs-blog_card_title-mobile: 1.875rem;
+    --fs-blog_card_title-desktop: 1.875rem;
+    --fs-blog_card_excerpt-mobile: 1rem;
+    --fs-blog_card_excerpt-desktop: 1rem;
+    --fs-blog_title-mobile: 2.25rem;
+    --fs-blog_title-desktop: 4.5rem;
+    --fs-blog_body-mobile: 1.125rem;
+    --fs-blog_body-desktop: 1.125rem;
+    --fs-blog_heading_h1-mobile: 2.6rem;
+    --fs-blog_heading_h1-desktop: 2.6rem;
+    --fs-blog_heading_h2-mobile: 2rem;
+    --fs-blog_heading_h2-desktop: 2rem;
+    --fs-blog_heading_h3-mobile: 1.5rem;
+    --fs-blog_heading_h3-desktop: 1.5rem;
+    --fs-page_heading-mobile: 3rem;
+    --fs-page_heading-desktop: 6rem;
+    --fs-section_heading-mobile: 2.25rem;
+    --fs-section_heading-desktop: 3.75rem;
+}
+
+.fs-nav_link { font-size: var(--fs-nav_link-mobile); }
+.fs-nav_button { font-size: var(--fs-nav_button-mobile); }
+.fs-kicker { font-size: var(--fs-kicker-mobile); }
+.fs-belief_body { font-size: var(--fs-belief_body-mobile); }
+.fs-cta_headline { font-size: var(--fs-cta_headline-mobile); }
+.fs-cta_button { font-size: var(--fs-cta_button-mobile); }
+.fs-category_title { font-size: var(--fs-category_title-mobile); }
+.fs-category_tagline { font-size: var(--fs-category_tagline-mobile); }
+.fs-subcategory_title { font-size: var(--fs-subcategory_title-mobile); }
+.fs-subcategory_tagline { font-size: var(--fs-subcategory_tagline-mobile); }
+.fs-filter_chip { font-size: var(--fs-filter_chip-mobile); }
+.fs-product_card_name { font-size: var(--fs-product_card_name-mobile); }
+.fs-product_card_price { font-size: var(--fs-product_card_price-mobile); }
+.fs-product_card_desc { font-size: var(--fs-product_card_desc-mobile); }
+.fs-product_card_variant { font-size: var(--fs-product_card_variant-mobile); }
+.fs-product_title { font-size: var(--fs-product_title-mobile); }
+.fs-product_price { font-size: var(--fs-product_price-mobile); }
+.fs-product_description { font-size: var(--fs-product_description-mobile); }
+.fs-ritual_title { font-size: var(--fs-ritual_title-mobile); }
+.fs-ritual_step { font-size: var(--fs-ritual_step-mobile); }
+.fs-related_name { font-size: var(--fs-related_name-mobile); }
+.fs-about_heading { font-size: var(--fs-about_heading-mobile); }
+.fs-about_section_heading { font-size: var(--fs-about_section_heading-mobile); }
+.fs-founder_hero_heading { font-size: var(--fs-founder_hero_heading-mobile); }
+.fs-about_lead { font-size: var(--fs-about_lead-mobile); }
+.fs-about_body { font-size: var(--fs-about_body-mobile); }
+.fs-about_quote { font-size: var(--fs-about_quote-mobile); }
+.fs-sense_title { font-size: var(--fs-sense_title-mobile); }
+.fs-sense_body { font-size: var(--fs-sense_body-mobile); }
+.fs-founder_name { font-size: var(--fs-founder_name-mobile); }
+.fs-founder_role { font-size: var(--fs-founder_role-mobile); }
+.fs-founder_bio { font-size: var(--fs-founder_bio-mobile); }
+.fs-closing_quote { font-size: var(--fs-closing_quote-mobile); }
+.fs-contact_heading { font-size: var(--fs-contact_heading-mobile); }
+.fs-contact_list_item { font-size: var(--fs-contact_list_item-mobile); }
+.fs-footer_title { font-size: var(--fs-footer_title-mobile); }
+.fs-footer_body { font-size: var(--fs-footer_body-mobile); }
+.fs-footer_heading { font-size: var(--fs-footer_heading-mobile); }
+.fs-footer_link { font-size: var(--fs-footer_link-mobile); }
+.fs-footer_copyright { font-size: var(--fs-footer_copyright-mobile); }
+.fs-blog_card_title { font-size: var(--fs-blog_card_title-mobile); }
+.fs-blog_card_excerpt { font-size: var(--fs-blog_card_excerpt-mobile); }
+.fs-blog_title { font-size: var(--fs-blog_title-mobile); }
+.fs-blog_body { font-size: var(--fs-blog_body-mobile); }
+.fs-blog_heading_h1 { font-size: var(--fs-blog_heading_h1-mobile); }
+.fs-blog_heading_h2 { font-size: var(--fs-blog_heading_h2-mobile); }
+.fs-blog_heading_h3 { font-size: var(--fs-blog_heading_h3-mobile); }
+.fs-page_heading { font-size: var(--fs-page_heading-mobile); }
+.fs-section_heading { font-size: var(--fs-section_heading-mobile); }
+
+@media (min-width: 768px) {
+    .fs-nav_link { font-size: var(--fs-nav_link-desktop); }
+    .fs-nav_button { font-size: var(--fs-nav_button-desktop); }
+    .fs-kicker { font-size: var(--fs-kicker-desktop); }
+    .fs-belief_body { font-size: var(--fs-belief_body-desktop); }
+    .fs-cta_headline { font-size: var(--fs-cta_headline-desktop); }
+    .fs-cta_button { font-size: var(--fs-cta_button-desktop); }
+    .fs-category_title { font-size: var(--fs-category_title-desktop); }
+    .fs-category_tagline { font-size: var(--fs-category_tagline-desktop); }
+    .fs-subcategory_title { font-size: var(--fs-subcategory_title-desktop); }
+    .fs-subcategory_tagline { font-size: var(--fs-subcategory_tagline-desktop); }
+    .fs-filter_chip { font-size: var(--fs-filter_chip-desktop); }
+    .fs-product_card_name { font-size: var(--fs-product_card_name-desktop); }
+    .fs-product_card_price { font-size: var(--fs-product_card_price-desktop); }
+    .fs-product_card_desc { font-size: var(--fs-product_card_desc-desktop); }
+    .fs-product_card_variant { font-size: var(--fs-product_card_variant-desktop); }
+    .fs-product_title { font-size: var(--fs-product_title-desktop); }
+    .fs-product_price { font-size: var(--fs-product_price-desktop); }
+    .fs-product_description { font-size: var(--fs-product_description-desktop); }
+    .fs-ritual_title { font-size: var(--fs-ritual_title-desktop); }
+    .fs-ritual_step { font-size: var(--fs-ritual_step-desktop); }
+    .fs-related_name { font-size: var(--fs-related_name-desktop); }
+    .fs-about_heading { font-size: var(--fs-about_heading-desktop); }
+    .fs-about_section_heading { font-size: var(--fs-about_section_heading-desktop); }
+    .fs-founder_hero_heading { font-size: var(--fs-founder_hero_heading-desktop); }
+    .fs-about_lead { font-size: var(--fs-about_lead-desktop); }
+    .fs-about_body { font-size: var(--fs-about_body-desktop); }
+    .fs-about_quote { font-size: var(--fs-about_quote-desktop); }
+    .fs-sense_title { font-size: var(--fs-sense_title-desktop); }
+    .fs-sense_body { font-size: var(--fs-sense_body-desktop); }
+    .fs-founder_name { font-size: var(--fs-founder_name-desktop); }
+    .fs-founder_role { font-size: var(--fs-founder_role-desktop); }
+    .fs-founder_bio { font-size: var(--fs-founder_bio-desktop); }
+    .fs-closing_quote { font-size: var(--fs-closing_quote-desktop); }
+    .fs-contact_heading { font-size: var(--fs-contact_heading-desktop); }
+    .fs-contact_list_item { font-size: var(--fs-contact_list_item-desktop); }
+    .fs-footer_title { font-size: var(--fs-footer_title-desktop); }
+    .fs-footer_body { font-size: var(--fs-footer_body-desktop); }
+    .fs-footer_heading { font-size: var(--fs-footer_heading-desktop); }
+    .fs-footer_link { font-size: var(--fs-footer_link-desktop); }
+    .fs-footer_copyright { font-size: var(--fs-footer_copyright-desktop); }
+    .fs-blog_card_title { font-size: var(--fs-blog_card_title-desktop); }
+    .fs-blog_card_excerpt { font-size: var(--fs-blog_card_excerpt-desktop); }
+    .fs-blog_title { font-size: var(--fs-blog_title-desktop); }
+    .fs-blog_body { font-size: var(--fs-blog_body-desktop); }
+    .fs-blog_heading_h1 { font-size: var(--fs-blog_heading_h1-desktop); }
+    .fs-blog_heading_h2 { font-size: var(--fs-blog_heading_h2-desktop); }
+    .fs-blog_heading_h3 { font-size: var(--fs-blog_heading_h3-desktop); }
+    .fs-page_heading { font-size: var(--fs-page_heading-desktop); }
+    .fs-section_heading { font-size: var(--fs-section_heading-desktop); }
 }

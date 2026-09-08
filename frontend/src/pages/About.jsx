@@ -15,7 +15,7 @@ function Senses({ senses }) {
       <div className="max-w-[1440px] mx-auto px-6 md:px-12">
         <Reveal className="text-center">
           <Kicker className="text-[#e6b980]">A Sensory Philosophy</Kicker>
-          <h2 className="font-display text-4xl md:text-6xl mt-5 tracking-tight">The Five Senses</h2>
+          <h2 className="font-display fs-about_section_heading mt-5 tracking-tight">The Five Senses</h2>
         </Reveal>
         <div className="mt-20 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="relative flex items-center justify-center">
@@ -42,10 +42,10 @@ function Senses({ senses }) {
                 <button key={s.key} data-testid={`sense-${s.key.toLowerCase()}`} onMouseEnter={() => setActive(i)} onClick={() => setActive(i)} className="w-full text-left py-6">
                   <div className="flex items-center gap-5">
                     <Icon size={22} strokeWidth={1.3} className={`transition-colors duration-300 ${on ? "text-[#e6b980]" : "text-[#f8f6f2]/50"}`} />
-                    <span className={`font-display text-3xl md:text-4xl transition-colors duration-300 ${on ? "text-[#f8f6f2]" : "text-[#f8f6f2]/45"}`}>{s.key}</span>
+                    <span className={`font-display fs-sense_title transition-colors duration-300 ${on ? "text-[#f8f6f2]" : "text-[#f8f6f2]/45"}`}>{s.key}</span>
                   </div>
                   <motion.div initial={false} animate={{ height: on ? "auto" : 0, opacity: on ? 1 : 0 }} className="overflow-hidden">
-                    <p className="text-[#f8f6f2]/60 text-sm md:text-base leading-relaxed pl-11 pt-3">{s.desc}</p>
+                    <p className="text-[#f8f6f2]/60 fs-sense_body leading-relaxed pl-11 pt-3">{s.desc}</p>
                   </motion.div>
                 </button>
               );
@@ -69,7 +69,7 @@ function FounderHero({ heading }) {
       </motion.div>
       <div className="relative z-10 h-full max-w-[1440px] mx-auto px-6 md:px-12 flex flex-col justify-end pb-14 md:pb-20">
         <Kicker className="text-[#f8f6f2]/80">Founder Story</Kicker>
-        <h2 className="mt-5 font-display text-[#f8f6f2] text-3xl md:text-5xl lg:text-6xl leading-[1.08] tracking-tight max-w-4xl">
+        <h2 className="mt-5 font-display text-[#f8f6f2] fs-founder_hero_heading leading-[1.08] tracking-tight max-w-4xl">
           {heading}
         </h2>
       </div>
@@ -116,7 +116,7 @@ export default function About() {
       <section className="pt-40 md:pt-56 pb-20 md:pb-28">
         <div className="max-w-[1440px] mx-auto px-6 md:px-12">
           <Kicker>About Us</Kicker>
-          <h1 className="font-display text-5xl md:text-7xl lg:text-8xl mt-6 tracking-tight leading-[1.02] max-w-4xl">
+          <h1 className="font-display fs-about_heading mt-6 tracking-tight leading-[1.02] max-w-4xl">
             <MaskLine delay={0.15}>{introHeading}</MaskLine>
           </h1>
         </div>
@@ -127,17 +127,17 @@ export default function About() {
           <Reveal className="lg:col-span-4"><Kicker>The Meaning</Kicker></Reveal>
           <div className="lg:col-span-8">
             <Reveal>
-              <p className="font-read italic text-3xl md:text-5xl leading-[1.2] tracking-tight text-[#2b2320]">
+              <p className="font-read italic fs-about_lead leading-[1.2] tracking-tight text-[#2b2320]">
                 {meaningLead}
               </p>
             </Reveal>
             <Reveal delay={0.08}>
-              <p className="mt-8 text-lg md:text-xl leading-relaxed text-[#2b2320]/80 max-w-2xl">
+              <p className="mt-8 fs-about_body leading-relaxed text-[#2b2320]/80 max-w-2xl">
                 {meaningBody}
               </p>
             </Reveal>
             <Reveal delay={0.14}>
-              <p className="mt-5 font-read italic text-lg md:text-xl text-[#5c3e2b] max-w-2xl">
+              <p className="mt-5 font-read italic fs-about_body text-[#5c3e2b] max-w-2xl">
                 {meaningTagline}
               </p>
             </Reveal>
@@ -149,11 +149,11 @@ export default function About() {
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 gap-16">
           <Reveal>
             <Kicker>Mission</Kicker>
-            <p className="font-read italic text-3xl md:text-4xl mt-6 leading-[1.35] tracking-tight">{mission}</p>
+            <p className="font-read italic fs-about_quote mt-6 leading-[1.35] tracking-tight">{mission}</p>
           </Reveal>
           <Reveal delay={0.1}>
             <Kicker>Vision</Kicker>
-            <p className="font-read italic text-3xl md:text-4xl mt-6 leading-[1.35] tracking-tight">{vision}</p>
+            <p className="font-read italic fs-about_quote mt-6 leading-[1.35] tracking-tight">{vision}</p>
           </Reveal>
         </div>
       </section>
@@ -193,8 +193,8 @@ export default function About() {
                       Read story <Plus size={14} />
                     </span>
                   </div>
-                  <h3 className="font-display text-3xl mt-6">{f.name}</h3>
-                  <p className="text-xs tracking-[0.2em] uppercase text-[#5c3e2b] mt-2">{f.role}</p>
+                  <h3 className="font-display fs-founder_name mt-6">{f.name}</h3>
+                  <p className="fs-founder_role tracking-[0.2em] uppercase text-[#5c3e2b] mt-2">{f.role}</p>
                 </button>
               </Reveal>
             ))}
@@ -205,7 +205,7 @@ export default function About() {
       <section className="py-32 md:py-48 bg-[#2b2320] text-[#f8f6f2]">
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 text-center">
           <Reveal>
-            <p className="font-read text-4xl md:text-6xl lg:text-7xl leading-[1.15] tracking-tight max-w-4xl mx-auto">
+            <p className="font-read fs-closing_quote leading-[1.15] tracking-tight max-w-4xl mx-auto">
               &ldquo;{closingQuote}&rdquo;
             </p>
           </Reveal>
@@ -242,7 +242,7 @@ export default function About() {
                 <div data-lenis-prevent className="flex-1 min-h-0 overflow-y-auto vl-hide-scrollbar overscroll-contain p-8 md:p-10">
                   <p className="text-xs tracking-[0.2em] uppercase text-[#5c3e2b]">{activeFounder.role}</p>
                   <h3 className="font-display text-4xl mt-2">{activeFounder.name}</h3>
-                  <p className="font-read text-base md:text-lg text-[#2b2320]/85 leading-relaxed mt-5">{activeFounder.bio}</p>
+                  <p className="font-read fs-founder_bio text-[#2b2320]/85 leading-relaxed mt-5">{activeFounder.bio}</p>
                 </div>
               </motion.div>
             </div>

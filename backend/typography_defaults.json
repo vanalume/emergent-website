@@ -1,0 +1,61 @@
+{
+  "tokens": [
+    { "key": "nav_link", "label": "Nav link", "group": "Global", "sizes": { "mobile": "0.875rem", "desktop": "0.875rem" } },
+    { "key": "nav_button", "label": "Nav button", "group": "Global", "sizes": { "mobile": "0.875rem", "desktop": "0.875rem" } },
+    { "key": "kicker", "label": "Section kicker", "group": "Global", "sizes": { "mobile": "1.25rem", "desktop": "1.5rem" } },
+
+    { "key": "belief_body", "label": "Belief body", "group": "Home", "sizes": { "mobile": "1.875rem", "desktop": "3rem" } },
+    { "key": "cta_headline", "label": "CTA headline", "group": "Home", "sizes": { "mobile": "3rem", "desktop": "6rem" } },
+    { "key": "cta_button", "label": "CTA button", "group": "Home", "sizes": { "mobile": "0.875rem", "desktop": "0.875rem" } },
+
+    { "key": "category_title", "label": "Category title", "group": "Shop", "sizes": { "mobile": "3rem", "desktop": "4.5rem" } },
+    { "key": "category_tagline", "label": "Category tagline", "group": "Shop", "sizes": { "mobile": "1.125rem", "desktop": "1.125rem" } },
+    { "key": "subcategory_title", "label": "Sub-category title", "group": "Shop", "sizes": { "mobile": "1.875rem", "desktop": "2.25rem" } },
+    { "key": "subcategory_tagline", "label": "Sub-category tagline", "group": "Shop", "sizes": { "mobile": "1rem", "desktop": "1rem" } },
+    { "key": "filter_chip", "label": "Filter chip", "group": "Shop", "sizes": { "mobile": "0.875rem", "desktop": "0.875rem" } },
+
+    { "key": "product_card_name", "label": "Product name", "group": "Product", "sizes": { "mobile": "1.5rem", "desktop": "1.5rem" } },
+    { "key": "product_card_price", "label": "Product price", "group": "Product", "sizes": { "mobile": "0.875rem", "desktop": "0.875rem" } },
+    { "key": "product_card_desc", "label": "Product description", "group": "Product", "sizes": { "mobile": "0.875rem", "desktop": "0.875rem" } },
+    { "key": "product_card_variant", "label": "Variant chip", "group": "Product", "sizes": { "mobile": "0.75rem", "desktop": "0.75rem" } },
+    { "key": "product_title", "label": "Product title", "group": "Product", "sizes": { "mobile": "3rem", "desktop": "3.75rem" } },
+    { "key": "product_price", "label": "Product price", "group": "Product", "sizes": { "mobile": "2.25rem", "desktop": "2.25rem" } },
+    { "key": "product_description", "label": "Product description", "group": "Product", "sizes": { "mobile": "1rem", "desktop": "1rem" } },
+    { "key": "ritual_title", "label": "Ritual title", "group": "Product", "sizes": { "mobile": "1.875rem", "desktop": "3rem" } },
+    { "key": "ritual_step", "label": "Ritual step", "group": "Product", "sizes": { "mobile": "0.9375rem", "desktop": "0.9375rem" } },
+    { "key": "related_name", "label": "Related product name", "group": "Product", "sizes": { "mobile": "1.125rem", "desktop": "1.125rem" } },
+
+    { "key": "about_heading", "label": "About heading", "group": "About", "sizes": { "mobile": "3rem", "desktop": "6rem" } },
+    { "key": "about_section_heading", "label": "About section heading", "group": "About", "sizes": { "mobile": "2.25rem", "desktop": "3.75rem" } },
+    { "key": "founder_hero_heading", "label": "Founder hero heading", "group": "About", "sizes": { "mobile": "1.875rem", "desktop": "3.75rem" } },
+    { "key": "about_lead", "label": "About lead", "group": "About", "sizes": { "mobile": "1.875rem", "desktop": "3rem" } },
+    { "key": "about_body", "label": "About body", "group": "About", "sizes": { "mobile": "1.125rem", "desktop": "1.25rem" } },
+    { "key": "about_quote", "label": "About quote", "group": "About", "sizes": { "mobile": "1.875rem", "desktop": "2.25rem" } },
+    { "key": "sense_title", "label": "Sense title", "group": "About", "sizes": { "mobile": "1.875rem", "desktop": "2.25rem" } },
+    { "key": "sense_body", "label": "Sense body", "group": "About", "sizes": { "mobile": "0.875rem", "desktop": "1rem" } },
+    { "key": "founder_name", "label": "Founder name", "group": "About", "sizes": { "mobile": "1.875rem", "desktop": "1.875rem" } },
+    { "key": "founder_role", "label": "Founder role", "group": "About", "sizes": { "mobile": "0.75rem", "desktop": "0.75rem" } },
+    { "key": "founder_bio", "label": "Founder bio", "group": "About", "sizes": { "mobile": "1rem", "desktop": "1.125rem" } },
+    { "key": "closing_quote", "label": "Closing quote", "group": "About", "sizes": { "mobile": "2.25rem", "desktop": "4.5rem" } },
+
+    { "key": "contact_heading", "label": "Contact heading", "group": "Contact", "sizes": { "mobile": "2.25rem", "desktop": "4.5rem" } },
+    { "key": "contact_list_item", "label": "Contact list item", "group": "Contact", "sizes": { "mobile": "1.5rem", "desktop": "1.875rem" } },
+
+    { "key": "footer_title", "label": "Footer title", "group": "Footer", "sizes": { "mobile": "1.875rem", "desktop": "2.25rem" } },
+    { "key": "footer_body", "label": "Footer body", "group": "Footer", "sizes": { "mobile": "0.875rem", "desktop": "0.875rem" } },
+    { "key": "footer_heading", "label": "Footer heading", "group": "Footer", "sizes": { "mobile": "0.75rem", "desktop": "0.75rem" } },
+    { "key": "footer_link", "label": "Footer link", "group": "Footer", "sizes": { "mobile": "0.875rem", "desktop": "0.875rem" } },
+    { "key": "footer_copyright", "label": "Footer copyright", "group": "Footer", "sizes": { "mobile": "0.75rem", "desktop": "0.75rem" } },
+
+    { "key": "blog_card_title", "label": "Blog card title", "group": "Blogs", "sizes": { "mobile": "1.875rem", "desktop": "1.875rem" } },
+    { "key": "blog_card_excerpt", "label": "Blog card excerpt", "group": "Blogs", "sizes": { "mobile": "1rem", "desktop": "1rem" } },
+    { "key": "blog_title", "label": "Blog title", "group": "Blogs", "sizes": { "mobile": "2.25rem", "desktop": "4.5rem" } },
+    { "key": "blog_body", "label": "Blog body", "group": "Blogs", "sizes": { "mobile": "1.125rem", "desktop": "1.125rem" } },
+    { "key": "blog_heading_h1", "label": "Blog heading (H1)", "group": "Blogs", "sizes": { "mobile": "2.6rem", "desktop": "2.6rem" } },
+    { "key": "blog_heading_h2", "label": "Blog heading (H2)", "group": "Blogs", "sizes": { "mobile": "2rem", "desktop": "2rem" } },
+    { "key": "blog_heading_h3", "label": "Blog heading (H3)", "group": "Blogs", "sizes": { "mobile": "1.5rem", "desktop": "1.5rem" } },
+
+    { "key": "page_heading", "label": "Page heading", "group": "Global", "sizes": { "mobile": "3rem", "desktop": "6rem" } },
+    { "key": "section_heading", "label": "Section heading", "group": "Global", "sizes": { "mobile": "2.25rem", "desktop": "3.75rem" } }
+  ]
+}

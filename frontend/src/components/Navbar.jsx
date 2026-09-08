@@ -60,7 +60,7 @@ export default function Navbar() {
               key={l.to}
               to={l.to}
               data-testid={`nav-${l.label.toLowerCase().replace(/\s+/g, "-")}`}
-              className={`vl-link-underline text-sm tracking-wide transition-colors duration-300 ${textCol} ${pathname === l.to ? "opacity-100" : "opacity-70 hover:opacity-100"}`}
+              className={`vl-link-underline fs-nav_link tracking-wide transition-colors duration-300 ${textCol} ${pathname === l.to ? "opacity-100" : "opacity-70 hover:opacity-100"}`}
             >
               {l.label}
             </Link>
@@ -68,7 +68,7 @@ export default function Navbar() {
           <Link
             to="/shop"
             data-testid="nav-explore-btn"
-            className={`inline-block border text-sm tracking-wide px-6 py-2.5 rounded-full transition-colors duration-300 ${
+            className={`inline-block border fs-nav_button tracking-wide px-6 py-2.5 rounded-full transition-colors duration-300 ${
               dark ? "border-[#f8f6f2]/60 text-[#f8f6f2] hover:bg-[#f8f6f2] hover:text-[#2b2823]" : "border-[#5c3e2b] text-[#5c3e2b] hover:bg-[#5c3e2b] hover:text-[#f8f6f2]"
             }`}
           >

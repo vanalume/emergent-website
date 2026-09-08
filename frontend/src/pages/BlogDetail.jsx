@@ -32,7 +32,7 @@ export default function BlogDetail() {
           </Link>
           {status === "ok" && (
             <>
-              <h1 className="font-display text-4xl md:text-6xl lg:text-7xl mt-10 tracking-tight leading-[1.05] max-w-4xl">{blog.title}</h1>
+              <h1 className="font-display fs-blog_title mt-10 tracking-tight leading-[1.05] max-w-4xl">{blog.title}</h1>
               {blog.author && <p className="text-sm tracking-[0.14em] uppercase text-[#5c3e2b] mt-6">By {blog.author}</p>}
             </>
           )}

@@ -4,11 +4,12 @@ These define the shape of every document stored in / read from MongoDB, and the
 request/response bodies of the API. `Product` and `Category` mirror the catalogue
 schema documented in `catalog.py` so the database conforms to the same models.
 """
+import re
 import uuid
 from datetime import datetime, timezone
 from typing import Any, List, Optional
 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
 
 def now_iso() -> str:
@@ -172,6 +173,31 @@ class Section(BaseModel):
 class Page(BaseModel):
     slug: str
     sections: List[Section]
+    updated_at: str = Field(default_factory=now_iso)
+
+
+# ----------------------------- Typography -----------------------------
+_SIZE_RE = re.compile(r"^\d+(\.\d+)?(rem|em|px)$")
+
+
+class TypographyToken(BaseModel):
+    """A named text role with per-breakpoint font sizes (e.g. "3rem")."""
+    key: str
+    label: str = ""
+    group: str = "General"
+    sizes: dict[str, str] = Field(default_factory=dict)
+
+    @field_validator("sizes")
+    @classmethod
+    def _validate_sizes(cls, v: dict[str, str]) -> dict[str, str]:
+        for bp, size in v.items():
+            if not _SIZE_RE.match(size or ""):
+                raise ValueError(f"Invalid font size for '{bp}': {size!r}")
+        return v
+
+
+class Typography(BaseModel):
+    tokens: List[TypographyToken]
     updated_at: str = Field(default_factory=now_iso)
 
 
