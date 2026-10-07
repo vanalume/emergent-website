@@ -12,6 +12,18 @@ import usePageState from "@/hooks/usePageState";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
+/**
+ * First image available for a product. Variant-based products often ship with an
+ * empty top-level `images` gallery and keep their imagery on each variant, so
+ * fall back to the variants (in order) when the product itself has none.
+ */
+const firstProductImage = (product) => {
+  if (!product) return null;
+  const direct = product.images?.[0] || product.image;
+  if (direct) return direct;
+  return (product.variants || []).map((v) => v?.images?.[0]).find(Boolean) || null;
+};
+
 export default function Shop() {
   const [data, setData] = useState({ products: [], categories: [] });
   const [loading, setLoading] = useState(true);
@@ -87,7 +99,7 @@ export default function Shop() {
           id: g.id,
           title: g.title,
           count: g.subs.reduce((n, s) => n + s.products.length, 0),
-          image: first?.images?.[0] || first?.image || null,
+          image: firstProductImage(first),
         };
       }),
     [groupData],
