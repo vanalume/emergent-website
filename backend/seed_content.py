@@ -5,7 +5,7 @@ Run from the directory that contains the backend `.env` file (it loads `.env`
 from the current working directory).
 
 Usage:
-    python3 seed_content.py            # seed missing pages (idempotent)
+    python3 seed_content.py            # seed missing pages + back-fill missing sections
     python3 seed_content.py --force    # overwrite all pages from defaults
     python3 seed_content.py --export   # dump current content to content_export.json
 """
@@ -17,6 +17,8 @@ from pathlib import Path
 
 import pymongo
 from dotenv import load_dotenv
+
+from content_migrate import missing_sections
 
 HERE = Path(__file__).resolve().parent
 DEFAULTS_PATH = HERE / "content_defaults.json"
@@ -40,19 +42,31 @@ def _connect():
 def seed(force: bool = False) -> None:
     client, db = _connect()
     defaults = json.loads(DEFAULTS_PATH.read_text())
-    existing = {d["slug"] for d in db.content.find({}, {"slug": 1})}
-    inserted = updated = 0
+    inserted = replaced = backfilled = added_sections = 0
     for slug, sections in defaults.items():
-        doc = {"slug": slug, "sections": sections, "updated_at": _now()}
-        if slug in existing and not force:
-            continue
-        db.content.replace_one({"slug": slug}, doc, upsert=True)
-        if slug in existing:
-            updated += 1
-        else:
+        existing = db.content.find_one({"slug": slug}, {"sections": 1})
+        if existing is None:
+            db.content.insert_one({"slug": slug, "sections": sections, "updated_at": _now()})
             inserted += 1
+            continue
+        if force:
+            db.content.replace_one({"slug": slug}, {"slug": slug, "sections": sections, "updated_at": _now()})
+            replaced += 1
+            continue
+        added = missing_sections(sections, existing.get("sections"))
+        if added:
+            db.content.update_one(
+                {"slug": slug},
+                {"$push": {"sections": {"$each": added}}, "$set": {"updated_at": _now()}},
+            )
+            backfilled += 1
+            added_sections += len(added)
     client.close()
-    print(f"Seeded content: {inserted} inserted, {updated} updated ({len(defaults)} pages total).")
+    print(
+        f"Seeded content: {inserted} page(s) inserted, {replaced} replaced (--force), "
+        f"{backfilled} page(s) back-filled ({added_sections} section(s) added) "
+        f"({len(defaults)} pages total)."
+    )
 
 
 def export(path: str = "content_export.json") -> None:

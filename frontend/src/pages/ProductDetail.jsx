@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight, ArrowRight, Check, Plus } from "lucide-react
 import { toast } from "sonner";
 import { useCart, formatINR } from "@/context/CartContext";
 import { Reveal, Kicker } from "@/components/Motion";
+import ScrollCarousel from "@/components/ScrollCarousel";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -23,7 +24,6 @@ export default function ProductDetail() {
   }, []);
 
   useEffect(() => { setImgIdx(0); }, [id]);
-  useEffect(() => { window.scrollTo(0, 0); }, [id]);
 
   const product = useMemo(() => data.products.find(p => p.id === id), [data.products, id]);
   const category = useMemo(
@@ -61,7 +61,7 @@ export default function ProductDetail() {
   const related = useMemo(() => {
     if (!product) return [];
     const match = (p) => product.subcategory ? p.subcategory === product.subcategory : p.category === product.category;
-    return data.products.filter(p => match(p) && p.id !== product.id).slice(0, 4);
+    return data.products.filter(p => match(p) && p.id !== product.id);
   }, [data.products, product]);
 
   if (loading) return <div className="pt-40 text-center text-[#5c3e2b]/60 font-display text-2xl">Loading…</div>;
@@ -248,9 +248,21 @@ export default function ProductDetail() {
             <Reveal delay={0.05}>
               <h2 className="font-display text-3xl md:text-5xl tracking-tight mt-3">More from {subcategory?.title || category?.title}</h2>
             </Reveal>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 mt-10">
+            <ScrollCarousel
+              className="mt-10"
+              resetKey={id}
+              prevLabel="Scroll related products left"
+              nextLabel="Scroll related products right"
+              prevTestId="related-prev"
+              nextTestId="related-next"
+              trackClassName="gap-6 md:gap-8"
+            >
               {related.map(r => (
-                <Link key={r.id} to={`/product/${r.id}`} className="group block">
+                <Link
+                  key={r.id}
+                  to={`/product/${r.id}`}
+                  className="group block shrink-0 snap-start w-[calc(50%-0.75rem)] md:w-[calc(50%-1rem)] lg:w-[calc(25%-1.5rem)]"
+                >
                   <div className="aspect-[4/5] overflow-hidden rounded-sm bg-[#ece3d4]">
                     <img src={r.images?.[0]} alt={r.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
                   </div>
@@ -260,7 +272,7 @@ export default function ProductDetail() {
                   </div>
                 </Link>
               ))}
-            </div>
+            </ScrollCarousel>
           </section>
         )}
       </div>

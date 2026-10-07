@@ -1,16 +1,17 @@
 import { useEffect, useState, useCallback } from "react";
-import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Marquee from "react-fast-marquee";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { Reveal, Kicker } from "@/components/Motion";
+import ResetLink from "@/components/ResetLink";
 import { IMAGES, FRAGRANCES } from "@/lib/data";
 import useContent from "@/hooks/useContent";
 
+// @Note: Removing default slides due to lag issue - need updated photos to show up directly
 const DEFAULT_SLIDES = [
-  { id: "candles", image: "/hero/candles.png", link: "/shop#group-jar-candles", alt: "Vanalume scented candles collection" },
-  { id: "stones", image: "/hero/stones.png", link: "/shop#group-aroma-stones", alt: "Vanalume aroma stones" },
-  { id: "oils", image: "/hero/oils.png", link: "/shop#group-aroma-oils", alt: "Vanalume aroma oils, inspired by the elements" },
+  // { id: "candles", image: "/hero/candles.png", link: "/shop#group-jar-candles", alt: "Vanalume scented candles collection" },
+  // { id: "stones", image: "/hero/stones.png", link: "/shop#group-aroma-stones", alt: "Vanalume aroma stones" },
+  // { id: "oils", image: "/hero/oils.png", link: "/shop#group-aroma-oils", alt: "Vanalume aroma oils, inspired by the elements" },
 ];
 
 function HeroSlideshow({ slides }) {
@@ -24,9 +25,9 @@ function HeroSlideshow({ slides }) {
     return () => clearInterval(t);
   }, [next]);
 
-  const slide = slides[idx];
+  const slide = slides.length > 0 ? slides[idx] : null;
 
-  return (
+  return slide === null ? (<></>) : (
     <section data-testid="hero-slideshow" className="relative w-full bg-[#f2ebdd]">
       <div className="max-w-[1240px] mx-auto px-6 md:px-12">
         <div className="relative w-full aspect-[3/2] overflow-hidden rounded-sm">
@@ -39,9 +40,9 @@ function HeroSlideshow({ slides }) {
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               className="absolute inset-0"
             >
-              <Link to={slide.link} data-testid={`hero-slide-${slide.id}`} className="block h-full w-full">
+              <ResetLink to={slide.link} data-testid={`hero-slide-${slide.id}`} className="block h-full w-full">
                 <img src={slide.image} alt={slide.alt} className="h-full w-full object-contain md:object-cover" />
-              </Link>
+              </ResetLink>
             </motion.div>
           </AnimatePresence>
 
@@ -121,9 +122,9 @@ function CTA({ headline, buttonLabel }) {
       <div className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-12 text-center">
         <Reveal><h2 className="font-display fs-cta_headline text-[#f8f6f2] tracking-tight">{headline}</h2></Reveal>
         <Reveal delay={0.1}>
-          <Link to="/shop" data-testid="cta-explore-btn" className="group mt-10 inline-flex items-center gap-2 bg-[#f8f6f2] text-[#2b2823] px-9 py-4 rounded-full fs-cta_button tracking-wide hover:bg-[#d4a574] transition-colors duration-300">
+          <ResetLink to="/shop" data-testid="cta-explore-btn" className="group mt-10 inline-flex items-center gap-2 bg-[#f8f6f2] text-[#2b2823] px-9 py-4 rounded-full fs-cta_button tracking-wide hover:bg-[#d4a574] transition-colors duration-300">
             {buttonLabel} <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
-          </Link>
+          </ResetLink>
         </Reveal>
       </div>
     </section>

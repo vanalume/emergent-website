@@ -10,6 +10,7 @@ import Contact from "@/pages/Contact";
 import Blogs from "@/pages/Blogs";
 import BlogDetail from "@/pages/BlogDetail";
 import { CartProvider } from "@/context/CartContext";
+import { PageStateProvider } from "@/context/PageStateContext";
 import { AdminAuthProvider } from "@/admin/AdminAuth";
 import AdminGuard from "@/admin/AdminGuard";
 import AdminShell from "@/admin/AdminShell";
@@ -29,30 +30,32 @@ function App() {
     <div className="App">
       <CartProvider>
         <AdminAuthProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route element={<Layout />}>
-                <Route path="/" element={<Home />} />
-                <Route path="/shop" element={<Shop />} />
-                <Route path="/product/:id" element={<ProductDetail />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/blogs" element={<Blogs />} />
-                <Route path="/blog/:slug" element={<BlogDetail />} />
-              </Route>
-              <Route path="/admin" element={<AdminGuard><AdminShell /></AdminGuard>}>
-                <Route index element={<AdminOverview />} />
-                <Route path="products" element={<Products />} />
-                <Route path="categories" element={<Categories />} />
-                <Route path="offers" element={<Offers />} />
-                <Route path="sales" element={<Sales />} />
-                <Route path="content" element={<Content />} />
-                <Route path="blogs" element={<AdminBlogs />} />
-                <Route path="submissions" element={<Submissions />} />
-                <Route path="kitchensink" element={<KitchenSink />} />
-              </Route>
-            </Routes>
-          </BrowserRouter>
+          <PageStateProvider>
+            <BrowserRouter>
+              <Routes>
+                <Route element={<Layout />}>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/shop" element={<Shop />} />
+                  <Route path="/product/:id" element={<ProductDetail />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/blogs" element={<Blogs />} />
+                  <Route path="/blog/:slug" element={<BlogDetail />} />
+                </Route>
+                <Route path="/admin" element={<AdminGuard><AdminShell /></AdminGuard>}>
+                  <Route index element={<AdminOverview />} />
+                  <Route path="products" element={<Products />} />
+                  <Route path="categories" element={<Categories />} />
+                  <Route path="offers" element={<Offers />} />
+                  <Route path="sales" element={<Sales />} />
+                  <Route path="content" element={<Content />} />
+                  <Route path="blogs" element={<AdminBlogs />} />
+                  <Route path="submissions" element={<Submissions />} />
+                  <Route path="kitchensink" element={<KitchenSink />} />
+                </Route>
+              </Routes>
+            </BrowserRouter>
+          </PageStateProvider>
           <Toaster position="bottom-right" theme="light" toastOptions={{ style: { fontFamily: "Jost, sans-serif" } }} />
         </AdminAuthProvider>
       </CartProvider>

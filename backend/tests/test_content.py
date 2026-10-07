@@ -50,6 +50,12 @@ class TestPublic:
     def test_get_unknown_slug_404(self, client):
         assert client.get(f"{API}/content/pages/zzz-unknown").status_code == 404
 
+    def test_get_shop_exposes_category_sections(self, client):
+        r = client.get(f"{API}/content/pages/shop")
+        assert r.status_code == 200, r.text
+        keys = {s["key"] for s in r.json()["sections"]}
+        assert {"categories_kicker", "categories_title", "categories_tagline"} <= keys
+
 
 class TestAdmin:
     def test_requires_auth(self, client):
@@ -71,3 +77,11 @@ class TestAdmin:
         assert r.status_code == 200, r.text
         keys = {s["key"] for s in r.json()["sections"]}
         assert "founders" in keys and "senses" in keys
+
+    def test_shop_page_back_filled_with_category_sections(self, client):
+        if not ADMIN_KEY:
+            pytest.skip("ADMIN_KEY not available")
+        r = client.get(f"{API}/admin/content/pages/shop", headers=_hdr())
+        assert r.status_code == 200, r.text
+        keys = {s["key"] for s in r.json()["sections"]}
+        assert {"categories_kicker", "categories_title", "categories_tagline"} <= keys

@@ -228,9 +228,11 @@ Types: `text` | `richtext` | `image` | `list_of_text` | `list` | `toggle`
   when empty** (admin CRUD is authoritative afterwards), and **uploads every
   product/variant image to Supabase S3** on first seed, rewriting URLs.
 - **Content** (`routers/content.py::seed_content`) — seeds missing pages from
-  `content_defaults.json`; also run manually via the standalone
-  **`seed_content.py`** (seed / `--force` / `--export`), which reads `.env` from
-  the CWD.
+  `content_defaults.json`, then **back-fills any default sections a page is
+  missing** (append-only via `$push`; never overwrites existing/edited values,
+  idempotent). Runs at startup and on the admin content list; also run manually
+  via the standalone **`seed_content.py`** (seed / `--force` / `--export`), which
+  reads `.env` from the CWD.
 - **Storage** (`storage.py`) — Supabase S3-compatible client (boto3), keys:
   `SUPABASE_KEY_ID`, `SUPABASE_SECRET_ACCESS_KEY`, `SUPABASE_ENDPOINT_URL`,
   `SUPABASE_BUCKET_NAME`, `SUPABASE_REGION`.

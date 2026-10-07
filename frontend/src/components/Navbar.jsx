@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ShoppingBag } from "lucide-react";
 import { IMAGES } from "@/lib/data";
 import { useCart } from "@/context/CartContext";
+import ResetLink from "@/components/ResetLink";
 import useContent from "@/hooks/useContent";
 
 const DEFAULT_LINKS = [
@@ -46,26 +47,26 @@ export default function Navbar() {
       }`}
     >
       <nav className="max-w-[1440px] mx-auto px-6 md:px-12 h-24 flex items-center justify-between">
-        <Link to="/" data-testid="nav-logo" aria-label="Vanalume, Home" className="flex items-center shrink-0">
+        <ResetLink to="/" data-testid="nav-logo" aria-label="Vanalume, Home" className="flex items-center shrink-0">
           <img
             src={IMAGES.logo}
             alt="Vanalume"
             className={`h-8 md:h-10 w-auto object-contain transition-[filter] duration-500 ${dark ? "invert" : ""}`}
           />
-        </Link>
+        </ResetLink>
 
         <div className="hidden lg:flex items-center gap-10">
           {links.map((l) => (
-            <Link
+            <ResetLink
               key={l.to}
               to={l.to}
               data-testid={`nav-${l.label.toLowerCase().replace(/\s+/g, "-")}`}
               className={`vl-link-underline fs-nav_link tracking-wide transition-colors duration-300 ${textCol} ${pathname === l.to ? "opacity-100" : "opacity-70 hover:opacity-100"}`}
             >
               {l.label}
-            </Link>
+            </ResetLink>
           ))}
-          <Link
+          <ResetLink
             to="/shop"
             data-testid="nav-explore-btn"
             className={`inline-block border fs-nav_button tracking-wide px-6 py-2.5 rounded-full transition-colors duration-300 ${
@@ -73,7 +74,7 @@ export default function Navbar() {
             }`}
           >
             {exploreLabel}
-          </Link>
+          </ResetLink>
           <button
             onClick={() => setCartOpen(true)}
             data-testid="nav-cart-btn"
@@ -123,9 +124,9 @@ export default function Navbar() {
           >
             <div className="px-6 py-6 flex flex-col gap-5">
               {links.map((l) => (
-                <Link key={l.to} to={l.to} data-testid={`nav-mobile-${l.label.toLowerCase().replace(/\s+/g, "-")}`} className="font-display text-3xl text-[#2b2823]">
+                <ResetLink key={l.to} to={l.to} data-testid={`nav-mobile-${l.label.toLowerCase().replace(/\s+/g, "-")}`} className="font-display text-3xl text-[#2b2823]">
                   {l.label}
-                </Link>
+                </ResetLink>
               ))}
             </div>
           </motion.div>

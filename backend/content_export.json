@@ -314,6 +314,21 @@
         "key": "partnership_button_label",
         "type": "text",
         "value": "Contact Us"
+      },
+      {
+        "key": "categories_kicker",
+        "type": "text",
+        "value": "Collections"
+      },
+      {
+        "key": "categories_title",
+        "type": "text",
+        "value": "Shop by Category"
+      },
+      {
+        "key": "categories_tagline",
+        "type": "richtext",
+        "value": "Each collection is composed around a distinct ritual — choose where to begin."
       }
     ],
     "updated_at": "2026-09-06T13:42:52.013165+00:00"
